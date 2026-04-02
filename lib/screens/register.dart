@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dego/services/auth_service.dart';
 
 class Register extends StatefulWidget {
 
@@ -173,8 +174,27 @@ class _Register extends State<Register> {
           ],),
 
           ElevatedButton(
-          onPressed: () {
-            
+          onPressed: () async {
+            try {
+              await AuthService().register(
+                email: _email.text,
+                username: _username.text,
+                name: _name.text,
+                password: _password.text,
+              );
+
+              // Éxito
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Usuario creado correctamente")),
+              );
+
+            } catch (e) {
+              print(e);
+              // Error
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Error: $e")),
+              );
+            }
           },
           child: const Text("Registrarse"),
         )

@@ -12,25 +12,30 @@ class AuthService {
   }) async {
 
     //Crear usuario en auth
-    final res= await supabase.auth.signUp(
-      email: email,
-      password: password,
-    );
+    try {
+      final res = await supabase.auth.signUp(
+          email: email,
+          password: password,
+          data: {
+            'username': username,
+            'name': name,
+          }
+      );
 
-    final user= res.user;
+      final user = res.user;
 
-    if(user == null){
-      throw Exception("No se pudo crear el usuario");
+      if (user == null) {
+        throw Exception("No se pudo crear el usuario");
+      }
+      
+    } on AuthException catch (e){
+      print(e);
+      throw e.message;
+    } catch (e){
+      print(e);
+      throw Exception ("Error inesperado: $e");
     }
-
-    //Insertar en tabla usuario
-    await supabase.from('usuario').insert({
-      'id': 'user.id',
-      'email': 'email',
-      'username': 'username',
-      'name': 'name',
-      'tipo': 'client',
-    });
+  
 
   }
 
