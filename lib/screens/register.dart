@@ -1,5 +1,7 @@
+import 'package:dego/funciones/check.dart';
 import 'package:flutter/material.dart';
 import 'package:dego/services/auth_service.dart';
+import 'package:dego/funciones/check.dart';
 
 class Register extends StatefulWidget {
 
@@ -10,6 +12,9 @@ class Register extends StatefulWidget {
 }
 
 class _Register extends State<Register> {
+
+  final _formKey = GlobalKey<FormState>();
+
   TextEditingController _username = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _name = TextEditingController();
@@ -25,7 +30,10 @@ class _Register extends State<Register> {
     final textFieldWidth = screenWidth * 0.5;
 
     return Scaffold(
-     body: Center (
+     body: Form(
+      key: _formKey,
+      child: Center (
+        child: SingleChildScrollView(
         child: Column(children: [
 
           //USERNAME
@@ -33,8 +41,9 @@ class _Register extends State<Register> {
             Text("Nombre de usuario: "),
             Expanded(
             child: TextFormField(
-              key: const Key('nameField'),
+              key: const Key('usernameField'),
               controller: _username,
+              validator:  (value) => CheckUsername().comprobar(value),
               cursorColor: Colors.grey,
               style: TextStyle(
                 color: Colors.black,
@@ -52,7 +61,6 @@ class _Register extends State<Register> {
                   fontSize:(screenHeight + screenWidth) *0.0125,
                 ),
               ),
-              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
             ),
             ),
           ],),
@@ -64,6 +72,7 @@ class _Register extends State<Register> {
             child: TextFormField(
               key: const Key('nameField'),
               controller: _name,
+              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
               cursorColor: Colors.grey,
               style: TextStyle(
                 color: Colors.black,
@@ -81,7 +90,6 @@ class _Register extends State<Register> {
                   fontSize:(screenHeight + screenWidth) *0.0125,
                 ),
               ),
-              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
             ),
             ),
           ],),
@@ -91,8 +99,9 @@ class _Register extends State<Register> {
             Text("Email: "),
             Expanded(
             child: TextFormField(
-              key: const Key('nameField'),
+              key: const Key('emailField'),
               controller: _email,
+              validator:  (value) => CheckEmail().comprobar(value),
               cursorColor: Colors.grey,
               style: TextStyle(
                 color: Colors.black,
@@ -110,7 +119,6 @@ class _Register extends State<Register> {
                   fontSize:(screenHeight + screenWidth) *0.0125,
                 ),
               ),
-              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
             ),
             ),
           ],),
@@ -120,7 +128,8 @@ class _Register extends State<Register> {
             Text("Contraseña: "),
             Expanded(
             child: TextFormField(
-              key: const Key('nameField'),
+              key: const Key('passwordField'),
+              validator:  (value) => CheckPassword().comprobar(value),
               controller: _password,
               cursorColor: Colors.grey,
               style: TextStyle(
@@ -130,6 +139,7 @@ class _Register extends State<Register> {
                 fontSize: (screenHeight + screenWidth) * 0.0125,
               ),
               decoration: InputDecoration(
+                errorMaxLines: 6,
                 border: InputBorder.none,
                 hintText: 'Introducir contraseña',
                 hintStyle: TextStyle(
@@ -139,7 +149,6 @@ class _Register extends State<Register> {
                   fontSize:(screenHeight + screenWidth) *0.0125,
                 ),
               ),
-              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
             ),
             ),
           ],),
@@ -149,8 +158,13 @@ class _Register extends State<Register> {
             Text("Repetir contraseña: "),
             Expanded(
             child: TextFormField(
-              key: const Key('nameField'),
+              key: const Key('password2Field'),
               controller: _password2,
+              validator:  (value) {
+                if (value == null || value.isEmpty) return "Campo obligatorio";
+                if (value != _password.text) return "Las contraseñas no coinciden";
+                return null;
+              },
               cursorColor: Colors.grey,
               style: TextStyle(
                 color: Colors.black,
@@ -168,13 +182,13 @@ class _Register extends State<Register> {
                   fontSize:(screenHeight + screenWidth) *0.0125,
                 ),
               ),
-              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
             ),
             ),
           ],),
 
           ElevatedButton(
           onPressed: () async {
+            if (_formKey.currentState!.validate()) {
             try {
               await AuthService().register(
                 email: _email.text,
@@ -195,11 +209,14 @@ class _Register extends State<Register> {
                 SnackBar(content: Text("Error: $e")),
               );
             }
+            }
           },
           child: const Text("Registrarse"),
         )
 
       ],)
+     ),
+     ),
      ),
     );
   }

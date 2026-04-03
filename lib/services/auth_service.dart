@@ -27,7 +27,7 @@ class AuthService {
       if (user == null) {
         throw Exception("No se pudo crear el usuario");
       }
-      
+
     } on AuthException catch (e){
       print(e);
       throw e.message;
