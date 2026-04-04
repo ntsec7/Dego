@@ -5,11 +5,9 @@ class UsuarioService {
 
   final supabase = Supabase.instance.client;
 
-  Future<Usuario> getUser() async {
-    final user= supabase.auth.currentUser;
+  Future<Usuario> getUser(String userId) async {
 
-    //el ! fuerza a dart a creer que no es null
-    final res = await supabase.from('usuario').select().eq('id', user!.id).single();
+    final res = await supabase.from('usuario').select().eq('id', userId).single();
 
     return Usuario.fromMap(res);
 

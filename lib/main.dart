@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';  //activa riverpod en toda la app
 import 'package:dego/screens/register.dart';
+import 'package:dego/screens/login.dart';
+import 'package:dego/screens/home_page.dart';
+import 'package:dego/screens/auth_gate.dart';
 
 void main() async{
   await Supabase.initialize(
       url: 'https://iqnyxljnkjaxowvsapbs.supabase.co',
       anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxbnl4bGpua2pheG93dnNhcGJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzU5MjksImV4cCI6MjA4OTk1MTkyOX0.C-sPr9ZqzqdREpDbvSlMdUdBUH8b49KkROzQaZQuhFc'
   );
-  runApp(const MyApp());
+  
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,9 +31,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: 'register',
+      home: const AuthGate(),
       routes: {
         'register': (context) => Register(),
+        'login' : (context) => Login(),
+        'homePage' : (context) => Homepage(),
       },
     );
   }

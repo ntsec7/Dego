@@ -29,10 +29,8 @@ class AuthService {
       }
 
     } on AuthException catch (e){
-      print(e);
       throw e.message;
     } catch (e){
-      print(e);
       throw Exception ("Error inesperado: $e");
     }
   
@@ -46,15 +44,25 @@ class AuthService {
     //Si ha introducido el username coge el email para hacer el login
     if(!input.contains('@')){
       //single porque solo esperamos uno. Si hay más de uno o 0 da error
-      final res=await supabase.from('usuario').select('email').eq('username',input).single();
+      final res=await supabase.from('usuario').select('email').eq('username',input).maybeSingle(); // Usar maybeSingle evita que explote si no existe;
+
+      if (res == null) {
+        throw "El nombre de usuario no existe";
+      }
 
       email= res['email'];
     }
 
-    await supabase.auth.signInWithPassword(
-      email: email,
-      password: password
-    );
+    try{
+      await supabase.auth.signInWithPassword(
+        email: email,
+        password: password
+      );
+    } on AuthException catch (e){
+      throw e.message;
+    } catch (e){
+      throw Exception ("Error inesperado: $e");
+    }
 
   }
 

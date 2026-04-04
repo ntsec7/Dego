@@ -1,17 +1,19 @@
 import 'package:dego/funciones/check.dart';
+import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:dego/services/auth_service.dart';
-import 'package:dego/funciones/check.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Register extends StatefulWidget {
+class Register extends ConsumerStatefulWidget {
 
   const Register({super.key});
 
   @override
-  State<Register> createState() => _Register();
+  ConsumerState<Register> createState() => _Register();
 }
 
-class _Register extends State<Register> {
+class _Register extends ConsumerState<Register> {
+
+  bool _loading = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -187,10 +189,12 @@ class _Register extends State<Register> {
           ],),
 
           ElevatedButton(
-          onPressed: () async {
+          onPressed: _loading ? null : () async {
             if (_formKey.currentState!.validate()) {
+              setState(() => _loading = true);
+
             try {
-              await AuthService().register(
+              await ref.read(authProvider.notifier).register(
                 email: _email.text,
                 username: _username.text,
                 name: _name.text,
@@ -199,16 +203,17 @@ class _Register extends State<Register> {
 
               // Éxito
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Usuario creado correctamente")),
+                const SnackBar(content: Text("Usuario creado correctamente")),
               );
 
             } catch (e) {
-              print(e);
               // Error
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Error: $e")),
               );
             }
+
+              setState(() => _loading = false);
             }
           },
           child: const Text("Registrarse"),
