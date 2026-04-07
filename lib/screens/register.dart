@@ -195,16 +195,18 @@ class _Register extends ConsumerState<Register> {
 
             try {
               await ref.read(authProvider.notifier).register(
-                email: _email.text,
-                username: _username.text,
-                name: _name.text,
-                password: _password.text,
+                email: _email.text.trim(),
+                username: _username.text.trim(),
+                name: _name.text.trim(),
+                password: _password.text.trim(),
               );
 
               // Éxito
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Usuario creado correctamente")),
               );
+
+              Navigator.of(context).pushReplacementNamed('/');
 
             } catch (e) {
               // Error
