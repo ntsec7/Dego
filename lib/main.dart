@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';  //activa riverpod en toda la app
+import 'package:dego/config/theme.dart';
 import 'package:dego/screens/register.dart';
 import 'package:dego/screens/login.dart';
 import 'package:dego/screens/home_page.dart';
@@ -28,9 +29,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false, //Para que no ponga "Demo"
       title: 'DEGO',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
+
+
+    theme: lightTheme,
+
+    darkTheme:  darkTheme,
+
+    themeMode: ThemeMode.system,  //Coge el tema del sistema
+
       home: const AuthGate(),
       routes: {
         'register': (context) => Register(),
