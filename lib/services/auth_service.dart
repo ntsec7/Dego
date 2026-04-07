@@ -37,20 +37,34 @@ class AuthService {
 
   }
 
-
   Future<void> login(String input, String password) async{
     String email = input;
 
     //Si ha introducido el username coge el email para hacer el login
     if(!input.contains('@')){
-      //single porque solo esperamos uno. Si hay más de uno o 0 da error
-      final res=await supabase.from('usuario').select('email').eq('username',input).maybeSingle(); // Usar maybeSingle evita que explote si no existe;
 
-      if (res == null) {
-        throw "El nombre de usuario no existe";
+      try {
+
+        // Invocamos la edge function
+        final res = await supabase.functions.invoke(
+          'get-email-from-username', 
+          body: {
+            'username': input,
+          },
+        );
+
+        if (res.status != 200) {
+          throw 'Credenciales incorrectas';
+        }
+
+        email = res.data['email'];
+
+
+      } catch (e) {
+        // Si es un error de red o el throw anterior
+        throw e.toString();
       }
 
-      email= res['email'];
     }
 
     try{
@@ -67,3 +81,4 @@ class AuthService {
   }
 
 }
+
