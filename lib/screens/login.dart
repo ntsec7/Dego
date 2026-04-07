@@ -2,6 +2,7 @@ import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:dego/services/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../l10n/app_localizations.dart';
 
 class Login extends ConsumerStatefulWidget {
 
@@ -133,7 +134,39 @@ class _Login extends ConsumerState<Login> {
 
           },
           child:const Text("Registrarse"),
-        )
+        ),
+
+        Row(children: [
+            Text(AppLocalizations.of(context)!.prueba),
+            Expanded(
+            child: TextFormField(
+              key: const Key('passwordField'),
+              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
+              controller: _password,
+              cursorColor: Colors.grey,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Arial',
+                fontSize: (screenHeight + screenWidth) * 0.0125,
+              ),
+              decoration: InputDecoration(
+                errorMaxLines: 6,
+                border: InputBorder.none,
+                hintText: 'Introducir contraseña',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Arial',
+                  fontSize:(screenHeight + screenWidth) *0.0125,
+                ),
+              ),
+            ),
+            ),
+          ],),
 
       ],)
      ),

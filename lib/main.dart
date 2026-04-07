@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';  //activa riverpod en toda la app
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'package:dego/config/theme.dart';
 import 'package:dego/screens/register.dart';
 import 'package:dego/screens/login.dart';
@@ -30,12 +32,24 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, //Para que no ponga "Demo"
       title: 'DEGO',
 
-
+    //Tema
     theme: lightTheme,
-
     darkTheme:  darkTheme,
-
     themeMode: ThemeMode.system,  //Coge el tema del sistema
+
+    //Idioma
+    localizationsDelegates: const [
+      AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+
+    supportedLocales: const [
+      Locale('es'),
+    ],
+
+    locale: const Locale('es'),
 
       home: const AuthGate(),
       routes: {
