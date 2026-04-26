@@ -1,3 +1,8 @@
 {
-    "prueba": "Esto es una prueba"
+    "usuario" : "Usuario",
+    "intro_usuario" : "Introduce el email o username",
+    "contra" : "Contraseña",
+    "intro_contra" : "Introduce la contraseña",
+    "login" : "Iniciar sesión",
+    "registrarse" : "Registrarse"
 }

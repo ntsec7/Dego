@@ -1,11 +1,11 @@
 abstract class Check{
-  String? comprobar(String? value);
+  String? check(String? value);
 }
 
 class CheckEmail implements Check{
 
   @override
-  String? comprobar(String? value){
+  String? check(String? value){
 
     if(value == null || value.isEmpty) return "Campo obligatorio";
 
@@ -23,7 +23,7 @@ class CheckEmail implements Check{
 class CheckUsername implements Check{
 
   @override
-  String? comprobar(String? value){
+  String? check(String? value){
 
     if(value == null || value.isEmpty) return "Campo obligatorio";
 
@@ -39,7 +39,7 @@ class CheckUsername implements Check{
 class CheckPassword implements Check{
 
   @override
-  String? comprobar(String? value){
+  String? check(String? value){
 
     if(value == null || value.isEmpty) return "Campo obligatorio";
 

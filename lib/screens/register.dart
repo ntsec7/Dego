@@ -45,7 +45,7 @@ class _Register extends ConsumerState<Register> {
             child: TextFormField(
               key: const Key('usernameField'),
               controller: _username,
-              validator:  (value) => CheckUsername().comprobar(value),
+              validator:  (value) => CheckUsername().check(value),
               cursorColor: Colors.grey,
               style: TextStyle(
                 color: Colors.black,
@@ -103,7 +103,7 @@ class _Register extends ConsumerState<Register> {
             child: TextFormField(
               key: const Key('emailField'),
               controller: _email,
-              validator:  (value) => CheckEmail().comprobar(value),
+              validator:  (value) => CheckEmail().check(value),
               cursorColor: Colors.grey,
               style: TextStyle(
                 color: Colors.black,
@@ -131,7 +131,7 @@ class _Register extends ConsumerState<Register> {
             Expanded(
             child: TextFormField(
               key: const Key('passwordField'),
-              validator:  (value) => CheckPassword().comprobar(value),
+              validator:  (value) => CheckPassword().check(value),
               controller: _password,
               cursorColor: Colors.grey,
               style: TextStyle(

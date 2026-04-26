@@ -1,8 +1,8 @@
 import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:dego/services/auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../l10n/app_localizations.dart';
+import 'package:dego/utilities/lang.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Login extends ConsumerStatefulWidget {
 
@@ -34,13 +34,36 @@ class _Login extends ConsumerState<Login> {
       key: _formKey,
       child: Center (
         child: SingleChildScrollView(
-        child: Column(children: [
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+        child: Column(
+
+          mainAxisAlignment: MainAxisAlignment.center, // Centrado vertical
+          crossAxisAlignment: CrossAxisAlignment.center, // Centrado horizontal
+
+        children: [
+
+          //DEGO
+          Text(
+              "DEGO",
+              style: GoogleFonts.shareTechMono(
+                fontSize: (screenHeight + screenWidth) * 0.05, 
+                fontWeight: FontWeight.bold),
+          ),
+          
+          SizedBox(height: screenHeight * 0.1),
+
 
         //NOMBRE
         Row(children: [
-            Text("Nombre: "),
+            Text("${context.lang.usuario}: ",
+             style: TextStyle(
+              fontSize : (screenHeight + screenWidth) * 0.014,
+             ),
+            ),
+            SizedBox(width: screenWidth * 0.03),
             Expanded(
-            child: TextFormField(
+            child:TextFormField(
+
               key: const Key('nameField'),
               controller: _name,
               validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
@@ -52,22 +75,32 @@ class _Login extends ConsumerState<Login> {
                 fontSize: (screenHeight + screenWidth) * 0.0125,
               ),
               decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Introducir nombre',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Arial',
-                  fontSize:(screenHeight + screenWidth) *0.0125,
-                ),
-              ),
+                          hintText: context.lang.intro_usuario,
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.normal,
+                            fontFamily: 'Arial',
+                            fontSize:(screenHeight + screenWidth) *0.0125,
+                          ),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)), 
+                          filled: true,
+                          fillColor: Colors.white,
+                          isDense: true, // Esto reduce el tamaño base
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                        ),
             ),
             ),
           ],),
 
+          SizedBox(height: screenHeight * 0.05),
+
           //CONTRASEÑA
           Row(children: [
-            Text("Contraseña: "),
+            Text("${context.lang.contra}: ",
+             style: TextStyle(
+              fontSize : (screenHeight + screenWidth) * 0.014,
+             ),
+            ),
             Expanded(
             child: TextFormField(
               key: const Key('passwordField'),
@@ -85,19 +118,26 @@ class _Login extends ConsumerState<Login> {
               ),
               decoration: InputDecoration(
                 errorMaxLines: 6,
-                border: InputBorder.none,
-                hintText: 'Introducir contraseña',
+                hintText: context.lang.intro_contra,
                 hintStyle: TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.normal,
                   fontFamily: 'Arial',
                   fontSize:(screenHeight + screenWidth) *0.0125,
                 ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)), 
+                filled: true,
+                fillColor: Colors.white,
+                isDense: true, // Esto reduce el tamaño base
+                contentPadding: const EdgeInsets.symmetric(vertical: 8),
               ),
             ),
             ),
           ],),
 
+          SizedBox(height: screenHeight * 0.05),
+
+          //INICIAR SESIÓN
           ElevatedButton(
           onPressed: _loading
           ? null // Deshabilita el botón mientras carga
@@ -121,52 +161,15 @@ class _Login extends ConsumerState<Login> {
           },
           child: _loading 
             ? const CircularProgressIndicator(color: Colors.white) 
-            : const Text("Iniciar Sesión"),
+            : Text(context.lang.login),
         ),
 
         ElevatedButton(
           onPressed: () {
             Navigator.pushNamed(context, 'register');
-
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(builder: (context) => const Register()),
-            // );
-
           },
-          child:const Text("Registrarse"),
+          child: Text(context.lang.registrarse),
         ),
-
-        Row(children: [
-            Text(AppLocalizations.of(context)!.prueba),
-            Expanded(
-            child: TextFormField(
-              key: const Key('passwordField'),
-              validator:  (value) => value == null || value.isEmpty ? 'Campo obligatorio' : null,
-              controller: _password,
-              cursorColor: Colors.grey,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Arial',
-                fontSize: (screenHeight + screenWidth) * 0.0125,
-              ),
-              decoration: InputDecoration(
-                errorMaxLines: 6,
-                border: InputBorder.none,
-                hintText: 'Introducir contraseña',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Arial',
-                  fontSize:(screenHeight + screenWidth) *0.0125,
-                ),
-              ),
-            ),
-            ),
-          ],),
 
       ],)
      ),

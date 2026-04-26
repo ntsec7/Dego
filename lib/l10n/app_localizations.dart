@@ -94,11 +94,41 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('es')];
 
-  /// No description provided for @prueba.
+  /// No description provided for @usuario.
   ///
   /// In es, this message translates to:
-  /// **'Esto es una prueba'**
-  String get prueba;
+  /// **'Usuario'**
+  String get usuario;
+
+  /// No description provided for @intro_usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce el email o username'**
+  String get intro_usuario;
+
+  /// No description provided for @contra.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña'**
+  String get contra;
+
+  /// No description provided for @intro_contra.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce la contraseña'**
+  String get intro_contra;
+
+  /// No description provided for @login.
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciar sesión'**
+  String get login;
+
+  /// No description provided for @registrarse.
+  ///
+  /// In es, this message translates to:
+  /// **'Registrarse'**
+  String get registrarse;
 }
 
 class _AppLocalizationsDelegate
