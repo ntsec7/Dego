@@ -1,8 +1,20 @@
 {
     "usuario" : "Usuario",
-    "intro_usuario" : "Introduce el email o username",
+    "intro_usuario" : "Email o username",
     "contra" : "Contraseña",
-    "intro_contra" : "Introduce la contraseña",
+    "intro_contra" : "Contraseña",
     "login" : "Iniciar sesión",
-    "registrarse" : "Registrarse"
+    "registrarse" : "Registrarse",
+    "campo_obligatorio" : "Campo obligatorio",
+    "olvidado_contra" : "He olvidado mi contraseña",
+    "recuperar_contra" : "Recuperar contraseña",
+    "txt_recuperar_contra" : "Introduce tu email y te enviaremos un correo para restablecer tu contraseña.",
+    "intro_email" : "Introduce el email",
+    "cancelar" : "Cancelar",
+    "enviar" : "Enviar",
+    "txt_recuperar_contra2" : "Revisa tu correo para continuar",
+    "politica_priv" : "Política de privacidad",
+    "term_cond" : "Términos y condiciones",
+    "polit_cookies" : "Política de cookies",
+    "aviso_legal" : "Aviso legal"
 }

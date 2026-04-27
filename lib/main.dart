@@ -1,3 +1,4 @@
+import 'package:dego/screens/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';  //activa riverpod en toda la app
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         'register': (context) => Register(),
         'login' : (context) => Login(),
         'homePage' : (context) => Homepage(),
+        'resetPassword' : (context) => ResetPassword(),
       },
     );
   }

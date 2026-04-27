@@ -68,4 +68,15 @@ class AuthNotifier extends StateNotifier<User?> {
     }
     
   }
+
+  //RECUPERAR CONTRASEÑA
+  Future<void> recuperatePassword(String email) async{
+    try{
+      await supabase.auth.resetPasswordForEmail(email,
+      redirectTo: 'http://localhost:3000/resetPassword');
+    } catch (e){
+      rethrow;
+    }
+  }
+
 }

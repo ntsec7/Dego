@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// No description provided for @intro_usuario.
   ///
   /// In es, this message translates to:
-  /// **'Introduce el email o username'**
+  /// **'Email o username'**
   String get intro_usuario;
 
   /// No description provided for @contra.
@@ -115,7 +115,7 @@ abstract class AppLocalizations {
   /// No description provided for @intro_contra.
   ///
   /// In es, this message translates to:
-  /// **'Introduce la contraseña'**
+  /// **'Contraseña'**
   String get intro_contra;
 
   /// No description provided for @login.
@@ -129,6 +129,78 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Registrarse'**
   String get registrarse;
+
+  /// No description provided for @campo_obligatorio.
+  ///
+  /// In es, this message translates to:
+  /// **'Campo obligatorio'**
+  String get campo_obligatorio;
+
+  /// No description provided for @olvidado_contra.
+  ///
+  /// In es, this message translates to:
+  /// **'He olvidado mi contraseña'**
+  String get olvidado_contra;
+
+  /// No description provided for @recuperar_contra.
+  ///
+  /// In es, this message translates to:
+  /// **'Recuperar contraseña'**
+  String get recuperar_contra;
+
+  /// No description provided for @txt_recuperar_contra.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce tu email y te enviaremos un correo para restablecer tu contraseña.'**
+  String get txt_recuperar_contra;
+
+  /// No description provided for @intro_email.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce el email'**
+  String get intro_email;
+
+  /// No description provided for @cancelar.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get cancelar;
+
+  /// No description provided for @enviar.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar'**
+  String get enviar;
+
+  /// No description provided for @txt_recuperar_contra2.
+  ///
+  /// In es, this message translates to:
+  /// **'Revisa tu correo para continuar'**
+  String get txt_recuperar_contra2;
+
+  /// No description provided for @politica_priv.
+  ///
+  /// In es, this message translates to:
+  /// **'Política de privacidad'**
+  String get politica_priv;
+
+  /// No description provided for @term_cond.
+  ///
+  /// In es, this message translates to:
+  /// **'Términos y condiciones'**
+  String get term_cond;
+
+  /// No description provided for @polit_cookies.
+  ///
+  /// In es, this message translates to:
+  /// **'Política de cookies'**
+  String get polit_cookies;
+
+  /// No description provided for @aviso_legal.
+  ///
+  /// In es, this message translates to:
+  /// **'Aviso legal'**
+  String get aviso_legal;
 }
 
 class _AppLocalizationsDelegate
