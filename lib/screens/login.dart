@@ -103,7 +103,7 @@ class _Login extends ConsumerState<Login> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final textFieldWidth = screenWidth * 0.5;
+    bool web = screenWidth > 600 ? true : false;
 
     return Scaffold(
      body: SafeArea(
@@ -124,8 +124,10 @@ class _Login extends ConsumerState<Login> {
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
-              // child: Center(
                 child: SingleChildScrollView(
+                  child: Center( 
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 800),
                   child: Form(
                   key: _formKey,
                   // child: Center (
@@ -140,15 +142,16 @@ class _Login extends ConsumerState<Login> {
 
                     //NOMBRE
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,  //para que el error no suba el campo
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
                         SizedBox(
-                          width: screenWidth * 0.25,
+                          width: web ? screenWidth * 0.1 : screenWidth * 0.25,
                           child: Text("${context.lang.usuario}: ",
                             textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize : (screenHeight + screenWidth) * 0.014,
+                                fontSize : web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
                               ),
                           ),
                         ),
@@ -165,7 +168,7 @@ class _Login extends ConsumerState<Login> {
                             color: Colors.black,
                             fontWeight: FontWeight.normal,
                             fontFamily: 'Arial',
-                            fontSize: (screenHeight + screenWidth) * 0.0125,
+                            fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
                           ),
                           decoration: InputDecoration(
                                       hintText: context.lang.intro_usuario,
@@ -173,7 +176,10 @@ class _Login extends ConsumerState<Login> {
                                         color: Colors.grey,
                                         fontWeight: FontWeight.normal,
                                         fontFamily: 'Arial',
-                                        fontSize:(screenHeight + screenWidth) *0.012,
+                                        fontSize: web ? (screenHeight + screenWidth) *0.01 : (screenHeight + screenWidth) *0.012,
+                                      ),
+                                      errorStyle: TextStyle(
+                                        fontSize: web ? (screenHeight + screenWidth) *0.007 : (screenHeight + screenWidth) *0.012,
                                       ),
                                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)), 
                                       filled: true,
@@ -189,15 +195,16 @@ class _Login extends ConsumerState<Login> {
 
                       //CONTRASEÑA
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
                         children: [
                         SizedBox(
-                          width: screenWidth * 0.25,
+                          width: web ? screenWidth * 0.1 : screenWidth * 0.25,
                           child: Text("${context.lang.contra}: ",
                           textAlign: TextAlign.right,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize : (screenHeight + screenWidth) * 0.014,
+                            fontSize : web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
                           ),
                           ),
                           ),
@@ -216,7 +223,7 @@ class _Login extends ConsumerState<Login> {
                             color: Colors.black,
                             fontWeight: FontWeight.normal,
                             fontFamily: 'Arial',
-                            fontSize: (screenHeight + screenWidth) * 0.012,
+                            fontSize: web ? (screenHeight + screenWidth) *0.01 : (screenHeight + screenWidth) * 0.012,
                           ),
                           decoration: InputDecoration(
                             errorMaxLines: 6,
@@ -225,13 +232,16 @@ class _Login extends ConsumerState<Login> {
                               color: Colors.grey,
                               fontWeight: FontWeight.normal,
                               fontFamily: 'Arial',
-                              fontSize:(screenHeight + screenWidth) *0.0125,
+                              fontSize: web ? (screenHeight + screenWidth) *0.01 : (screenHeight + screenWidth) *0.0125,
+                            ),
+                            errorStyle: TextStyle(
+                              fontSize: web ? (screenHeight + screenWidth) *0.007 : (screenHeight + screenWidth) *0.012,
                             ),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)), 
                             filled: true,
                             fillColor: Colors.white,
                             isDense: true, // Esto reduce el tamaño base
-                            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10),
                             suffixIcon: IconButton(
                             icon: Icon(
                               // Cambia el icono según el estado
@@ -261,6 +271,7 @@ class _Login extends ConsumerState<Login> {
                           style: TextStyle(
                             color: Colors.blue,
                             decoration: TextDecoration.underline,
+                            fontSize:  web ? (screenHeight + screenWidth) *0.007 : (screenHeight + screenWidth) *0.012,
                           ),
                         ),
                       ),
@@ -294,7 +305,7 @@ class _Login extends ConsumerState<Login> {
                         : Text(context.lang.login,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: (screenHeight + screenWidth) * 0.014,
+                              fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
                             ),),
                     ),
 
@@ -316,7 +327,7 @@ class _Login extends ConsumerState<Login> {
                       child: Text(context.lang.registrarse,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: (screenHeight + screenWidth) * 0.014,
+                              fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
                             ),),
                     ),
 
@@ -324,7 +335,8 @@ class _Login extends ConsumerState<Login> {
 
                     Image.asset(
                       'assets/images/logo.png',
-                      width: screenWidth * 0.2,
+                      // Si el 20% del ancho es mayor a 150px, usa el 0.07(para web)
+                      width: (screenWidth * 0.2) > 150 ? screenWidth * 0.07 : screenWidth * 0.2,
                     ),
 
                     SizedBox(height: screenHeight * 0.03),
@@ -333,6 +345,8 @@ class _Login extends ConsumerState<Login> {
                 // ),
                 ),
                 ),
+                  ),
+                  ),
                 ),
                   ),
                 ),

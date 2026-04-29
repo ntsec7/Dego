@@ -22,6 +22,12 @@ class LegalFooter extends StatelessWidget {
   }
 
   Widget _link(BuildContext context, String text, String route) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    bool web = screenWidth > 600 ? true : false;
+
     return TextButton(
       onPressed: () {
         Navigator.pushNamed(context, route);
@@ -33,8 +39,8 @@ class LegalFooter extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 12,
+        style: TextStyle(
+          fontSize: web ? (screenHeight + screenWidth) *0.006 : (screenHeight + screenWidth) *0.01,
           color: Colors.blue,
         ),
       ),
