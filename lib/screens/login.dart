@@ -23,6 +23,8 @@ class _Login extends ConsumerState<Login> {
   TextEditingController _name = TextEditingController();  //puede ser email o username
   TextEditingController _password = TextEditingController();
 
+   bool _passwordVisible= true;
+
   void _showResetPasswordDialog(BuildContext context) {
   final TextEditingController emailController = TextEditingController();
 
@@ -207,7 +209,7 @@ class _Login extends ConsumerState<Login> {
                           controller: _password,
                           cursorColor: Colors.grey,
                           textAlign: TextAlign.center,
-                          obscureText: true,
+                          obscureText: _passwordVisible,
                           enableSuggestions: false,
                           autocorrect: false,
                           style: TextStyle(
@@ -230,6 +232,19 @@ class _Login extends ConsumerState<Login> {
                             fillColor: Colors.white,
                             isDense: true, // Esto reduce el tamaño base
                             contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                            suffixIcon: IconButton(
+                            icon: Icon(
+                              // Cambia el icono según el estado
+                              _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            onPressed: () {
+                              // Actualizamos el estado para redibujar el widget
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                          ),
                           ),
                         ),
                         ),
