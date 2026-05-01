@@ -23,7 +23,7 @@ class _Login extends ConsumerState<Login> {
   TextEditingController _name = TextEditingController();  //puede ser email o username
   TextEditingController _password = TextEditingController();
 
-   bool _passwordVisible= true;
+  bool _passwordVisible= true;
 
   void _showResetPasswordDialog(BuildContext context) {
   final TextEditingController emailController = TextEditingController();
@@ -130,12 +130,10 @@ class _Login extends ConsumerState<Login> {
                     constraints: BoxConstraints(maxWidth: 800),
                   child: Form(
                   key: _formKey,
-                  // child: Center (
                     child: SingleChildScrollView(
                       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      // mainAxisAlignment: MainAxisAlignment.end, // En el fondo verticalmente
                       crossAxisAlignment: CrossAxisAlignment.center, // Centrado horizontal
 
                     children: [
@@ -246,7 +244,7 @@ class _Login extends ConsumerState<Login> {
                             icon: Icon(
                               // Cambia el icono según el estado
                               _passwordVisible ? Icons.visibility_off : Icons.visibility,
-                              color: Theme.of(context).primaryColor,
+                              color: Colors.black,
                             ),
                             onPressed: () {
                               // Actualizamos el estado para redibujar el widget
@@ -271,6 +269,7 @@ class _Login extends ConsumerState<Login> {
                           style: TextStyle(
                             color: Colors.blue,
                             decoration: TextDecoration.underline,
+                            decorationColor: Colors.blue,
                             fontSize:  web ? (screenHeight + screenWidth) *0.007 : (screenHeight + screenWidth) *0.012,
                           ),
                         ),
@@ -342,7 +341,6 @@ class _Login extends ConsumerState<Login> {
                     SizedBox(height: screenHeight * 0.03),
 
                   ],)
-                // ),
                 ),
                 ),
                   ),

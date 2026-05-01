@@ -201,6 +201,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Aviso legal'**
   String get aviso_legal;
+
+  /// No description provided for @username.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre de usuario'**
+  String get username;
+
+  /// No description provided for @nombre.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get nombre;
+
+  /// No description provided for @email.
+  ///
+  /// In es, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @repite_contra.
+  ///
+  /// In es, this message translates to:
+  /// **'Repite la contraseña'**
+  String get repite_contra;
+
+  /// No description provided for @contras_no_coinciden.
+  ///
+  /// In es, this message translates to:
+  /// **'Las contraseñas no coinciden'**
+  String get contras_no_coinciden;
 }
 
 class _AppLocalizationsDelegate

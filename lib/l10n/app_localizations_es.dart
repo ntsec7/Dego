@@ -62,4 +62,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aviso_legal => 'Aviso legal';
+
+  @override
+  String get username => 'Nombre de usuario';
+
+  @override
+  String get nombre => 'Nombre';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get repite_contra => 'Repite la contraseña';
+
+  @override
+  String get contras_no_coinciden => 'Las contraseñas no coinciden';
 }

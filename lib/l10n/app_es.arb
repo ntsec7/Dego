@@ -16,5 +16,10 @@
     "politica_priv" : "Política de privacidad",
     "term_cond" : "Términos y condiciones",
     "polit_cookies" : "Política de cookies",
-    "aviso_legal" : "Aviso legal"
+    "aviso_legal" : "Aviso legal",
+    "username" : "Nombre de usuario",
+    "nombre" : "Nombre",
+    "email" : "Email",
+    "repite_contra" : "Repite la contraseña",
+    "contras_no_coinciden" : "Las contraseñas no coinciden"
 }
