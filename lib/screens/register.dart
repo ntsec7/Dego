@@ -55,7 +55,7 @@ class _Register extends ConsumerState<Register> {
               child: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, 'login');
               },
             ),
             ),
@@ -81,12 +81,16 @@ class _Register extends ConsumerState<Register> {
      child: Form(
       key: _formKey,
         child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center, // Centrado horizontal
 
           children: [
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+            child: Column(
+            children: [
 
           SizedBox(height: screenHeight * 0.05),
 
@@ -439,6 +443,9 @@ class _Register extends ConsumerState<Register> {
 
           SizedBox(height: screenHeight * 0.03),
 
+            ],
+            ),
+          ),
           const LegalFooter(),
 
       ],)
