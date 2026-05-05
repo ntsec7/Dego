@@ -11,6 +11,9 @@ import 'package:dego/screens/home_page.dart';
 import 'package:dego/screens/auth_gate.dart';
 
 void main() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
       url: 'https://iqnyxljnkjaxowvsapbs.supabase.co',
       anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxbnl4bGpua2pheG93dnNhcGJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzU5MjksImV4cCI6MjA4OTk1MTkyOX0.C-sPr9ZqzqdREpDbvSlMdUdBUH8b49KkROzQaZQuhFc'
@@ -23,13 +26,43 @@ void main() async{
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+
+}  
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+      // final session = data.session;
+      final event = data.event;
+
+      if (event == AuthChangeEvent.passwordRecovery) {
+        // Usamos la navigatorKey para movernos a la pantalla sin errores de contexto
+        navigatorKey.currentState?.pushNamed('resetPassword');
+      }
+      
+      //Si es un registro nuevo (confirmación de email)
+      // if (event == AuthChangeEvent.signedIn && session != null) {
+      //   navigatorKey.currentState?.pushNamed('login');
+      // }
+    });
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false, //Para que no ponga "Demo"
       title: 'DEGO',
 

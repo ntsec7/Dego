@@ -166,6 +166,12 @@ abstract class AppLocalizations {
   /// **'Cancelar'**
   String get cancelar;
 
+  /// No description provided for @guardar.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get guardar;
+
   /// No description provided for @enviar.
   ///
   /// In es, this message translates to:
@@ -243,6 +249,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Las contraseñas no coinciden'**
   String get contras_no_coinciden;
+
+  /// No description provided for @intro_nueva_contra.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce una nueva contraseña'**
+  String get intro_nueva_contra;
+
+  /// No description provided for @confirmar_email.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmar email'**
+  String get confirmar_email;
+
+  /// No description provided for @confirmar_email_text.
+  ///
+  /// In es, this message translates to:
+  /// **'Diríjase a su correo electrónico para confirmar su cuenta.'**
+  String get confirmar_email_text;
+
+  /// No description provided for @continuar.
+  ///
+  /// In es, this message translates to:
+  /// **'Continuar'**
+  String get continuar;
 }
 
 class _AppLocalizationsDelegate

@@ -36,24 +36,35 @@ class _PoliticsState extends ConsumerState<Politics> {
 
             Align(
               alignment: Alignment.centerLeft,
-              child: IconButton(
+              child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+              IconButton(
               icon: const Icon(Icons.arrow_back_ios_new),
               onPressed: () {
                 Navigator.pushNamed(context, 'login');
               },
             ),
-            ),
+            
 
-            //DEGO
+            //Titulo
             Text(
               widget.type.title(context),
+              style: TextStyle(
+                fontSize: web ? (screenHeight + screenWidth) *0.01 : (screenHeight + screenWidth) *0.018,
+                fontWeight: FontWeight.w500,
+                decoration: TextDecoration.underline, 
+              )
             ),
+              ],
+              ),
+          ),
 
           ],), ), 
 
             Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
+              // child: Align(
+              //   alignment: Alignment.bottomCenter,
                 child: SingleChildScrollView(
                   child: Center( 
                   child: ConstrainedBox(
@@ -63,11 +74,17 @@ class _PoliticsState extends ConsumerState<Politics> {
           child : Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
             children: [
 
           SizedBox(height: screenHeight * 0.05),
 
-          Text(widget.type.description(context)),
+          Text(widget.type.description(context),
+          textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: web ? (screenHeight + screenWidth) *0.008 : (screenHeight + screenWidth) *0.0125,
+            ),
+          ),
 
           SizedBox(height: screenHeight * 0.08),
 
@@ -87,7 +104,7 @@ class _PoliticsState extends ConsumerState<Politics> {
       ),
       ),
                 ),
-              ),
+              // ),
             ),
           ],
      ),

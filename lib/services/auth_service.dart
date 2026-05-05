@@ -19,7 +19,8 @@ class AuthService {
           data: {
             'username': username,
             'name': name,
-          }
+          },
+          emailRedirectTo: 'com.dego://login-callback',
       );
 
       final user = res.user;

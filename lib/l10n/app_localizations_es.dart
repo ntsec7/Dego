@@ -46,6 +46,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cancelar => 'Cancelar';
 
   @override
+  String get guardar => 'Guardar';
+
+  @override
   String get enviar => 'Enviar';
 
   @override
@@ -86,4 +89,17 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get contras_no_coinciden => 'Las contraseñas no coinciden';
+
+  @override
+  String get intro_nueva_contra => 'Introduce una nueva contraseña';
+
+  @override
+  String get confirmar_email => 'Confirmar email';
+
+  @override
+  String get confirmar_email_text =>
+      'Diríjase a su correo electrónico para confirmar su cuenta.';
+
+  @override
+  String get continuar => 'Continuar';
 }

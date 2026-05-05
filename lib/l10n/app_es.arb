@@ -11,6 +11,7 @@
     "txt_recuperar_contra" : "Introduce tu email y te enviaremos un correo para restablecer tu contraseña.",
     "intro_email" : "Introduce el email",
     "cancelar" : "Cancelar",
+    "guardar" : "Guardar",
     "enviar" : "Enviar",
     "txt_recuperar_contra2" : "Revisa tu correo para continuar",
     "politica_priv" : "Política de privacidad",
@@ -23,5 +24,9 @@
     "nombre" : "Nombre",
     "email" : "Email",
     "repite_contra" : "Repite la contraseña",
-    "contras_no_coinciden" : "Las contraseñas no coinciden"
+    "contras_no_coinciden" : "Las contraseñas no coinciden",
+    "intro_nueva_contra" : "Introduce una nueva contraseña",
+    "confirmar_email" : "Confirmar email",
+    "confirmar_email_text" : "Diríjase a su correo electrónico para confirmar su cuenta.",
+    "continuar" : "Continuar"
 }

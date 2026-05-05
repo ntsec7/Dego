@@ -73,7 +73,7 @@ class AuthNotifier extends StateNotifier<User?> {
   Future<void> recuperatePassword(String email) async{
     try{
       await supabase.auth.resetPasswordForEmail(email,
-      redirectTo: 'http://localhost:3000/resetPassword');
+      redirectTo: 'com.dego://reset-password');
     } catch (e){
       rethrow;
     }

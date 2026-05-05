@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dego/widgets/legal_footer.dart';
 import 'package:dego/utilities/lang.dart';
+import 'package:dego/screens/auth_gate.dart';
 
 class Register extends ConsumerStatefulWidget {
 
@@ -28,6 +29,34 @@ class _Register extends ConsumerState<Register> {
 
   bool _passwordVisible= true;
   bool _passwordVisible2= true;
+
+  void _showEmailConfirmation(BuildContext context) {
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(context.lang.confirmar_email),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              context.lang.confirmar_email_text,
+            ),
+            SizedBox(height: 12),
+          ],
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pushNamed(context, 'login'),
+            child: Text(context.lang.continuar),
+          ),
+        ],
+      );
+    },
+  );
+}
 
    @override
   Widget build(BuildContext context) {
@@ -412,7 +441,7 @@ class _Register extends ConsumerState<Register> {
                 const SnackBar(content: Text("Usuario creado correctamente")),
               );
 
-              Navigator.of(context).pushReplacementNamed('/');
+              _showEmailConfirmation(context);
 
             } catch (e) {
               // Error
