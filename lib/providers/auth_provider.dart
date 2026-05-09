@@ -79,4 +79,19 @@ class AuthNotifier extends StateNotifier<User?> {
     }
   }
 
+  //CAMBIAR CONTRASEÑA DESPUÉS DE RECUPERARLA
+Future<void> updatePassword(String newPassword) async {
+  try {
+
+    await supabase.auth.updateUser(
+      UserAttributes(
+        password: newPassword,
+      ),
+    );
+
+  } catch (e) {
+    rethrow;
+  }
+}
+
 }

@@ -102,4 +102,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get continuar => 'Continuar';
+
+  @override
+  String get contra_cambiada => 'Contraseña cambiada correctamente';
+
+  @override
+  String get error_credenciales => 'Credenciales incorrectas';
+
+  @override
+  String get error_servidor => 'Error interno del servidor';
+
+  @override
+  String get error_username => 'El nombre de usuario ya está en uso';
+
+  @override
+  String get error_confirma_email =>
+      'Por favor, confirma tu correo electrónico';
+
+  @override
+  String get error_internet => 'No hay conexión a internet';
+
+  @override
+  String get error_datos => 'Error al guardar los datos. Inténtalo de nuevo';
+
+  @override
+  String get error_inesperado =>
+      'Ha ocurrido un error inesperado. Inténtalo más tarde';
 }

@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:dego/utilities/error.dart';
 
 class AuthService {
 
@@ -13,6 +14,18 @@ class AuthService {
 
     //Crear usuario en auth
     try {
+
+      //comprobamos si ya existe el username
+      final resUsername = await supabase
+        .from('usuario')
+        .select('username')
+        .eq('username', username)
+        .maybeSingle();
+
+      if (resUsername != null) {
+        throw 'username_ya_existe'; 
+      }
+
       final res = await supabase.auth.signUp(
           email: email,
           password: password,
@@ -26,13 +39,13 @@ class AuthService {
       final user = res.user;
 
       if (user == null) {
-        throw Exception("No se pudo crear el usuario");
+        throw ("No se pudo crear el usuario");
       }
 
     } on AuthException catch (e){
       throw e.message;
     } catch (e){
-      throw Exception ("Error inesperado: $e");
+      rethrow;
     }
   
 
@@ -63,7 +76,7 @@ class AuthService {
 
       } catch (e) {
         // Si es un error de red o el throw anterior
-        throw e.toString();
+        rethrow;
       }
 
     }
@@ -76,7 +89,7 @@ class AuthService {
     } on AuthException catch (e){
       throw e.message;
     } catch (e){
-      throw Exception ("Error inesperado: $e");
+      rethrow;
     }
 
   }

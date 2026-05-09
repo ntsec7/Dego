@@ -1,4 +1,5 @@
 import 'package:dego/providers/auth_provider.dart';
+import 'package:dego/utilities/error.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
@@ -20,8 +21,8 @@ class _Login extends ConsumerState<Login> {
 
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _name = TextEditingController();  //puede ser email o username
-  TextEditingController _password = TextEditingController();
+  final TextEditingController _name = TextEditingController();  //puede ser email o username
+  final TextEditingController _password = TextEditingController();
 
   bool _passwordVisible= true;
 
@@ -84,8 +85,9 @@ class _Login extends ConsumerState<Login> {
                   );
                 }
               } catch (e) {
+                print(e);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Error: $e")),
+                  SnackBar(content: Text(translateSupabaseError(context,e))),
                 );
               }
             },
@@ -260,6 +262,7 @@ class _Login extends ConsumerState<Login> {
 
                       SizedBox(height: screenHeight * 0.02),
 
+                      //HE OLVIDADO MI CONTRASEÑA
                       InkWell(
                         onTap: () {
                           _showResetPasswordDialog(context);
@@ -287,11 +290,9 @@ class _Login extends ConsumerState<Login> {
                         try {
                           await ref.read(authProvider.notifier).login(_name.text.trim(),_password.text.trim(),);
                         } catch (e) {
-                          print(e);
-                          // Error
                           if (!mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Error: $e")),
+                            SnackBar(content: Text(translateSupabaseError(context,e))),
                           );
                         }
                         finally {

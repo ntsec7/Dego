@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dego/widgets/legal_footer.dart';
 import 'package:dego/utilities/lang.dart';
-import 'package:dego/screens/auth_gate.dart';
+import 'package:dego/utilities/error.dart';
 
 class Register extends ConsumerStatefulWidget {
 
@@ -21,11 +21,11 @@ class _Register extends ConsumerState<Register> {
 
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _username = TextEditingController();
-  TextEditingController _email = TextEditingController();
-  TextEditingController _name = TextEditingController();
-  TextEditingController _password = TextEditingController();
-  TextEditingController _password2 = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _password2 = TextEditingController();
 
   bool _passwordVisible= true;
   bool _passwordVisible2= true;
@@ -444,9 +444,10 @@ class _Register extends ConsumerState<Register> {
               _showEmailConfirmation(context);
 
             } catch (e) {
+              print(e);
               // Error
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Error: $e")),
+                SnackBar(content: Text(translateSupabaseError(context,e))),
               );
             }
 

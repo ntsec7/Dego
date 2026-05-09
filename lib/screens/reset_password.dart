@@ -1,15 +1,18 @@
 import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:dego/funciones/check.dart';
+import 'package:dego/providers/auth_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dego/utilities/error.dart';
 
-class ResetPassword extends StatefulWidget {
+class ResetPassword extends ConsumerStatefulWidget {
   const ResetPassword({super.key});
 
   @override
-  State<ResetPassword> createState() => _ResetPassword();
+  ConsumerState<ResetPassword> createState() => _ResetPassword();
 }
 
-class _ResetPassword extends State<ResetPassword> {
+class _ResetPassword extends ConsumerState<ResetPassword> {
 
     bool _loading = false;
 
@@ -250,24 +253,19 @@ class _ResetPassword extends State<ResetPassword> {
               setState(() => _loading = true);
 
             try {
-              // await ref.read(authProvider.notifier).register(
-              //   email: _email.text.trim(),
-              //   username: _username.text.trim(),
-              //   name: _name.text.trim(),
-              //   password: _password.text.trim(),
-              // );
+              await ref.read(authProvider.notifier).updatePassword(_password.text.trim());
 
               // Éxito
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Usuario creado correctamente")),
+                SnackBar(content: Text(context.lang.contra_cambiada)),
               );
 
-              Navigator.of(context).pushReplacementNamed('/');
+              Navigator.of(context).pushReplacementNamed('homePage');
 
             } catch (e) {
               // Error
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Error: $e")),
+                SnackBar(content: Text(translateSupabaseError(context,e))),
               );
             }
 

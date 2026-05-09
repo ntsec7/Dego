@@ -28,5 +28,13 @@
     "intro_nueva_contra" : "Introduce una nueva contraseña",
     "confirmar_email" : "Confirmar email",
     "confirmar_email_text" : "Diríjase a su correo electrónico para confirmar su cuenta.",
-    "continuar" : "Continuar"
+    "continuar" : "Continuar",
+    "contra_cambiada" : "Contraseña cambiada correctamente",
+    "error_credenciales" : "Credenciales incorrectas",
+    "error_servidor" : "Error interno del servidor",
+    "error_username" : "El nombre de usuario ya está en uso",
+    "error_confirma_email": "Por favor, confirma tu correo electrónico",
+    "error_internet" : "No hay conexión a internet",
+    "error_datos" : "Error al guardar los datos. Inténtalo de nuevo",
+    "error_inesperado" : "Ha ocurrido un error inesperado. Inténtalo más tarde"
 }

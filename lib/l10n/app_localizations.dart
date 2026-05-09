@@ -273,6 +273,54 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Continuar'**
   String get continuar;
+
+  /// No description provided for @contra_cambiada.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña cambiada correctamente'**
+  String get contra_cambiada;
+
+  /// No description provided for @error_credenciales.
+  ///
+  /// In es, this message translates to:
+  /// **'Credenciales incorrectas'**
+  String get error_credenciales;
+
+  /// No description provided for @error_servidor.
+  ///
+  /// In es, this message translates to:
+  /// **'Error interno del servidor'**
+  String get error_servidor;
+
+  /// No description provided for @error_username.
+  ///
+  /// In es, this message translates to:
+  /// **'El nombre de usuario ya está en uso'**
+  String get error_username;
+
+  /// No description provided for @error_confirma_email.
+  ///
+  /// In es, this message translates to:
+  /// **'Por favor, confirma tu correo electrónico'**
+  String get error_confirma_email;
+
+  /// No description provided for @error_internet.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay conexión a internet'**
+  String get error_internet;
+
+  /// No description provided for @error_datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Error al guardar los datos. Inténtalo de nuevo'**
+  String get error_datos;
+
+  /// No description provided for @error_inesperado.
+  ///
+  /// In es, this message translates to:
+  /// **'Ha ocurrido un error inesperado. Inténtalo más tarde'**
+  String get error_inesperado;
 }
 
 class _AppLocalizationsDelegate
