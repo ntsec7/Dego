@@ -25,7 +25,7 @@ class Usuario{
       email: map['email'] ?? '',
       name: map['name'] ?? '',
       image: map['image'],
-      tipo: map['tipo'] ?? 'client',
+      tipo: map['user_type'] ?? 'client',
     );
   }
 
