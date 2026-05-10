@@ -255,6 +255,8 @@ class _ResetPassword extends ConsumerState<ResetPassword> {
             try {
               await ref.read(authProvider.notifier).updatePassword(_password.text.trim());
 
+              if(!context.mounted) return;
+
               // Éxito
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(context.lang.contra_cambiada)),

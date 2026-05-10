@@ -436,6 +436,8 @@ class _Register extends ConsumerState<Register> {
                 password: _password.text.trim(),
               );
 
+              if(!context.mounted) return;
+
               // Éxito
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Usuario creado correctamente")),
@@ -444,7 +446,6 @@ class _Register extends ConsumerState<Register> {
               _showEmailConfirmation(context);
 
             } catch (e) {
-              print(e);
               // Error
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(translateSupabaseError(context,e))),

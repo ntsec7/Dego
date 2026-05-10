@@ -36,5 +36,8 @@
     "error_confirma_email": "Por favor, confirma tu correo electrónico",
     "error_internet" : "No hay conexión a internet",
     "error_datos" : "Error al guardar los datos. Inténtalo de nuevo",
-    "error_inesperado" : "Ha ocurrido un error inesperado. Inténtalo más tarde"
+    "error_inesperado" : "Ha ocurrido un error inesperado. Inténtalo más tarde",
+    "buscar_grupos" : "Buscar grupos...",
+    "crear" : "Crear",
+    "crear_grupo" : "Crear grupo"
 }

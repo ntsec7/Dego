@@ -128,4 +128,13 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get error_inesperado =>
       'Ha ocurrido un error inesperado. Inténtalo más tarde';
+
+  @override
+  String get buscar_grupos => 'Buscar grupos...';
+
+  @override
+  String get crear => 'Crear';
+
+  @override
+  String get crear_grupo => 'Crear grupo';
 }

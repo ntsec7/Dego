@@ -85,10 +85,11 @@ class _Login extends ConsumerState<Login> {
                   );
                 }
               } catch (e) {
-                print(e);
+                if(context.mounted){
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(translateSupabaseError(context,e))),
                 );
+                }
               }
             },
             child: Text(context.lang.enviar),
@@ -290,7 +291,7 @@ class _Login extends ConsumerState<Login> {
                         try {
                           await ref.read(authProvider.notifier).login(_name.text.trim(),_password.text.trim(),);
                         } catch (e) {
-                          if (!mounted) return;
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(translateSupabaseError(context,e))),
                           );

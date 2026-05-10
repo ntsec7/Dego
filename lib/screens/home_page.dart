@@ -1,4 +1,5 @@
 import 'package:dego/providers/auth_provider.dart';
+import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/usuario_provider.dart';
@@ -19,7 +20,13 @@ class _Homepage extends ConsumerState<Homepage> {
 @override
 Widget build(BuildContext context) {
   final usuarioAsync = ref.watch(usuarioProvider);
+
+  final TextEditingController searchController = TextEditingController();
+  
+  final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
+
+  bool web = screenWidth > 600 ? true : false;
 
   return Scaffold(
     body: SafeArea(
@@ -43,6 +50,43 @@ Widget build(BuildContext context) {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+
+                            //BUSCADOR Y +
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: web ? 0 : screenWidth * 0.03 ,
+                              ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: searchController,
+                                    onChanged: (value) {
+                                      //print(value);
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: context.lang.buscar_grupos,
+                                      prefixIcon: const Icon(Icons.search),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(width: web ? screenWidth * 0.02 : screenWidth * 0.03),
+
+                                CircleAvatar(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.add),
+                                    color: Colors.white,
+                                    onPressed: () => Navigator.pushNamed(context, 'createGroup'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ),
                             Text("Bienvenido ${usuario.name}"),
                             const SizedBox(height: 20),
                             ElevatedButton(

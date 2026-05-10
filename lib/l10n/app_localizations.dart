@@ -321,6 +321,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ha ocurrido un error inesperado. Inténtalo más tarde'**
   String get error_inesperado;
+
+  /// No description provided for @buscar_grupos.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar grupos...'**
+  String get buscar_grupos;
+
+  /// No description provided for @crear.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear'**
+  String get crear;
+
+  /// No description provided for @crear_grupo.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear grupo'**
+  String get crear_grupo;
 }
 
 class _AppLocalizationsDelegate
