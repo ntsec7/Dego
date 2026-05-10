@@ -11,8 +11,6 @@ class NavigationBottom extends StatelessWidget {
 
   void _navigate(BuildContext context, int index){
 
-    if(index == currentIndex) return;
-
     switch(index){
 
       case 0:
@@ -20,15 +18,15 @@ class NavigationBottom extends StatelessWidget {
         break;
 
       case 1:
-        Navigator.pushReplacementNamed(context, 'homePage');
+        Navigator.pushReplacementNamed(context, 'individualHomePage');
         break;
 
       case 2:
-        Navigator.pushReplacementNamed(context, 'homePage');
+        Navigator.pushReplacementNamed(context, 'notifications');
         break;
 
       case 3:
-        Navigator.pushReplacementNamed(context, 'homePage');
+        Navigator.pushReplacementNamed(context, 'profile');
         break;
     }
   }
@@ -74,7 +72,7 @@ class NavigationBottom extends StatelessWidget {
                 : Icon(
                     icon,
                     color: Colors.black,
-                    size: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.04,
+                    size: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.03,
                   ),
           ),
         ),

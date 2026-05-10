@@ -11,8 +11,6 @@ class NavigationBottomAdmin extends StatelessWidget {
 
   void _navigate(BuildContext context, int index){
 
-    if(index == currentIndex) return;
-
     switch(index){
 
       case 0:
@@ -20,16 +18,13 @@ class NavigationBottomAdmin extends StatelessWidget {
         break;
 
       case 1:
-        Navigator.pushReplacementNamed(context, 'homePage');
+        Navigator.pushReplacementNamed(context, 'usersList');
         break;
 
       case 2:
-        Navigator.pushReplacementNamed(context, 'homePage');
+        Navigator.pushReplacementNamed(context, 'profile');
         break;
 
-      case 3:
-        Navigator.pushReplacementNamed(context, 'homePage');
-        break;
     }
   }
 
@@ -74,7 +69,7 @@ class NavigationBottomAdmin extends StatelessWidget {
                 : Icon(
                     icon,
                     color: Colors.black,
-                    size: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.04,
+                    size: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.03,
                   ),
           ),
         ),
@@ -106,7 +101,7 @@ class NavigationBottomAdmin extends StatelessWidget {
           _navItem(
             context: context,
             index: 1,
-            imagePath: 'assets/images/IconoIndividual.png',
+            imagePath: 'assets/images/IconoListaUsuarios.png',
           ),
 
           Container(
@@ -116,7 +111,7 @@ class NavigationBottomAdmin extends StatelessWidget {
 
           _navItem(
             context: context,
-            index: 3,
+            index: 2,
             imagePath: 'assets/images/IconoPerfil.png',
           ),
         ],

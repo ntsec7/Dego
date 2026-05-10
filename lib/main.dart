@@ -9,6 +9,10 @@ import 'package:dego/screens/register.dart';
 import 'package:dego/screens/login.dart';
 import 'package:dego/screens/home_page.dart';
 import 'package:dego/screens/auth_gate.dart';
+import 'package:dego/screens/individual_home_page.dart';
+import 'package:dego/screens/profile.dart';
+import 'package:dego/screens/users_list.dart';
+import 'package:dego/screens/notifications.dart';
 
 void main() async{
 
@@ -91,6 +95,10 @@ class _MyAppState extends State<MyApp> {
         'login' : (context) => Login(),
         'homePage' : (context) => Homepage(),
         'resetPassword' : (context) => ResetPassword(),
+        'profile' : (context) => Profile(),
+        'individualHomePage' : (context) => Individualhomepage(),
+        'notifications' : (context) => Notifications(),
+        'usersList' : (context) => Userslist(),
       },
     );
   }
