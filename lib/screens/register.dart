@@ -440,7 +440,7 @@ class _Register extends ConsumerState<Register> {
 
               // Éxito
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Usuario creado correctamente")),
+                SnackBar(content: Text(context.lang.exito_crear_usuario)),
               );
 
               _showEmailConfirmation(context);

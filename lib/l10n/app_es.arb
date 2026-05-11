@@ -39,5 +39,7 @@
     "error_inesperado" : "Ha ocurrido un error inesperado. Inténtalo más tarde",
     "buscar_grupos" : "Buscar grupos...",
     "crear" : "Crear",
-    "crear_grupo" : "Crear grupo"
+    "crear_grupo" : "Crear grupo",
+    "exito_crear_usuario" : "Usuario creado con éxito",
+    "exito_crear_grupo" : "Grupo creado con éxito"
 }

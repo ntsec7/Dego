@@ -339,6 +339,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Crear grupo'**
   String get crear_grupo;
+
+  /// No description provided for @exito_crear_usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Usuario creado con éxito'**
+  String get exito_crear_usuario;
+
+  /// No description provided for @exito_crear_grupo.
+  ///
+  /// In es, this message translates to:
+  /// **'Grupo creado con éxito'**
+  String get exito_crear_grupo;
 }
 
 class _AppLocalizationsDelegate

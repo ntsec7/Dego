@@ -1,6 +1,6 @@
 import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
-import 'package:dego/providers/auth_provider.dart';
+import 'package:dego/providers/create_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/error.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +19,7 @@ class _CreateGroup extends ConsumerState<CreateGroup> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nombre = TextEditingController();
+  final TextEditingController _name = TextEditingController();
 
   final picker = ImagePicker();
 
@@ -107,7 +107,7 @@ class _CreateGroup extends ConsumerState<CreateGroup> {
                                         validator: (value) => value == null || value.isEmpty
                                             ? context.lang.campo_obligatorio
                                             : null,
-                                        controller: _nombre,
+                                        controller: _name,
                                         decoration: InputDecoration(
                                           hintText: context.lang.nombre,
                                           border: OutlineInputBorder(
@@ -242,7 +242,16 @@ class _CreateGroup extends ConsumerState<CreateGroup> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
+                                        
+                                        await ref.read(createProvider.notifier).createGroup(name: _name.text.trim(), image: imageBytes);
 
+                                        if(!context.mounted) return;
+
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text(context.lang.exito_crear_grupo)),
+                                        );
+
+                                        Navigator.pushNamed(context, 'homePage');
                                         
                                       } catch (e) {
                                         ScaffoldMessenger.of(context).showSnackBar(

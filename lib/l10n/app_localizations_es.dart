@@ -137,4 +137,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get crear_grupo => 'Crear grupo';
+
+  @override
+  String get exito_crear_usuario => 'Usuario creado con éxito';
+
+  @override
+  String get exito_crear_grupo => 'Grupo creado con éxito';
 }
