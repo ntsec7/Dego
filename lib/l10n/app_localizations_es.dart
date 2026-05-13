@@ -143,4 +143,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exito_crear_grupo => 'Grupo creado con éxito';
+
+  @override
+  String get error_carga_usuario =>
+      'Error: No se ha cargado el usuario correctamente';
+
+  @override
+  String get grupos => 'Grupos';
 }

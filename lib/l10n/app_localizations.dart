@@ -351,6 +351,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Grupo creado con éxito'**
   String get exito_crear_grupo;
+
+  /// No description provided for @error_carga_usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: No se ha cargado el usuario correctamente'**
+  String get error_carga_usuario;
+
+  /// No description provided for @grupos.
+  ///
+  /// In es, this message translates to:
+  /// **'Grupos'**
+  String get grupos;
 }
 
 class _AppLocalizationsDelegate

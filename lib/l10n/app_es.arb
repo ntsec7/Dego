@@ -41,5 +41,7 @@
     "crear" : "Crear",
     "crear_grupo" : "Crear grupo",
     "exito_crear_usuario" : "Usuario creado con éxito",
-    "exito_crear_grupo" : "Grupo creado con éxito"
+    "exito_crear_grupo" : "Grupo creado con éxito",
+    "error_carga_usuario" : "Error: No se ha cargado el usuario correctamente",
+    "grupos" : "Grupos" 
 }
