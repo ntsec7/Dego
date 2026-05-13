@@ -108,6 +108,7 @@ class _CreateGroup extends ConsumerState<CreateGroup> {
                                             ? context.lang.campo_obligatorio
                                             : null,
                                         controller: _name,
+                                        style: const TextStyle(color: Colors.black),
                                         decoration: InputDecoration(
                                           hintText: context.lang.nombre,
                                           border: OutlineInputBorder(
