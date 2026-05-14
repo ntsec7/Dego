@@ -11,6 +11,8 @@ class NavigationBottom extends StatelessWidget {
 
   void _navigate(BuildContext context, int index){
 
+    if(index == currentIndex) return;  //para evitar recargas innecesarias
+
     switch(index){
 
       case 0:
@@ -83,9 +85,14 @@ class NavigationBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    bool web = screenWidth > 600;
+
     return SizedBox(
 
-      height: 70,
+      height: web ? screenHeight * 0.07 : screenHeight * 0.06,
 
       child: Row(
         children: [
