@@ -363,6 +363,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Grupos'**
   String get grupos;
+
+  /// No description provided for @error_carga_grupo.
+  ///
+  /// In es, this message translates to:
+  /// **'Error cargando los datos del grupo. Vuelva a intentarlo'**
+  String get error_carga_grupo;
 }
 
 class _AppLocalizationsDelegate

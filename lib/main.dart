@@ -1,4 +1,5 @@
 import 'package:dego/screens/create_group.dart';
+import 'package:dego/screens/group_home_page.dart';
 import 'package:dego/screens/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -101,6 +102,7 @@ class _MyAppState extends State<MyApp> {
         'notifications' : (context) => Notifications(),
         'usersList' : (context) => Userslist(),
         'createGroup' : (context) => CreateGroup(),
+        'groupHomePage' : (context) => GroupHomePage(),
       },
     );
   }

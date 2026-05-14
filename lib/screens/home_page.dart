@@ -5,6 +5,7 @@ import 'package:dego/providers/usuario_provider.dart';
 import 'package:dego/widgets/navigation_bottom.dart';
 import 'package:dego/widgets/navigation_bottom_admin.dart';
 import 'package:dego/providers/grupo_provider.dart';
+import 'package:dego/providers/current_group_provider.dart';
 
 class Homepage extends ConsumerStatefulWidget {
 
@@ -139,7 +140,8 @@ Widget build(BuildContext context) {
                       final grupo = gruposFiltrados[index];
                       return GestureDetector(
                         onTap: () {
-                          // Tu lógica de navegación aquí
+                          ref.read(idCurrentGroupProvider.notifier).state = grupo.id;  //actualizamos los datos de currentGroup
+                          Navigator.pushNamed(context, 'groupHomePage');
                         },
                         child: Container(
                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros

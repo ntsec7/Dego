@@ -15,7 +15,6 @@ class Profile extends ConsumerStatefulWidget {
 
 class _Profile extends ConsumerState<Profile> {
 
-  @override
 @override
 Widget build(BuildContext context) {
   final usuarioAsync = ref.watch(usuarioProvider);

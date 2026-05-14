@@ -150,4 +150,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get grupos => 'Grupos';
+
+  @override
+  String get error_carga_grupo =>
+      'Error cargando los datos del grupo. Vuelva a intentarlo';
 }
