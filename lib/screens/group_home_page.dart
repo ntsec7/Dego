@@ -1,4 +1,5 @@
 import 'package:dego/providers/auth_provider.dart';
+import 'package:dego/widgets/group_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/usuario_provider.dart';
@@ -6,7 +7,7 @@ import 'package:dego/widgets/navigation_bottom.dart';
 import 'package:dego/widgets/navigation_bottom_admin.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/utilities/lang.dart';
-
+import 'package:dego/widgets/group_navigation.dart';
 
 class GroupHomePage extends ConsumerStatefulWidget {
 
@@ -40,7 +41,8 @@ Widget build(BuildContext context) {
 
           return Column(
             children: [
-              SizedBox(height: screenHeight * 0.02),
+              GroupHeader(),
+              const GroupNavigation(currentIndex: 0),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -69,9 +71,9 @@ Widget build(BuildContext context) {
               ),
 
               if(usuario.tipo=='admin')
-                const NavigationBottomAdmin(currentIndex: 2)
+                const NavigationBottomAdmin(currentIndex: -1) //-1 para que no marque ninguno
               else
-                const NavigationBottom(currentIndex: 3)
+                const NavigationBottom(currentIndex: -1)
             ],
           );
         },
