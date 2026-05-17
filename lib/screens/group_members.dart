@@ -2,22 +2,30 @@ import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/providers/current_group_provider.dart';
+import 'package:dego/utilities/lang.dart';
 
-class Notifications extends ConsumerStatefulWidget {
+class GroupMembers extends ConsumerStatefulWidget {
 
-  const Notifications({super.key});
+  const GroupMembers({super.key});
 
   @override
-  ConsumerState<Notifications> createState() => _Notifications();
+  ConsumerState<GroupMembers> createState() => _GroupMembers();
 }
 
-class _Notifications extends ConsumerState<Notifications> {
+class _GroupMembers extends ConsumerState<GroupMembers> {
 
-  @override
 @override
 Widget build(BuildContext context) {
   final usuarioAsync = ref.watch(usuarioProvider);
   final screenHeight = MediaQuery.of(context).size.height;
+  final grupo = ref.watch(currentGroupProvider);
+
+  if(grupo==null){
+    return Scaffold(
+        body: Center(child: Text(context.lang.error_carga_grupo)),
+    );
+  }
 
   return Scaffold(
     body: SafeArea(
@@ -29,7 +37,6 @@ Widget build(BuildContext context) {
 
           return Column(
             children: [
-              SizedBox(height: screenHeight * 0.02),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -41,7 +48,7 @@ Widget build(BuildContext context) {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text("Bienvenido ${usuario.name}"),
+                            Text("Bienvenido a ${grupo.name}"),
                             const SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () async {
@@ -57,7 +64,10 @@ Widget build(BuildContext context) {
                 ),
               ),
 
-                // const NavigationBottom(currentIndex: 2)
+              // if(usuario.tipo=='admin')
+              //   const NavigationBottomAdmin(currentIndex: -1) //-1 para que no marque ninguno
+              // else
+              //   const NavigationBottom(currentIndex: -1)
             ],
           );
         },

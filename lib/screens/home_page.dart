@@ -2,8 +2,6 @@ import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/usuario_provider.dart';
-import 'package:dego/widgets/navigation_bottom.dart';
-import 'package:dego/widgets/navigation_bottom_admin.dart';
 import 'package:dego/providers/grupo_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
 
@@ -141,7 +139,6 @@ Widget build(BuildContext context) {
                       return GestureDetector(
                         onTap: () {
                           ref.read(idCurrentGroupProvider.notifier).state = grupo.id;  //actualizamos los datos de currentGroup
-                          Navigator.pushNamed(context, 'groupHomePage');
                         },
                         child: Container(
                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
@@ -193,10 +190,10 @@ Widget build(BuildContext context) {
               ),
             ),
 
-            if (usuario.tipo == 'admin')
-              const NavigationBottomAdmin(currentIndex: 0)
-            else
-              const NavigationBottom(currentIndex: 0),
+            // if (usuario.tipo == 'admin')
+            //   const NavigationBottomAdmin(currentIndex: 0)
+            // else
+            //   const NavigationBottom(currentIndex: 0),
           ],
         );
       },

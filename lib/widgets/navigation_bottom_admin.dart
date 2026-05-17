@@ -4,30 +4,20 @@ class NavigationBottomAdmin extends StatelessWidget {
 
   final int currentIndex;
 
+  final ValueChanged<int> onTap;
+
   const NavigationBottomAdmin({
     super.key,
     required this.currentIndex,
+    required this.onTap,
   });
 
-  void _navigate(BuildContext context, int index){
+  void _navigate(int index){
 
-    if(index == currentIndex) return;  //para evitar recargas innecesarias
+    //if(index == currentIndex) return;  //para evitar recargas innecesarias
 
-    switch(index){
+    onTap(index);
 
-      case 0:
-        Navigator.pushReplacementNamed(context, 'homePage');
-        break;
-
-      case 1:
-        Navigator.pushReplacementNamed(context, 'usersList');
-        break;
-
-      case 2:
-        Navigator.pushReplacementNamed(context, 'profile');
-        break;
-
-    }
   }
 
 
@@ -48,7 +38,7 @@ class NavigationBottomAdmin extends StatelessWidget {
     return Expanded(
       child: InkWell(
 
-        onTap: () => _navigate(context, index),
+        onTap: () => _navigate(index),
 
         child: Container(
 

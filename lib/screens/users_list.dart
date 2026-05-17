@@ -2,7 +2,6 @@ import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/usuario_provider.dart';
-import 'package:dego/widgets/navigation_bottom_admin.dart';
 
 class Userslist extends ConsumerStatefulWidget {
 
@@ -58,7 +57,7 @@ Widget build(BuildContext context) {
                 ),
               ),
 
-                const NavigationBottomAdmin(currentIndex: 1)
+                // const NavigationBottomAdmin(currentIndex: 1)
 
             ],
           );

@@ -4,30 +4,19 @@ class GroupNavigation extends StatelessWidget {
 
   final int currentIndex;
 
+  final ValueChanged<int> onTap; 
+
   const GroupNavigation({
     super.key,
     required this.currentIndex,
+    required this.onTap,
   });
 
-  void _navigate(BuildContext context, int index){
+  void _navigate(int index){
 
     if(index == currentIndex) return;  //para evitar recargas innecesarias
 
-    switch(index){
-
-      case 0:
-        Navigator.pushReplacementNamed(context, 'groupHomePage');
-        break;
-
-      case 1:
-        Navigator.pushReplacementNamed(context, 'groupHomePage');
-        break;
-
-      case 2:
-        Navigator.pushReplacementNamed(context, 'groupHomePage');
-        break;
-
-    }
+    onTap(index);
   }
 
 
@@ -47,7 +36,7 @@ class GroupNavigation extends StatelessWidget {
     return Expanded(
       child: InkWell(
 
-        onTap: () => _navigate(context, index),
+        onTap: () => _navigate(index),
 
         child: Container(
 

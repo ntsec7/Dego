@@ -1,8 +1,8 @@
+import 'package:dego/screens/main_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/auth_provider.dart';
 import 'package:dego/screens/login.dart';
-import 'package:dego/screens/home_page.dart';
 
 class AuthGate extends ConsumerWidget {
   const AuthGate({super.key});
@@ -15,7 +15,7 @@ class AuthGate extends ConsumerWidget {
     if (user == null) {
       return const Login();
     } else {
-      return const Homepage();
+      return const AppMainContainer();
     }
   }
 }

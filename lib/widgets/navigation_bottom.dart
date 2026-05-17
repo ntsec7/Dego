@@ -4,33 +4,19 @@ class NavigationBottom extends StatelessWidget {
 
   final int currentIndex;
 
+  final ValueChanged<int> onTap;  //función callback para avisar al padre
+
   const NavigationBottom({
     super.key,
     required this.currentIndex,
+    required this.onTap,
   });
 
-  void _navigate(BuildContext context, int index){
+  void _navigate(int index){  
 
-    if(index == currentIndex) return;  //para evitar recargas innecesarias
+    //if(index == currentIndex) return;  //para evitar recargas innecesarias
 
-    switch(index){
-
-      case 0:
-        Navigator.pushReplacementNamed(context, 'homePage');
-        break;
-
-      case 1:
-        Navigator.pushReplacementNamed(context, 'individualHomePage');
-        break;
-
-      case 2:
-        Navigator.pushReplacementNamed(context, 'notifications');
-        break;
-
-      case 3:
-        Navigator.pushReplacementNamed(context, 'profile');
-        break;
-    }
+    onTap(index);
   }
 
 
@@ -51,7 +37,7 @@ class NavigationBottom extends StatelessWidget {
     return Expanded(
       child: InkWell(
 
-        onTap: () => _navigate(context, index),
+        onTap: () => _navigate(index),
 
         child: Container(
 

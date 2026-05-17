@@ -222,7 +222,7 @@ class _CreateGroup extends ConsumerState<CreateGroup> {
 
                                 //CANCELAR
                                 ElevatedButton(
-                                  onPressed: () => Navigator.of(context).pushReplacementNamed('homePage'),
+                                  onPressed: () => Navigator.of(context).pushReplacementNamed('mainContainer'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xFFCC2525), // Color personalizado
                                     foregroundColor: Colors.white, // Tamaño
@@ -252,7 +252,7 @@ class _CreateGroup extends ConsumerState<CreateGroup> {
                                           SnackBar(content: Text(context.lang.exito_crear_grupo)),
                                         );
 
-                                        Navigator.pushNamed(context, 'homePage');
+                                        Navigator.pushNamed(context, 'mainContainer');
                                         
                                       } catch (e) {
                                         ScaffoldMessenger.of(context).showSnackBar(

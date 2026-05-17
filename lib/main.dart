@@ -1,5 +1,7 @@
 import 'package:dego/screens/create_group.dart';
+import 'package:dego/screens/group_history.dart';
 import 'package:dego/screens/group_home_page.dart';
+import 'package:dego/screens/group_members.dart';
 import 'package:dego/screens/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -15,6 +17,8 @@ import 'package:dego/screens/individual_home_page.dart';
 import 'package:dego/screens/profile.dart';
 import 'package:dego/screens/users_list.dart';
 import 'package:dego/screens/notifications.dart';
+import 'package:dego/screens/main_container.dart';
+import 'package:dego/screens/group_container.dart';
 
 void main() async{
 
@@ -103,6 +107,10 @@ class _MyAppState extends State<MyApp> {
         'usersList' : (context) => Userslist(),
         'createGroup' : (context) => CreateGroup(),
         'groupHomePage' : (context) => GroupHomePage(),
+        'mainContainer' : (context) => AppMainContainer(),
+        'groupMembers' : (context) => GroupMembers(),
+        'groupHistory' : (context) => GroupHistory(),
+        'groupContainer' : (context) => GroupContainer(),
       },
     );
   }

@@ -2,8 +2,6 @@ import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/usuario_provider.dart';
-import 'package:dego/widgets/navigation_bottom.dart';
-import 'package:dego/widgets/navigation_bottom_admin.dart';
 
 class Profile extends ConsumerStatefulWidget {
 
@@ -58,10 +56,10 @@ Widget build(BuildContext context) {
                 ),
               ),
 
-              if(usuario.tipo=='admin')
-                const NavigationBottomAdmin(currentIndex: 2)
-              else
-                const NavigationBottom(currentIndex: 3)
+              // if(usuario.tipo=='admin')
+              //   const NavigationBottomAdmin(currentIndex: 2)
+              // else
+              //   const NavigationBottom(currentIndex: 3)
             ],
           );
         },
