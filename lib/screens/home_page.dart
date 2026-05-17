@@ -190,10 +190,6 @@ Widget build(BuildContext context) {
               ),
             ),
 
-            // if (usuario.tipo == 'admin')
-            //   const NavigationBottomAdmin(currentIndex: 0)
-            // else
-            //   const NavigationBottom(currentIndex: 0),
           ],
         );
       },

@@ -2,7 +2,6 @@ class Usuario{
 
   String id;
   String username;
-  String email;
   String name;
   String? image;
   String tipo;
@@ -11,7 +10,6 @@ class Usuario{
   Usuario({
     required this.id,
     required this.username,
-    required this.email,
     required this.name,
     this.image,
     required this.tipo,
@@ -22,7 +20,6 @@ class Usuario{
     return Usuario(
       id: map['id'],
       username: map['username'] ?? '',
-      email: map['email'] ?? '',
       name: map['name'] ?? '',
       image: map['image'],
       tipo: map['user_type'] ?? 'client',
@@ -34,7 +31,6 @@ class Usuario{
     return{
       'id':id,
       'username': username,
-      'email': email,
       'name': name,
       'image': image,
       'tipo': tipo,

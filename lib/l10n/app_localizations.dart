@@ -369,6 +369,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error cargando los datos del grupo. Vuelva a intentarlo'**
   String get error_carga_grupo;
+
+  /// No description provided for @miembros.
+  ///
+  /// In es, this message translates to:
+  /// **'Miembros'**
+  String get miembros;
+
+  /// No description provided for @buscar_miembros.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar miembros...'**
+  String get buscar_miembros;
 }
 
 class _AppLocalizationsDelegate
