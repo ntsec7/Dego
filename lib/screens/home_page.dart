@@ -1,7 +1,6 @@
 import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dego/providers/usuario_provider.dart';
 import 'package:dego/providers/grupo_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
 
@@ -34,7 +33,7 @@ class _Homepage extends ConsumerState<Homepage> {
 
 @override
 Widget build(BuildContext context) {
-  final usuarioAsync = ref.watch(usuarioProvider);
+  // final usuarioAsync = ref.watch(usuarioProvider);
   final gruposState = ref.watch(grupoProvider);
 
   
@@ -47,11 +46,7 @@ Widget build(BuildContext context) {
 
   return Scaffold(
   body: SafeArea(
-    child: usuarioAsync.when(
-      data: (usuario) {
-        if (usuario == null) return Center(child: Text(context.lang.error_carga_usuario));
-
-        return Column( 
+    child: Column( 
           children: [
           Padding(
             padding: EdgeInsets.symmetric(
@@ -191,10 +186,6 @@ Widget build(BuildContext context) {
             ),
 
           ],
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text("Error: $e")),
     ),
   ),
 );

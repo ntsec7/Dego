@@ -1,7 +1,6 @@
 import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dego/providers/usuario_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/utilities/lang.dart';
 
@@ -17,7 +16,6 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
 
 @override
 Widget build(BuildContext context) {
-  final usuarioAsync = ref.watch(usuarioProvider);
   final screenHeight = MediaQuery.of(context).size.height;
   final grupo = ref.watch(currentGroupProvider);
 
@@ -29,13 +27,7 @@ Widget build(BuildContext context) {
 
   return Scaffold(
     body: SafeArea(
-      child: usuarioAsync.when(
-        data: (usuario) {
-          if (usuario == null) {
-            return const Center(child: Text("No hay usuario"));
-          }
-
-          return Column(
+      child: Column(
             children: [
               Expanded(
                 child: Align(
@@ -63,16 +55,7 @@ Widget build(BuildContext context) {
                   ),
                 ),
               ),
-
-              // if(usuario.tipo=='admin')
-              //   const NavigationBottomAdmin(currentIndex: -1) //-1 para que no marque ninguno
-              // else
-              //   const NavigationBottom(currentIndex: -1)
             ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text("Error: $e")),
       ),
     ),
   );

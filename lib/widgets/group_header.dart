@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dego/utilities/lang.dart';
 
 class GroupHeader extends ConsumerWidget{
 
@@ -61,7 +60,6 @@ class GroupHeader extends ConsumerWidget{
           color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
           onPressed: () {
             // Lógica para editar el grupo
-            print('Editar grupo: ${grupo.id}');
           },
         ),
         IconButton(
@@ -69,7 +67,6 @@ class GroupHeader extends ConsumerWidget{
           color: Colors.redAccent,
           onPressed: () {
             // Lógica para eliminar el grupo
-            print('Eliminar grupo: ${grupo.id}');
           },
         ),
 
