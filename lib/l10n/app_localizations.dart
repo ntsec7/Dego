@@ -381,6 +381,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Buscar miembros...'**
   String get buscar_miembros;
+
+  /// No description provided for @anadir_miembro.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir miembro'**
+  String get anadir_miembro;
+
+  /// No description provided for @anadir_miembro_txt.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce el username del usuario que quieres añadir en el grupo para enviarle una invitación.'**
+  String get anadir_miembro_txt;
+
+  /// No description provided for @intro_username.
+  ///
+  /// In es, this message translates to:
+  /// **'Introduce el username'**
+  String get intro_username;
+
+  /// No description provided for @invitacion_enviada.
+  ///
+  /// In es, this message translates to:
+  /// **'Invitación enviada'**
+  String get invitacion_enviada;
+
+  /// No description provided for @username_no_existe.
+  ///
+  /// In es, this message translates to:
+  /// **'El username ingresado no existe'**
+  String get username_no_existe;
+
+  /// No description provided for @usuario_pertenece_grupo.
+  ///
+  /// In es, this message translates to:
+  /// **'El usuario ya pertenece al grupo'**
+  String get usuario_pertenece_grupo;
 }
 
 class _AppLocalizationsDelegate

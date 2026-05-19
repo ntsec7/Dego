@@ -144,6 +144,7 @@ Widget build(BuildContext context) {
                           ),
                           child: Row(
                             children: [
+                              
                               // IMAGEN
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
@@ -162,7 +163,8 @@ Widget build(BuildContext context) {
                                 ),
                               ),
                               SizedBox(width: web ? screenWidth * 0.01 : screenWidth * 0.03), // Espacio entre foto y texto
-                              // --- TEXTO ---
+                              
+                              // NOMBRE
                               Expanded(
                                 child: Text(
                                   grupo.name,

@@ -160,4 +160,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get buscar_miembros => 'Buscar miembros...';
+
+  @override
+  String get anadir_miembro => 'Añadir miembro';
+
+  @override
+  String get anadir_miembro_txt =>
+      'Introduce el username del usuario que quieres añadir en el grupo para enviarle una invitación.';
+
+  @override
+  String get intro_username => 'Introduce el username';
+
+  @override
+  String get invitacion_enviada => 'Invitación enviada';
+
+  @override
+  String get username_no_existe => 'El username ingresado no existe';
+
+  @override
+  String get usuario_pertenece_grupo => 'El usuario ya pertenece al grupo';
 }

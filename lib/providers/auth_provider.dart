@@ -81,17 +81,28 @@ class AuthNotifier extends StateNotifier<User?> {
 
   //CAMBIAR CONTRASEÑA DESPUÉS DE RECUPERARLA
   Future<void> updatePassword(String newPassword) async {
-  try {
+    try {
 
-    await supabase.auth.updateUser(
-      UserAttributes(
-        password: newPassword,
-      ),
-    );
+      await supabase.auth.updateUser(
+        UserAttributes(
+          password: newPassword,
+        ),
+      );
 
-  } catch (e) {
-    rethrow;
+    } catch (e) {
+      rethrow;
+    }
   }
-}
+
+  //COGER EL ID DEL USUARIO A PARTIR DE SU USERNAME
+  Future<String?> getUserId(String username) async{
+    try{
+      
+      return await authService.getUserId(username);
+
+    } catch (e) {
+      rethrow;
+    }
+  }
 
 }

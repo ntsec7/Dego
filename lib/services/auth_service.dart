@@ -93,5 +93,21 @@ class AuthService {
 
   }
 
+  Future<String?> getUserId(String username) async{
+    try{
+      
+      final user = await supabase.from('usuario').select('id').eq('username',username).maybeSingle();
+
+      if(user==null){
+        return null;
+      }
+
+      return user['id'] as String;
+
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }
 

@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/providers/group_members_provider.dart';
+import 'package:dego/utilities/error.dart';
+import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/providers/current_group_provider.dart';
+import 'package:dego/models/notification.dart';
+import 'package:dego/providers/auth_provider.dart';
+import 'package:dego/providers/notification_provider.dart';
 
 class GroupMembers extends ConsumerStatefulWidget {
 
@@ -29,6 +35,126 @@ class _GroupMembers extends ConsumerState<GroupMembers> {
     _searchController.dispose();
     super.dispose();
   }
+
+  void _addMembers(BuildContext context) {
+    final TextEditingController usernameController = TextEditingController();
+
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    String? error;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+          return AlertDialog(
+          title: Text(context.lang.anadir_miembro),
+          content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.lang.anadir_miembro_txt,
+              ),
+              SizedBox(height: 12),
+              TextFormField(
+                controller: usernameController,
+                // keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: context.lang.intro_username,
+                  border: OutlineInputBorder(),
+                  errorText: error,
+                ),
+                onChanged: (_) {
+                  // Si el usuario vuelve a escribir, limpiamos el erro
+                  if (error != null) {
+                    setStateDialog(() => error = null);
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return context.lang.campo_obligatorio; 
+                  }
+                  return null; // Si devuelve null, significa que todo está correcto
+                },
+              ),
+            ],
+          ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.lang.cancelar),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                
+
+                try {
+
+                  final username = usernameController.text.trim();
+
+                  final groupMembers = ref.watch(groupMembersProvider).value ?? [];
+
+                  //Comprobamos si el usuario ya pertenece al grupo
+                  final belongs = groupMembers.any(
+                        (user) => user.username == username
+                  );
+
+                  if(belongs){
+                    setStateDialog(() {
+                      error = context.lang.usuario_pertenece_grupo;
+                    });
+                    return;
+                  }
+
+                  final idUser= await ref.read(authProvider.notifier).getUserId(username);
+
+                  if (idUser==null){
+                    setStateDialog(() {
+                      error = context.lang.username_no_existe;
+                    });
+                    return;
+                  }
+
+                  final idCreator = ref.read(usuarioProvider).value!.id; // El usuario actual
+                  final idGroup = ref.read(currentGroupProvider)!.id;
+
+                  final notification= NotificationModel(id_user:idUser, id_creator_user:idCreator, id_group:idGroup, type:'invite_group');
+
+                  await ref.read(NotificationsProvider.notifier).createNotification(notification);
+
+                  if (context.mounted) {
+                    Navigator.pop(context);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(context.lang.invitacion_enviada),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if(context.mounted){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(translateSupabaseError(context,e))),
+                  );
+                  }
+                }
+              },
+              child: Text(context.lang.enviar),
+            ),
+          ],
+          );
+          },
+        );
+      },
+    );
+}
+
 
 @override
 Widget build(BuildContext context) {
@@ -73,7 +199,7 @@ Widget build(BuildContext context) {
                 child: IconButton(
                   icon: const Icon(Icons.add),
                   color: Colors.white,
-                  onPressed: () => Navigator.pushNamed(context, 'createGroup'),
+                  onPressed: () => _addMembers(context),
                 ),
               ),
             ],
@@ -88,7 +214,7 @@ Widget build(BuildContext context) {
             Text(
             "${context.lang.miembros}:",
             style: TextStyle(
-              fontSize: web ? (screenHeight + screenWidth) *0.01 : (screenHeight + screenWidth) *0.018,
+              fontSize: web ? (screenHeight + screenWidth) *0.009 : (screenHeight + screenWidth) *0.015,
               fontWeight: FontWeight.w400,
               decoration: TextDecoration.underline, 
             )
@@ -124,6 +250,7 @@ Widget build(BuildContext context) {
                           ),
                           child: Row(
                             children: [
+
                               // IMAGEN
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
@@ -142,9 +269,13 @@ Widget build(BuildContext context) {
                                 ),
                               ),
                               SizedBox(width: web ? screenWidth * 0.01 : screenWidth * 0.03), // Espacio entre foto y texto
-                              // --- TEXTO ---
+                              
+                              //NOMBRE Y USERNAME
                               Expanded(
-                                child: Text(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                Text(
                                   user.name,
                                   style:  TextStyle(
                                     fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
@@ -152,7 +283,26 @@ Widget build(BuildContext context) {
                                     color: Colors.black87,
                                   ),
                                 ),
+                                Text(
+                                  user.username,
+                                  style:  TextStyle(
+                                    fontSize: web ? (screenHeight + screenWidth) * 0.009 : (screenHeight + screenWidth) * 0.012,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromARGB(221, 85, 85, 85),
+                                  ),
+                                ),
+                            ],),
                               ),
+
+                              //ELIMINAR
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  // Lógica para eliminar el grupo
+                                },
+                              ),
+
                             ],
                           ),
                         ),
