@@ -126,7 +126,7 @@ class _GroupMembers extends ConsumerState<GroupMembers> {
 
                   final notification= NotificationModel(id_user:idUser, id_creator_user:idCreator, id_group:idGroup, type:'invite_group');
 
-                  await ref.read(NotificationsProvider.notifier).createNotification(notification);
+                  await ref.read(NotificationProvider.notifier).createNotification(notification);
 
                   if (context.mounted) {
                     Navigator.pop(context);

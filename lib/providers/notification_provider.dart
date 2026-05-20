@@ -1,37 +1,25 @@
 import 'package:dego/services/notification_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:dego/models/notification.dart';
 
 final notificationServiceProvider = Provider<NotificationService>((ref){
   return NotificationService();
 });
 
-final createProvider = StateNotifierProvider<CreateNotification?>((ref) {
+final NotificationProvider = StateNotifierProvider<NotificationNotifier, AsyncValue<void>>((ref) {
   final notificationService = ref.watch(notificationServiceProvider);
-  final supabase = Supabase.instance.client;
-
-  return NotificationNotifier(notificationService, supabase);
+  return NotificationNotifier(notificationService);
 });
 
-class NotificationNotifier extends StateNotifier<NotificationModel?> {
+class NotificationNotifier extends StateNotifier<AsyncValue<void>> {
   final NotificationService notificationService;
-  final SupabaseClient supabase;
 
-  NotificationNotifier(this.notificationService, this.supabase)
-      : super(supabase.auth.currentUser) {
-    _listenAuthChanges();
-  }
+  NotificationNotifier(this.notificationService) : super(const AsyncValue.data(null));
 
-  void _listenAuthChanges() {
-    supabase.auth.onAuthStateChange.listen((data) {
-      state = data.session?.user;
-    });
-  }
 
-  Future<NotificationModel> createNotification(NotificationModel noti) async{
+  Future<void> createNotification(NotificationModel noti) async{
     try{
-      return await notificationService.createNotification(noti);
+      await notificationService.createNotification(noti);
     } catch (e){
       rethrow;
     }
