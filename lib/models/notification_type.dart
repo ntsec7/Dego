@@ -1,1 +1,0 @@
-enum NotificationType {invite_group, kick_group, create_group, end_vote, create_option}

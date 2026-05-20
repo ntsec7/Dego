@@ -179,4 +179,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get usuario_pertenece_grupo => 'El usuario ya pertenece al grupo';
+
+  @override
+  String get aceptar => 'Aceptar';
+
+  @override
+  String get rechazar => 'Rechazar';
+
+  @override
+  String get notificaciones => 'Notificaciones';
+
+  @override
+  String noti_invite_group(String user_name, String group_name) {
+    return '$user_name te ha invitado a unirte al grupo $group_name';
+  }
+
+  @override
+  String noti_kick_group(String user_name, String group_name) {
+    return '$user_name te ha echado del grupo $group_name';
+  }
 }

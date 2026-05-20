@@ -19,4 +19,15 @@ class NotificationService {
 
   }
 
+  Stream<List<NotificationModel>> getNotifications(){
+    try{
+      return supabase.from('notifications').stream(primaryKey: ['id'])
+      .map((listaMapas) => listaMapas
+            .map((mapa) => NotificationModel.fromMap(mapa))
+            .toList());
+    } catch (e){
+      rethrow;
+    }
+  }
+
 }

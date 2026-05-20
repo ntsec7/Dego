@@ -417,6 +417,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'El usuario ya pertenece al grupo'**
   String get usuario_pertenece_grupo;
+
+  /// No description provided for @aceptar.
+  ///
+  /// In es, this message translates to:
+  /// **'Aceptar'**
+  String get aceptar;
+
+  /// No description provided for @rechazar.
+  ///
+  /// In es, this message translates to:
+  /// **'Rechazar'**
+  String get rechazar;
+
+  /// No description provided for @notificaciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get notificaciones;
+
+  /// Notificación para invitar a un grupo
+  ///
+  /// In es, this message translates to:
+  /// **'{user_name} te ha invitado a unirte al grupo {group_name}'**
+  String noti_invite_group(String user_name, String group_name);
+
+  /// Notificación para echar de un grupo
+  ///
+  /// In es, this message translates to:
+  /// **'{user_name} te ha echado del grupo {group_name}'**
+  String noti_kick_group(String user_name, String group_name);
 }
 
 class _AppLocalizationsDelegate

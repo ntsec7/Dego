@@ -1,10 +1,11 @@
+enum NotificationType {invite_group, kick_group, create_group, end_vote, create_option}
 class NotificationModel{
   
   String? id;
   String id_user;
   String? id_creator_user;
   String id_group;
-  String type;
+  NotificationType type;
 
   NotificationModel({
     this.id,
@@ -32,7 +33,7 @@ class NotificationModel{
       'id_user':id_user,
       'id_creator_user':id_creator_user,
       'id_group':id_group,
-      'type':type,
+      'type':type.name, //name convierte el enum a String
     };
   }
 

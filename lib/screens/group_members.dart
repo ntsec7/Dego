@@ -124,7 +124,7 @@ class _GroupMembers extends ConsumerState<GroupMembers> {
                   final idCreator = ref.read(usuarioProvider).value!.id; // El usuario actual
                   final idGroup = ref.read(currentGroupProvider)!.id;
 
-                  final notification= NotificationModel(id_user:idUser, id_creator_user:idCreator, id_group:idGroup, type:'invite_group');
+                  final notification= NotificationModel(id_user:idUser, id_creator_user:idCreator, id_group:idGroup, type:NotificationType.invite_group);
 
                   await ref.read(NotificationProvider.notifier).createNotification(notification);
 

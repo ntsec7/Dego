@@ -52,5 +52,32 @@
     "intro_username" : "Introduce el username",
     "invitacion_enviada" : "Invitación enviada",
     "username_no_existe" : "El username ingresado no existe",
-    "usuario_pertenece_grupo" : "El usuario ya pertenece al grupo"
+    "usuario_pertenece_grupo" : "El usuario ya pertenece al grupo",
+    "aceptar" : "Aceptar",
+    "rechazar" : "Rechazar",
+    "notificaciones" : "Notificaciones",
+    "noti_invite_group" : "{user_name} te ha invitado a unirte al grupo {group_name}",
+    "@noti_invite_group": {
+    "description": "Notificación para invitar a un grupo",
+    "placeholders": {
+        "user_name": {
+        "type": "String"
+        },
+        "group_name" : {
+            "type" : "String"
+        }
+    }
+    },
+    "noti_kick_group" : "{user_name} te ha echado del grupo {group_name}",
+    "@noti_kick_group": {
+    "description": "Notificación para echar de un grupo",
+    "placeholders": {
+        "user_name": {
+        "type": "String"
+        },
+        "group_name" : {
+            "type" : "String"
+        }
+    }
+    }
 }
