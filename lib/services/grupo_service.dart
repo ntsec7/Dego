@@ -30,6 +30,22 @@ class GrupoService {
         
     return List<Map<String, dynamic>>.from(response).map((map) => Usuario.fromMap(map)).toList(); //Lo convertimos a tipo Usuario
   }
+
+    Future<String?> getGroupName(String id) async{
+    try{
+
+      final grupo = await supabase.from('grupo').select('name').eq('id',id).maybeSingle();
+
+      if(grupo==null){
+        return null;
+      }
+
+      return grupo['name'] as String;
+
+    } catch (e) {
+      rethrow;
+    }
+  }
   
 }
 

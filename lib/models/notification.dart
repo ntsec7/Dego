@@ -22,7 +22,10 @@ class NotificationModel{
       id_user: map['id_user'],
       id_creator_user: map['id_creator_user'],
       id_group: map['id_group'],
-      type: map['type'],
+      type: NotificationType.values.firstWhere(
+        (e) => e.name == map['type'],
+        orElse: () => NotificationType.invite_group, 
+      ),
     );
   }
 
@@ -36,5 +39,18 @@ class NotificationModel{
       'type':type.name, //name convierte el enum a String
     };
   }
+
+}
+class NotificationDisplayModel{
+
+  final NotificationModel baseNotification;
+  final String creatorUsername;
+  final String groupName;
+
+  NotificationDisplayModel({
+    required this.baseNotification,
+    required this.creatorUsername,
+    required this.groupName,
+  });
 
 }

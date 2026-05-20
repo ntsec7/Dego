@@ -105,4 +105,15 @@ class AuthNotifier extends StateNotifier<User?> {
     }
   }
 
+  //COGER EL USERNAME DEL USUARIO A PARTIR DE SU ID
+  Future<String?> getUserUsername(String id) async{
+    try{
+      
+      return await authService.getUserUsername(id);
+
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 }

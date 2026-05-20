@@ -4,7 +4,7 @@ import 'package:dego/models/notification.dart';
 import 'package:dego/utilities/lang.dart';
 
 class NotificationCard extends ConsumerWidget {
-  final NotificationModel notification;
+  final NotificationDisplayModel notification;
 
   const NotificationCard({
     super.key,
@@ -44,13 +44,13 @@ class NotificationCard extends ConsumerWidget {
 
               //Mensaje dinámico según el tipo
               Padding(padding: EdgeInsets.only(
-                right: web ? screenWidth * 0.01 : screenWidth * 0.02,) ,
+                right: web ? screenWidth * 0.01 : screenWidth * 0.03,) ,
                 child : _buildNotificationMessage(context, fontSize),
               ),
               
               
               //Si es una invitación de grupo, añadimos los botones abajo
-              if (notification.type == NotificationType.invite_group) ...[
+              if (notification.baseNotification.type == NotificationType.invite_group) ...[
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -131,15 +131,15 @@ class NotificationCard extends ConsumerWidget {
 
   // Método auxiliar para pintar un mensaje u otro según el tipo
   Widget _buildNotificationMessage(BuildContext context, fontSize) {
-    switch (notification.type) {
+    switch (notification.baseNotification.type) {
       case NotificationType.invite_group:
         return Text(
-          context.lang.noti_invite_group(notification.id_user, notification.id_group), 
+          context.lang.noti_invite_group(notification.creatorUsername, notification.groupName), 
           style: TextStyle(fontSize: fontSize, color: Colors.black),
         );
       case NotificationType.kick_group:
         return Text(
-          context.lang.noti_kick_group(notification.id_user, notification.id_group),
+          context.lang.noti_kick_group(notification.creatorUsername, notification.groupName),
           style: TextStyle(fontSize: fontSize, color: Colors.black),
         );
       case NotificationType.create_group:

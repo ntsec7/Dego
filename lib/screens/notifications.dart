@@ -1,4 +1,4 @@
-import 'package:dego/providers/current_notifications_provider.dart';
+import 'package:dego/providers/enriched_notifications_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
@@ -17,7 +17,7 @@ class _Notifications extends ConsumerState<Notifications> {
 @override
 Widget build(BuildContext context) {
 
-  final notificationsState = ref.watch(currentNotificationsProvider);
+  final notificationsState = ref.watch(enrichedNotificationsProvider);
 
   final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
