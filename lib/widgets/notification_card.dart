@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/models/notification.dart';
 import 'package:dego/utilities/lang.dart';
+import 'package:dego/providers/notification_provider.dart';
 
 class NotificationCard extends ConsumerWidget {
   final NotificationDisplayModel notification;
@@ -58,8 +59,8 @@ class NotificationCard extends ConsumerWidget {
 
                     // Botón Rechazar 
                     ElevatedButton(
-                      onPressed: () {
-                        // TODO: Lógica para aceptar
+                      onPressed: () async {
+                        await ref.read(notificationServiceProvider).deleteNotification(notification.baseNotification.id ?? '',);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 228, 59, 59),
@@ -83,8 +84,9 @@ class NotificationCard extends ConsumerWidget {
 
                     // Botón Aceptar
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async{
                         // TODO: Lógica para aceptar
+                        await ref.read(notificationServiceProvider).deleteNotification(notification.baseNotification.id ?? '',);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 17, 151, 69),
@@ -115,8 +117,8 @@ class NotificationCard extends ConsumerWidget {
           top: marginVertical + 12,
           right: marginHorizontal + 12,
           child: GestureDetector(
-            onTap: () {
-              // TODO: Lógica para borrar/descartar la notificación
+            onTap: () async {
+              await ref.read(notificationServiceProvider).deleteNotification(notification.baseNotification.id ?? '',);
             },
             child: Icon(
               Icons.close,

@@ -25,5 +25,12 @@ class NotificationNotifier extends StateNotifier<AsyncValue<void>> {
     }
   }
 
+  Future<void> deleteNotification(String id) async{
+    try{
+      await notificationService.deleteNotification(id);
+    } catch (e){
+      rethrow;
+    }
+  }
 
 }

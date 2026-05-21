@@ -30,4 +30,12 @@ class NotificationService {
     }
   }
 
+  Future<void> deleteNotification(String id) async{
+    try{
+      await supabase.from('notifications').delete().eq('id',id);
+    } catch (e){
+      rethrow;
+    }
+  }
+
 }
