@@ -7,10 +7,14 @@ class GrupoService {
   final supabase = Supabase.instance.client;
 
   
-  Stream<List<Grupo>> getGrupos(){
+  Stream<List<Grupo>> getGrupos(String Id){
     try{
 
-      return supabase.from('grupo').stream(primaryKey: ['id']).map((data) => data.map((json) => Grupo.fromMap(json)).toList());
+      return supabase.from('grupo')
+      .select('*, group_members!inner(id_user)')  //INNER JOIN
+      .eq('group_members.id_user', Id)  //que pertenezca el usuario
+      .asStream() //para persistencia en tiempo real
+      .map((maps) => maps.map((map) => Grupo.fromMap(map)).toList());
 
     } catch(e){
       rethrow;

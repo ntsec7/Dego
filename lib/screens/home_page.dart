@@ -33,7 +33,7 @@ class _Homepage extends ConsumerState<Homepage> {
 
 @override
 Widget build(BuildContext context) {
-  // final usuarioAsync = ref.watch(usuarioProvider);
+
   final gruposState = ref.watch(grupoProvider);
 
   
