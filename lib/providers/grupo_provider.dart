@@ -15,9 +15,16 @@ final grupoProvider = StreamProvider<List<Grupo>>((ref) {
       if (user == null) {
         return Stream.value([]);
       }
-      
+
       // Si el usuario ya está cargado
-      return service.getGrupos(user.id);
+      if(user.tipo=='admin'){
+        return service.getGruposAdmin(user.id);
+      }
+      else{
+        return service.getGrupos(user.id);
+      }
+      
+      
     },
     // Mientras el FutureProvider está cargando los datos del usuario de Supabase,
     // o si da un error, mantenemos el stream de grupos en espera devolviendo una lista vacía.
