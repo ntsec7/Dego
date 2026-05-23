@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/models/notification.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/providers/notification_provider.dart';
+import 'package:dego/providers/group_info_provider.dart';
 
 class NotificationCard extends ConsumerWidget {
   final NotificationDisplayModel notification;
@@ -85,7 +86,7 @@ class NotificationCard extends ConsumerWidget {
                     // Botón Aceptar
                     ElevatedButton(
                       onPressed: () async{
-                        // TODO: Lógica para aceptar
+                        await ref.read(groupInfoProvider.notifier).joinGroup(notification.baseNotification.id_group);
                         await ref.read(notificationServiceProvider).deleteNotification(notification.baseNotification.id ?? '',);
                       },
                       style: ElevatedButton.styleFrom(

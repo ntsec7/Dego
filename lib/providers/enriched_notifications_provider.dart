@@ -21,7 +21,7 @@ final enrichedNotificationsProvider = FutureProvider.autoDispose<List<Notificati
 
     final username = await authNotifier.getUserUsername(noti.id_creator_user ?? '') ?? '';
     
-    final groupName = await groupInfoNotifier.getGroupName(noti.id_group ?? '') ?? '';
+    final groupName = await groupInfoNotifier.getGroupName(noti.id_group) ?? '';
 
     return NotificationDisplayModel(
       baseNotification: noti,

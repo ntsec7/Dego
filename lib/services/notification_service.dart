@@ -11,7 +11,7 @@ class NotificationService {
           'id_user':noti.id_user,
           'id_creator_user':noti.id_creator_user,
           'id_group':noti.id_group,
-          'type':noti.type,
+          'type':noti.type.name,
         });
     }catch(e){
       rethrow;

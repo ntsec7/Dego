@@ -1,5 +1,4 @@
 import 'package:dego/models/usuario.dart';
-import 'package:dego/providers/usuario_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:dego/models/grupo.dart';
 import 'dart:async';
@@ -19,46 +18,22 @@ class GrupoService {
 
   Stream<List<Grupo>> getGrupos(String Id){
     
-    final controller = StreamController<List<Grupo>>();
+    return supabase
+      .from('group_members')
+      .stream(primaryKey: ['id'])
+      .eq('id_user', Id) 
+      .asyncMap((snapshot) async {  //filas de group_members
+        if (snapshot.isEmpty) return [];
 
-      Future<void> fetchDatos() async {
-        try {
-          final response = await supabase
-              .from('grupo')
-              .select('*, group_members!inner(id_user)')
-              .eq('group_members.id_user', Id);
-              
-          final listaGrupos = response.map((map) => Grupo.fromMap(map)).toList();
-          if (!controller.isClosed) controller.add(listaGrupos);
-        } catch (e) {
-          if (!controller.isClosed) controller.addError(e);
-        }
-      }
+        final List<String> idsGrupos = snapshot.map((row) => row['id_group'] as String).toList();
 
-      //Hacemos la primera carga de datos
-      fetchDatos();
+        final res = await supabase  //coge la información del grupo
+            .from('grupo')
+            .select()
+            .inFilter('id', idsGrupos);
 
-      // Nos suscribimos al canal en tiempo real para que escuche cambios en la tabla
-      final canal = supabase
-          .channel('public:grupo')
-          .onPostgresChanges(
-            event: PostgresChangeEvent.all,
-            schema: 'public',
-            table: 'grupo',
-            callback: (payload) {
-              fetchDatos();   //Cada vez que cambie algo en la tabla 'grupo', volvemos a ejecutar la query
-            },
-          );
-          
-      canal.subscribe();
-
-      //Limpiamos el canal cuando Riverpod deje de escuchar este stream
-      controller.onCancel = () {
-        canal.unsubscribe();
-        controller.close();
-      };
-
-      return controller.stream;
+        return (res as List).map((map) => Grupo.fromMap(map)).toList();
+      });
 
   }
 
@@ -93,8 +68,15 @@ class GrupoService {
   }
 
   Future<void> joinGroup(String id) async{
+
+    final user = supabase.auth.currentUser;
+    if (user == null) throw Exception("Usuario no autenticado");
+
     try{
-      await supabase.from('group_members').insert({'id_group': id});
+      await supabase.from('group_members').insert({
+        'id_group': id,
+        'id_user': user.id,
+      });
     } catch (e) {
       rethrow;
     }
