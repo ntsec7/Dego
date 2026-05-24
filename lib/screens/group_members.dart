@@ -1,3 +1,4 @@
+import 'package:dego/providers/group_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
@@ -8,6 +9,7 @@ import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/models/notification.dart';
 import 'package:dego/providers/auth_provider.dart';
 import 'package:dego/providers/notification_provider.dart';
+import 'package:dego/models/usuario.dart';
 
 class GroupMembers extends ConsumerStatefulWidget {
 
@@ -153,12 +155,79 @@ class _GroupMembers extends ConsumerState<GroupMembers> {
         );
       },
     );
-}
+  }
 
+  void _deleteMember(BuildContext context, Usuario user) {
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+          return AlertDialog(
+          title: Text(context.lang.eliminar_miembro),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.lang.eliminar_miembro_txt(user.name),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.lang.cancelar),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                
+                try {
+
+                  final idCreator = ref.read(usuarioProvider).value!.id; // El usuario actual
+                  final idGroup = ref.read(currentGroupProvider)!.id;
+
+                  await ref.read(groupInfoProvider.notifier).deleteMember(idGroup, user.id);
+
+                  final notification= NotificationModel(id_user:user.id, id_creator_user:idCreator, id_group:idGroup, type:NotificationType.kick_group);
+
+                  await ref.read(NotificationProvider.notifier).createNotification(notification);
+
+                  if (context.mounted) {
+                    Navigator.pop(context);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(context.lang.eliminar_miembro_res),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if(context.mounted){
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(translateSupabaseError(context,e))),
+                    );
+                  }
+                }
+              },
+              child: Text(context.lang.aceptar),
+            ),
+          ],
+          );
+          },
+        );
+      },
+    );
+  }
 
 @override
 Widget build(BuildContext context) {
   final groupMembers = ref.watch(groupMembersProvider);
+  final usuarioAsync = ref.watch(usuarioProvider);
+  final currentUserId = usuarioAsync.value?.id;
 
   final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
@@ -294,12 +363,13 @@ Widget build(BuildContext context) {
                             ],),
                               ),
 
+                            if(user.id != currentUserId)
                               //ELIMINAR
                               IconButton(
                                 icon: const Icon(Icons.delete),
                                 color: Colors.redAccent,
                                 onPressed: () {
-                                  // Lógica para eliminar el grupo
+                                  _deleteMember(context, user);
                                 },
                               ),
 

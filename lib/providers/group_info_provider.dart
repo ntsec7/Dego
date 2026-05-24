@@ -39,4 +39,17 @@ class GroupInfoNotifier extends Notifier<Grupo?> {
     }
   }
 
+  //DELETE MEMBER OF GROUP
+  Future<void> deleteMember(String id_group, String id_user) async{
+    try{
+
+      final grupoService = ref.read(grupoServiceProvider);
+
+      return await grupoService.deleteMember(id_group, id_user);
+
+    } catch(e){
+      rethrow;
+    }
+  }
+
 }

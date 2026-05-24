@@ -81,6 +81,17 @@ class GrupoService {
       rethrow;
     }
   }
+
+  Future<void> deleteMember(String id_group, String id_user) async{
+    try{
+      await supabase.from('group_members').delete()
+      .eq('id_group', id_group)
+      .eq('id_user',id_user);
+    } catch (e){
+      rethrow;
+    }
+
+  }
   
 }
 

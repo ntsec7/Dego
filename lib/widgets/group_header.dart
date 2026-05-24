@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/providers/group_info_provider.dart';
 
 class GroupHeader extends ConsumerWidget{
 
@@ -65,8 +67,16 @@ class GroupHeader extends ConsumerWidget{
         IconButton(
           icon: const Icon(Icons.delete),
           color: Colors.redAccent,
-          onPressed: () {
-            // Lógica para eliminar el grupo
+          onPressed: () async{
+              
+
+            // final usuarioAsync = ref.watch(usuarioProvider);
+            // final currentUserId = usuarioAsync.value?.id; // El usuario actual
+            // final idGroup = ref.read(currentGroupProvider)!.id;
+
+            // if(currentUserId == null) return;
+
+            // await ref.read(groupInfoProvider.notifier).deleteMember(idGroup, currentUserId);
           },
         ),
 

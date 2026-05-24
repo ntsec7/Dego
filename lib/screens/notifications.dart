@@ -63,8 +63,9 @@ Widget build(BuildContext context) {
                 data: (notification) {
                   if (notification.isEmpty) return const Center(child: Text(""));
                 
-                  return ListView.builder(
+                  return ListView.separated(
                     itemCount: notification.length,
+                    separatorBuilder: (context, index) => SizedBox(height: web ? screenHeight * 0.01 : screenHeight * 0.02),
                     itemBuilder: (context, index) {
                       final noti = notification[index];
                       

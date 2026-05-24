@@ -198,4 +198,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String noti_kick_group(String user_name, String group_name) {
     return '$user_name te ha echado del grupo $group_name';
   }
+
+  @override
+  String get eliminar_miembro => 'Eliminar miembro';
+
+  @override
+  String eliminar_miembro_txt(String user_name) {
+    return '¿Estás seguro que quieres eliminar a $user_name del grupo?';
+  }
+
+  @override
+  String get eliminar_miembro_res => 'Miembro eliminado';
 }

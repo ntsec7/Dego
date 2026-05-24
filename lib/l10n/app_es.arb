@@ -79,5 +79,17 @@
             "type" : "String"
         }
     }
-    }
+    },
+    "eliminar_miembro" : "Eliminar miembro",
+    "eliminar_miembro_txt" : "¿Estás seguro que quieres eliminar a {user_name} del grupo?",
+    "@eliminar_miembro_txt" : {
+        "description" : "Eliminar un miembro del grupo",
+        "placeholders":{
+            "user_name":{
+                "type":"String"
+            }
+        }
+    },
+    "eliminar_miembro_res" : "Miembro eliminado"
+
 }
