@@ -465,6 +465,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Miembro eliminado'**
   String get eliminar_miembro_res;
+
+  /// No description provided for @salir_grupo.
+  ///
+  /// In es, this message translates to:
+  /// **'Salirse del grupo'**
+  String get salir_grupo;
+
+  /// No description provided for @salir_grupo_txt.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro que quieres abandonar el grupo?'**
+  String get salir_grupo_txt;
 }
 
 class _AppLocalizationsDelegate

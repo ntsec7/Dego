@@ -3,10 +3,74 @@ import 'package:dego/providers/current_group_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/usuario_provider.dart';
 import 'package:dego/providers/group_info_provider.dart';
+import 'package:dego/utilities/lang.dart';
+import 'package:dego/utilities/error.dart';
 
 class GroupHeader extends ConsumerWidget{
 
   const GroupHeader({super.key});
+
+  void _leaveGroup(BuildContext context, WidgetRef ref) {
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+          return AlertDialog(
+          title: Text(context.lang.salir_grupo),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.lang.salir_grupo_txt,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.lang.cancelar),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                
+                try {
+
+                  final usuarioAsync = ref.read(usuarioProvider);
+                  final currentUserId = usuarioAsync.value?.id; // El usuario actual
+                  final idGroup = ref.read(currentGroupProvider)!.id;
+                  if (currentUserId == null) return;
+
+                  await ref.read(groupInfoProvider.notifier).deleteMember(idGroup, currentUserId);
+
+                  if (context.mounted) {
+
+                    ref.read(idCurrentGroupProvider.notifier).state = null;
+
+                    Navigator.pop(context);
+
+                  }
+                } catch (e) {
+                  if(context.mounted){
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(translateSupabaseError(context,e))),
+                    );
+                  }
+                }
+              },
+              child: Text(context.lang.aceptar),
+            ),
+          ],
+          );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref){
@@ -68,15 +132,7 @@ class GroupHeader extends ConsumerWidget{
           icon: const Icon(Icons.delete),
           color: Colors.redAccent,
           onPressed: () async{
-              
-
-            // final usuarioAsync = ref.watch(usuarioProvider);
-            // final currentUserId = usuarioAsync.value?.id; // El usuario actual
-            // final idGroup = ref.read(currentGroupProvider)!.id;
-
-            // if(currentUserId == null) return;
-
-            // await ref.read(groupInfoProvider.notifier).deleteMember(idGroup, currentUserId);
+            _leaveGroup(context, ref);
           },
         ),
 

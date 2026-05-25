@@ -132,6 +132,7 @@ Widget build(BuildContext context) {
                     itemBuilder: (context, index) {
                       final grupo = gruposFiltrados[index];
                       return GestureDetector(
+                        key: ValueKey(grupo.id),
                         onTap: () {
                           ref.read(idCurrentGroupProvider.notifier).state = grupo.id;  //actualizamos los datos de currentGroup
                         },

@@ -10,7 +10,7 @@ class GrupoService {
   
   Stream<List<Grupo>> getGruposAdmin(String Id){
       try{
-      return supabase.from('grupo').stream(primaryKey: ['id']).map((data) => data.map((json) => Grupo.fromMap(json)).toList());
+      return supabase.from('grupo').stream(primaryKey: ['id']).order('name').map((data) => data.map((json) => Grupo.fromMap(json)).toList());
     } catch(e){
       rethrow;
     }
@@ -20,7 +20,7 @@ class GrupoService {
     
     return supabase
       .from('group_members')
-      .stream(primaryKey: ['id'])
+      .stream(primaryKey: ['id_user', 'id_group'])
       .eq('id_user', Id) 
       .asyncMap((snapshot) async {  //filas de group_members
         if (snapshot.isEmpty) return [];
@@ -32,7 +32,14 @@ class GrupoService {
             .select()
             .inFilter('id', idsGrupos);
 
-        return (res as List).map((map) => Grupo.fromMap(map)).toList();
+        //Convertimos la respuesta a objetos Grupo
+        final groupsList = (res as List).map((map) => Grupo.fromMap(map)).toList();
+
+        // Ordenamos la lista alfabéticamente por nombre antes de enviarla
+        // Esto garantiza que la lista nunca "salte" sin criterio
+        groupsList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
+        return groupsList;    
       });
 
   }

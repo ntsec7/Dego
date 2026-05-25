@@ -90,6 +90,7 @@
             }
         }
     },
-    "eliminar_miembro_res" : "Miembro eliminado"
-
+    "eliminar_miembro_res" : "Miembro eliminado",
+    "salir_grupo":  "Salirse del grupo",
+    "salir_grupo_txt": "¿Estás seguro que quieres abandonar el grupo?"
 }

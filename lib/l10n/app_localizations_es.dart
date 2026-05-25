@@ -209,4 +209,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get eliminar_miembro_res => 'Miembro eliminado';
+
+  @override
+  String get salir_grupo => 'Salirse del grupo';
+
+  @override
+  String get salir_grupo_txt => '¿Estás seguro que quieres abandonar el grupo?';
 }
