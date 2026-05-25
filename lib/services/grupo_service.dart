@@ -99,6 +99,14 @@ class GrupoService {
     }
 
   }
+
+  Future<void> deleteGroup(String id) async{
+    try{
+      await supabase.from('grupo').delete().eq('id',id);
+    } catch (e){
+      rethrow;
+    }
+  }
   
 }
 

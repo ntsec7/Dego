@@ -477,6 +477,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'¿Estás seguro que quieres abandonar el grupo?'**
   String get salir_grupo_txt;
+
+  /// No description provided for @eliminar_grupo.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar grupo'**
+  String get eliminar_grupo;
+
+  /// No description provided for @eliminar_grupo_txt.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro de que quieres eliminar el grupo?'**
+  String get eliminar_grupo_txt;
 }
 
 class _AppLocalizationsDelegate

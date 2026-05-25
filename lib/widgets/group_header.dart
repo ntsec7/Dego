@@ -72,6 +72,65 @@ class GroupHeader extends ConsumerWidget{
     );
   }
 
+  void _deleteGroup(BuildContext context, WidgetRef ref) {
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+          return AlertDialog(
+          title: Text(context.lang.eliminar_grupo),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.lang.eliminar_grupo_txt,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.lang.cancelar),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                
+                try {
+
+                  final idGroup = ref.read(currentGroupProvider)!.id;
+
+                  await ref.read(groupInfoProvider.notifier).deleteGroup(idGroup);
+
+                  if (context.mounted) {
+
+                    ref.read(idCurrentGroupProvider.notifier).state = null;
+
+                    Navigator.pop(context);
+
+                  }
+                } catch (e) {
+                  if(context.mounted){
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(translateSupabaseError(context,e))),
+                    );
+                  }
+                }
+              },
+              child: Text(context.lang.aceptar),
+            ),
+          ],
+          );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref){
 
@@ -81,6 +140,8 @@ class GroupHeader extends ConsumerWidget{
     bool web = screenWidth > 600;
 
     final grupo = ref.watch(currentGroupProvider);
+    final usuarioAsync = ref.watch(usuarioProvider);
+    final usuarioTipo = usuarioAsync.value?.tipo;
 
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
@@ -132,7 +193,12 @@ class GroupHeader extends ConsumerWidget{
           icon: const Icon(Icons.delete),
           color: Colors.redAccent,
           onPressed: () async{
-            _leaveGroup(context, ref);
+            if(usuarioTipo == 'admin') {
+              _deleteGroup(context,ref);
+            }  
+            else {
+              _leaveGroup(context, ref);
+            }
           },
         ),
 
