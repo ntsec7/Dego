@@ -46,5 +46,20 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
+  //UPDATE GRUPO
+  Future<void> updateGroup({
+    required String id,
+    String? name,
+    Uint8List? image,
+    required bool deletePhoto,
+    String? oldImageName,
+  }) async{
+    try{
+      await createService.updateGroup(id: id, name: name, image:image, deletePhoto: deletePhoto, oldImageName: oldImageName);
+    } catch (e){
+      rethrow;
+    }
+  }
+
 
 }

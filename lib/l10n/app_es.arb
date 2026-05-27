@@ -94,5 +94,6 @@
     "salir_grupo":  "Salirse del grupo",
     "salir_grupo_txt": "¿Estás seguro que quieres abandonar el grupo?",
     "eliminar_grupo" : "Eliminar grupo",
-    "eliminar_grupo_txt" : "¿Estás seguro de que quieres eliminar el grupo?"
+    "eliminar_grupo_txt" : "¿Estás seguro de que quieres eliminar el grupo?",
+    "editar_grupo" : "Editar grupo"
 }

@@ -16,33 +16,60 @@ class GrupoService {
     }
   }
 
-  Stream<List<Grupo>> getGrupos(String Id){
+  // Stream<List<Grupo>> getGrupos(String Id){
     
-    return supabase
+  //   return supabase
+  //     .from('group_members')
+  //     .stream(primaryKey: ['id_user', 'id_group'])
+  //     .eq('id_user', Id) 
+  //     // .asyncMap((snapshot) async {  //filas de group_members
+  //     .asyncMap((snapshot) async {  //filas de group_members
+  //       if (snapshot.isEmpty) return [];
+
+  //       final List<String> idsGrupos = snapshot.map((row) => row['id_group'] as String).toList();
+
+  //       final res = await supabase  //coge la información del grupo
+  //           .from('grupo')
+  //           .select()
+  //           .inFilter('id', idsGrupos);
+
+  //       //Convertimos la respuesta a objetos Grupo
+  //       final groupsList = (res as List).map((map) => Grupo.fromMap(map)).toList();
+
+  //       // Ordenamos la lista alfabéticamente por nombre antes de enviarla
+  //       // Esto garantiza que la lista nunca "salte" sin criterio
+  //       groupsList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
+  //       return groupsList;    
+  //     });
+
+  // }
+
+Stream<List<Grupo>> getGrupos(String Id) {
+  return supabase
       .from('group_members')
       .stream(primaryKey: ['id_user', 'id_group'])
       .eq('id_user', Id) 
-      .asyncMap((snapshot) async {  //filas de group_members
-        if (snapshot.isEmpty) return [];
+      .asyncExpand((snapshot) {  // filas de group_members
+        
+        if (snapshot.isEmpty) {
+          // Devolvemos un Stream que emite una lista vacía
+          return Stream.value([]);
+        }
 
         final List<String> idsGrupos = snapshot.map((row) => row['id_group'] as String).toList();
 
-        final res = await supabase  //coge la información del grupo
+        return supabase //stream con la info de los grupos para que se actualice si cambias sus datos
             .from('grupo')
-            .select()
-            .inFilter('id', idsGrupos);
-
-        //Convertimos la respuesta a objetos Grupo
-        final groupsList = (res as List).map((map) => Grupo.fromMap(map)).toList();
-
-        // Ordenamos la lista alfabéticamente por nombre antes de enviarla
-        // Esto garantiza que la lista nunca "salte" sin criterio
-        groupsList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-
-        return groupsList;    
+            .stream(primaryKey: ['id'])
+            .inFilter('id', idsGrupos)
+            .map((data) {
+              final list = data.map((json) => Grupo.fromMap(json)).toList();
+              list.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+              return list;
+            });
       });
-
-  }
+}
 
   // Escucha en tiempo real los miembros de un grupo específico
   Stream<List<Map<String, dynamic>>> streamGroupMembers(String idGroup) {

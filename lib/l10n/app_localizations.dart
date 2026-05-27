@@ -489,6 +489,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'¿Estás seguro de que quieres eliminar el grupo?'**
   String get eliminar_grupo_txt;
+
+  /// No description provided for @editar_grupo.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar grupo'**
+  String get editar_grupo;
 }
 
 class _AppLocalizationsDelegate

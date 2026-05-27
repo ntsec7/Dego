@@ -222,4 +222,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get eliminar_grupo_txt =>
       '¿Estás seguro de que quieres eliminar el grupo?';
+
+  @override
+  String get editar_grupo => 'Editar grupo';
 }

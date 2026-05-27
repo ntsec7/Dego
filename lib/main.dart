@@ -1,4 +1,5 @@
 import 'package:dego/screens/create_group.dart';
+import 'package:dego/screens/edit_group.dart';
 import 'package:dego/screens/group_history.dart';
 import 'package:dego/screens/group_home_page.dart';
 import 'package:dego/screens/group_members.dart';
@@ -111,6 +112,7 @@ class _MyAppState extends State<MyApp> {
         'groupMembers' : (context) => GroupMembers(),
         'groupHistory' : (context) => GroupHistory(),
         'groupContainer' : (context) => GroupContainer(),
+        'editGroup' : (context) => EditGroup(),
       },
     );
   }

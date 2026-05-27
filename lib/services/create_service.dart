@@ -50,12 +50,59 @@ class CreateService {
         'image' : url,
       });
 
-
     } catch(e){
       rethrow;
     }
 
+  }
 
+  Future<void> deleteImage(String name) async {
+    try{
+      
+      await supabase.storage.from('images').remove([name]);
+
+    } catch(e){
+      rethrow;
+    }
+  }
+
+  Future<void> updateGroup({
+    required String id,
+    String? name,
+    Uint8List? image,
+    required bool deletePhoto,
+    String? oldImageName,
+  }) async{
+    try{
+
+      String? url;
+      final Map<String, dynamic> updates = {};  //Mapa donde guardamos lo que vamos a actualizar
+
+      if( (deletePhoto || image!= null) && oldImageName!=null ){
+        //borrar la imagen subida
+        await deleteImage(oldImageName);
+      }
+
+      if(name!=null){
+        updates['name'] = name;
+      }
+
+      if(deletePhoto){
+        updates['image'] = null;
+      }
+      else if(image!=null){
+        final name = 'groups/$id/${DateTime.now().millisecondsSinceEpoch}.png';
+        url = await uploadImage(name: name, image: image);
+        updates['image']=url;
+      }
+
+      if (updates.isNotEmpty) {
+        await supabase.from('grupo').update(updates).eq('id', id);
+      }
+
+    } catch(e){
+      rethrow;
+    }
   }
 
 }
