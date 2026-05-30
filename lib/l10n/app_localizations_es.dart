@@ -231,4 +231,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get buscar_usuarios => 'Buscar usuarios...';
+
+  @override
+  String get perfil => 'Perfil';
+
+  @override
+  String get logout => 'Cerrar sesión';
 }

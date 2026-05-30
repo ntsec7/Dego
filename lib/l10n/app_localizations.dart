@@ -507,6 +507,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Buscar usuarios...'**
   String get buscar_usuarios;
+
+  /// No description provided for @perfil.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfil'**
+  String get perfil;
+
+  /// No description provided for @logout.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sesión'**
+  String get logout;
 }
 
 class _AppLocalizationsDelegate
