@@ -225,4 +225,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get editar_grupo => 'Editar grupo';
+
+  @override
+  String get usuarios => 'Usuarios';
+
+  @override
+  String get buscar_usuarios => 'Buscar usuarios...';
 }

@@ -182,11 +182,15 @@ class GroupHeader extends ConsumerWidget{
             ),
           ),
         ),
+
+        //EDITAR
         IconButton(
           icon: const Icon(Icons.edit),
           color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
           onPressed: () => Navigator.pushNamed(context, 'editGroup'),
         ),
+
+        //PAPELERA
         IconButton(
           icon: const Icon(Icons.delete),
           color: Colors.redAccent,

@@ -1,7 +1,9 @@
-import 'package:dego/providers/auth_provider.dart';
+import 'package:dego/providers/users_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/utilities/lang.dart';
+import 'package:dego/providers/grupo_provider.dart';
+import 'package:dego/providers/current_group_provider.dart';
 
 class Userslist extends ConsumerStatefulWidget {
 
@@ -13,59 +15,186 @@ class Userslist extends ConsumerStatefulWidget {
 
 class _Userslist extends ConsumerState<Userslist> {
 
+  late TextEditingController _searchController;
+  String search = "";
+
   @override
+  void initState() {
+    super.initState();
+    // Inicializar el controlador una sola vez
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // Es buena práctica liberar la memoria
+    _searchController.dispose();
+    super.dispose();
+  }
+
 @override
 Widget build(BuildContext context) {
-  final usuarioAsync = ref.watch(usuarioProvider);
+ 
+  final usersState = ref.watch(userListProvider);
+
+  
+  final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
 
-  return Scaffold(
-    body: SafeArea(
-      child: usuarioAsync.when(
-        data: (usuario) {
-          if (usuario == null) {
-            return const Center(child: Text("No hay usuario"));
-          }
+  bool web = screenWidth > 600 ? true : false;
 
-          return Column(
-            children: [
-              SizedBox(height: screenHeight * 0.02),
+  bool isDarkMode = Theme.of(context).brightness == Brightness.dark;  //Para ver si el tema es claro u oscuro
+
+  return Scaffold(
+  body: SafeArea(
+    child: Column( 
+          children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: web? screenHeight * 0.03 : screenHeight * 0.02,
+              horizontal: web ? screenWidth * 0.01 : screenWidth * 0.03 ,
+            ),
+          child: 
               Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SingleChildScrollView(
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 800),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text("Bienvenido ${usuario.name}"),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () async {
-                                await ref.read(authProvider.notifier).logout();
-                              },
-                              child: const Text("Cerrar sesión"),
-                            ),
-                          ],
-                        ),
-                      ),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() { search = value.toLowerCase(); });
+                  },
+                  decoration: InputDecoration(
+                    hintText: context.lang.buscar_usuarios,
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                 ),
               ),
+          ),
 
-                // const NavigationBottomAdmin(currentIndex: 1)
-
+        Padding(
+          padding:EdgeInsets.symmetric( horizontal: web ? screenWidth * 0.01 : screenWidth * 0.03 ,),
+        child: Align(
+              alignment: Alignment.centerLeft,    
+          child: Row(
+            children: [ 
+            Text(
+            context.lang.usuarios,
+            style: TextStyle(
+              fontSize: web ? (screenHeight + screenWidth) *0.01 : (screenHeight + screenWidth) *0.018,
+              fontWeight: FontWeight.w400,
+              decoration: TextDecoration.underline, 
+            )
+            ),
+            SizedBox(width: web ? screenWidth * 0.006 : screenWidth * 0.02),
+            if(isDarkMode) //imagen blanca
+              Image.asset( 
+                'assets/images/IconoListaUsuariosBlanco.png',
+                width: web? screenWidth * 0.025 : screenWidth * 0.07,
+              )
+            else //Imagen oscura
+             Image.asset( 
+                'assets/images/IconoListaUsuarios.png',
+                width: web? screenWidth * 0.025 : screenWidth * 0.07,
+              ),
+            
             ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text("Error: $e")),
-      ),
+          ),
+        ),
+        ),
+
+            // LISTA DE USUARIOS
+            Expanded( // Esto hace que la lista use todo el espacio central
+              child: usersState.when(
+                data: (users) {
+                  if (users.isEmpty) return const Center(child: Text(""));
+                  
+                  final FilterUsers = users.where((g) {
+                    return g.name.toLowerCase().contains(search) || g.username.toLowerCase().contains(search);
+                  }).toList();
+
+                  return ListView.builder(
+                    padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.01), // Espaciado alrededor de la lista
+                    itemCount: FilterUsers.length,
+                    itemBuilder: (context, index) {
+                      final user = FilterUsers[index];
+                      return GestureDetector(
+                        key: ValueKey(user.id),
+                        // onTap: () {
+                        //   ref.read(idCurrentGroupProvider.notifier).state = grupo.id;  //actualizamos los datos de currentGroup
+                        // },
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
+                          padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 224, 224, 224), 
+                            borderRadius: BorderRadius.circular(30), // Bordes redondeados
+                          ),
+                          child: Row(
+                            children: [
+                              
+                              // IMAGEN
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Container(
+                                  width: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.03,
+                                  height: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.03,
+                                  color: Colors.grey[400], // Fondo por si la imagen falla
+                                  child: user.image != null && user.image!.isNotEmpty
+                                      ? Image.network(
+                                          user.image!, // URL de Supabase
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) => 
+                                              Icon(Icons.group, size: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.02),
+                                        )
+                                      :  Icon(Icons.group, size: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.02), // Icono por defecto
+                                ),
+                              ),
+                              SizedBox(width: web ? screenWidth * 0.01 : screenWidth * 0.03), // Espacio entre foto y texto
+                              
+                              // NOMBRE
+                              Expanded(
+                                child: Text(
+                                  user.name,
+                                  style:  TextStyle(
+                                    fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
+                                onPressed: () => Navigator.pushNamed(context, 'editGroup'), //TODO EDITAR USUARIO
+                              ),
+
+                              //PAPELERA
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                color: Colors.redAccent,
+                                onPressed: () async{
+                                  //TODO ELIMINAR USUARIO
+                                },
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (e, st) => Center(child: Text("Error: $e")),
+              ),
+            ),
+
+          ],
     ),
-  );
+  ),
+);
+
 }
 }

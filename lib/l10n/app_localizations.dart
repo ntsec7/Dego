@@ -495,6 +495,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Editar grupo'**
   String get editar_grupo;
+
+  /// No description provided for @usuarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Usuarios'**
+  String get usuarios;
+
+  /// No description provided for @buscar_usuarios.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar usuarios...'**
+  String get buscar_usuarios;
 }
 
 class _AppLocalizationsDelegate

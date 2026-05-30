@@ -13,4 +13,15 @@ class UsuarioService {
 
   }
 
+  Stream<List<Usuario>> getUsersList() {
+    try{
+
+      final supabase = Supabase.instance.client;
+
+      return supabase.from('usuario').stream(primaryKey: ['id']).order('name').map((data) => data.map((json) => Usuario.fromMap(json)).toList());
+    } catch (e){
+      rethrow;
+    }
+  }
+
 }
