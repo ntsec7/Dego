@@ -20,6 +20,7 @@ import 'package:dego/screens/users_list.dart';
 import 'package:dego/screens/notifications.dart';
 import 'package:dego/screens/main_container.dart';
 import 'package:dego/screens/group_container.dart';
+import 'package:dego/screens/edit_user.dart';
 
 void main() async{
 
@@ -113,6 +114,7 @@ class _MyAppState extends State<MyApp> {
         'groupHistory' : (context) => GroupHistory(),
         'groupContainer' : (context) => GroupContainer(),
         'editGroup' : (context) => EditGroup(),
+        'editUser' : (context) => EditUser(),
       },
     );
   }

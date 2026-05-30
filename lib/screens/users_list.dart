@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/providers/selected_user_provider.dart';
 
 class Userslist extends ConsumerStatefulWidget {
 
@@ -122,7 +123,10 @@ Widget build(BuildContext context) {
                       final user = FilterUsers[index];
                       return GestureDetector(
                         key: ValueKey(user.id),
-                        onTap: () => {Navigator.pushNamed(context, 'homePage')},  //TODO LLEVAR A EDITAR USUARIO
+                        onTap: () => {
+                          ref.read(idSelectedUserProvider.notifier).state = user.id,
+                          Navigator.pushNamed(context, 'editUser')
+                          },  
                         child: Container(
                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
                           padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),

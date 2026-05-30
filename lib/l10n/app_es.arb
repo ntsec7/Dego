@@ -103,5 +103,10 @@
     "logout" : "Cerrar sesión",
     "user_edit" : "Usuario modificado",
     "cambiar_email" : "Cambiar email",
-    "cambiar_email_text" : "El cambio de email deberá ser confirmado mediante la antigua o nueva cuenta de correo. Para visualizar la actualización en la app es posible que tenga que reiniciar la sesión"
+    "cambiar_email_text" : "El cambio de email deberá ser confirmado mediante la antigua o nueva cuenta de correo. Para visualizar la actualización en la app es posible que tenga que reiniciar la sesión",
+    "editar_usuario" : "Editar usuario",
+    "tipo" : "Tipo",
+    "cliente" : "Cliente",
+    "admin" : "Admin",
+    "no_usuario" : "No hay usuario"
 }

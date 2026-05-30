@@ -251,4 +251,19 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get cambiar_email_text =>
       'El cambio de email deberá ser confirmado mediante la antigua o nueva cuenta de correo. Para visualizar la actualización en la app es posible que tenga que reiniciar la sesión';
+
+  @override
+  String get editar_usuario => 'Editar usuario';
+
+  @override
+  String get tipo => 'Tipo';
+
+  @override
+  String get cliente => 'Cliente';
+
+  @override
+  String get admin => 'Admin';
+
+  @override
+  String get no_usuario => 'No hay usuario';
 }

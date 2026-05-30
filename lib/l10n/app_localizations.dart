@@ -543,6 +543,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'El cambio de email deberá ser confirmado mediante la antigua o nueva cuenta de correo. Para visualizar la actualización en la app es posible que tenga que reiniciar la sesión'**
   String get cambiar_email_text;
+
+  /// No description provided for @editar_usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar usuario'**
+  String get editar_usuario;
+
+  /// No description provided for @tipo.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo'**
+  String get tipo;
+
+  /// No description provided for @cliente.
+  ///
+  /// In es, this message translates to:
+  /// **'Cliente'**
+  String get cliente;
+
+  /// No description provided for @admin.
+  ///
+  /// In es, this message translates to:
+  /// **'Admin'**
+  String get admin;
+
+  /// No description provided for @no_usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay usuario'**
+  String get no_usuario;
 }
 
 class _AppLocalizationsDelegate
