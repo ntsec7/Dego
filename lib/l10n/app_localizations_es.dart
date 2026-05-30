@@ -107,20 +107,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get contra_cambiada => 'Contraseña cambiada correctamente';
 
   @override
-  String get error_credenciales => 'Credenciales incorrectas';
+  String get error_credenciales => 'Error: Credenciales incorrectas';
 
   @override
   String get error_servidor => 'Error interno del servidor';
 
   @override
-  String get error_username => 'El nombre de usuario ya está en uso';
+  String get error_username => 'Error: El nombre de usuario ya está en uso';
+
+  @override
+  String get error_email => 'Error: El email ya está en uso';
 
   @override
   String get error_confirma_email =>
       'Por favor, confirma tu correo electrónico';
 
   @override
-  String get error_internet => 'No hay conexión a internet';
+  String get error_internet => 'Error: No hay conexión a internet';
 
   @override
   String get error_datos => 'Error al guardar los datos. Inténtalo de nuevo';
@@ -175,10 +178,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get invitacion_enviada => 'Invitación enviada';
 
   @override
-  String get username_no_existe => 'El username ingresado no existe';
+  String get username_no_existe => 'Error: El username ingresado no existe';
 
   @override
-  String get usuario_pertenece_grupo => 'El usuario ya pertenece al grupo';
+  String get usuario_pertenece_grupo =>
+      'Error: El usuario ya pertenece al grupo';
 
   @override
   String get aceptar => 'Aceptar';
@@ -237,4 +241,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get logout => 'Cerrar sesión';
+
+  @override
+  String get user_edit => 'Usuario modificado';
+
+  @override
+  String get cambiar_email => 'Cambiar email';
+
+  @override
+  String get cambiar_email_text =>
+      'El cambio de email deberá ser confirmado mediante la antigua o nueva cuenta de correo. Para visualizar la actualización en la app es posible que tenga que reiniciar la sesión';
 }

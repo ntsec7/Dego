@@ -9,6 +9,7 @@ import 'package:dego/utilities/error.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:dego/providers/create_provider.dart';
 
 class Profile extends ConsumerStatefulWidget {
 
@@ -42,6 +43,36 @@ class _Profile extends ConsumerState<Profile> {
   bool _isInitialized = false;
   bool imageRemoved = false;
 
+  final userEmail = Supabase.instance.client.auth.currentUser?.email ?? "";
+
+  void _changeEmailConfirmation(BuildContext context) {
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(context.lang.cambiar_email),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              context.lang.cambiar_email_text,
+            ),
+            SizedBox(height: 12),
+          ],
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(context.lang.aceptar),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 @override
 Widget build(BuildContext context) {
   final usuarioAsync = ref.watch(usuarioProvider);
@@ -65,9 +96,16 @@ Widget build(BuildContext context) {
             if (!_isInitialized) {
               _username.text = usuario.username;
               _name.text = usuario.name;
-              _email.text = Supabase.instance.client.auth.currentUser?.email ?? "";
+              _email.text = userEmail;
               _isInitialized = true;
             }
+
+        resetForm(){
+          _username.text = usuario.username;
+          _name.text = usuario.name;
+          _email.text = userEmail;
+        }
+
             
     return Scaffold(
     body: SafeArea(
@@ -113,7 +151,7 @@ Widget build(BuildContext context) {
               const Spacer(),
 
               //PAPELERA
-              if(usuario.tipo!='admin')
+              // if(usuario.tipo!='admin')
                 IconButton(
                   icon: const Icon(Icons.delete),
                   color: Colors.redAccent,
@@ -381,7 +419,7 @@ Widget build(BuildContext context) {
 
                           SizedBox(height: screenHeight * 0.03),
 
-                          //CONTRASEÑA
+                        //CONTRASEÑA
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
@@ -472,6 +510,7 @@ Widget build(BuildContext context) {
                               key: const Key('password2Field'),
                               controller: _password2,
                               validator:  (value) {
+                                if(_password.text == "" || _password.text.isEmpty ) return null;
                                 if (value == null || value.isEmpty) return context.lang.campo_obligatorio;
                                 if (value != _password.text) return context.lang.contras_no_coinciden;
                                 return null;
@@ -524,68 +563,28 @@ Widget build(BuildContext context) {
 
                           SizedBox(height: screenHeight * 0.07),
 
-                        //   ElevatedButton(
-                        //   onPressed: _loading ? null : () async {
-                        //     if (_formKey.currentState!.validate()) {
-                        //       setState(() => _loading = true);
-
-                        //     try {
-                        //       await ref.read(authProvider.notifier).register(
-                        //         email: _email.text.trim(),
-                        //         username: _username.text.trim(),
-                        //         name: _name.text.trim(),
-                        //         password: _password.text.trim(),
-                        //       );
-
-                        //       if(!context.mounted) return;
-
-                        //       // Éxito
-                        //       ScaffoldMessenger.of(context).showSnackBar(
-                        //         SnackBar(content: Text(context.lang.exito_crear_usuario)),
-                        //       );
-
-                        //       // _showEmailConfirmation(context);
-
-                        //     } catch (e) {
-                        //       // Error
-                        //       ScaffoldMessenger.of(context).showSnackBar(
-                        //         SnackBar(content: Text(translateSupabaseError(context,e))),
-                        //       );
-                        //     }
-
-                        //       setState(() => _loading = false);
-                        //     }
-                        //   },
-                        //   child: _loading 
-                        //     ? const CircularProgressIndicator(color: Colors.white) 
-                        //     : Text(context.lang.registrarse,
-                        //         style: TextStyle(
-                        //           fontWeight: FontWeight.w500,
-                        //           fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
-                        //         ),),
-                        // ),
-
                         // BOTONES
-                      //   Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
 
-                      //   //CANCELAR
-                      //   ElevatedButton(
-                      //     onPressed: () => Navigator.of(context).pushReplacementNamed('mainContainer'),
-                      //     style: ElevatedButton.styleFrom(
-                      //       backgroundColor: Color(0xFFCC2525), // Color personalizado
-                      //       foregroundColor: Colors.white, // Tamaño
-                      //     ),
-                      //     child: Text(context.lang.cancelar,
-                      //     style: TextStyle(
-                      //       fontSize: web
-                      //           ? (screenHeight + screenWidth) * 0.01
-                      //           : (screenHeight + screenWidth) * 0.015,
-                      //     ),),
-                      //   ),
+                        //CANCELAR
+                        ElevatedButton(
+                          onPressed: () => resetForm(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFCC2525), // Color personalizado
+                            foregroundColor: Colors.white, // Tamaño
+                          ),
+                          child: Text(context.lang.cancelar,
+                          style: TextStyle(
+                            fontSize: web
+                                ? (screenHeight + screenWidth) * 0.01
+                                : (screenHeight + screenWidth) * 0.015,
+                          ),),
+                        ),
 
-                      // SizedBox(width: web ? screenWidth * 0.04 : screenWidth * 0.04),
+                      SizedBox(width: web ? screenWidth * 0.04 : screenWidth * 0.04),
+
 
                         //GUARDAR 
                         ElevatedButton(
@@ -594,27 +593,50 @@ Widget build(BuildContext context) {
                               setState(() => _loading = true);
                               try {
                                 
-                                // Uint8List? sendImage;
-                                // bool deletePhoto= false;
+                                Uint8List? sendImage;
+                                bool deletePhoto= false;
 
-                                // if(imageBytes!=null){ //nueva foto
-                                //   sendImage = imageBytes;
-                                // } else if(imageRemoved){  //ha borrado la foto que había
-                                //   deletePhoto = true;
-                                // }
+                                if(imageBytes!=null){ //nueva foto
+                                  sendImage = imageBytes;
+                                } else if(imageRemoved){  //ha borrado la foto que había
+                                  deletePhoto = true;
+                                }
 
-                                // String? sendName;
-                                // if (_name.text.trim() != grupo?.name) {
-                                //   sendName = _name.text.trim();  //Solo lo enviamos si es distinto de lo que había
-                                // }
+                                String? sendName;
+                                if (_name.text.trim() != usuario.name) {
+                                  sendName = _name.text.trim();  //Solo lo enviamos si es distinto de lo que había
+                                }
 
-                                // if(sendImage!=null || deletePhoto || sendName!=null){
-                                //   await ref.read(createProvider.notifier).updateGroup(id:grupo!.id, name: sendName, image: sendImage, deletePhoto: deletePhoto, oldImageName: grupo.image);
-                                // }
+                                String? sendUsername;
+                                if (_username.text.trim() != usuario.username) {
+                                  sendUsername = _username.text.trim();  //Solo lo enviamos si es distinto de lo que había
+                                }
 
-                                if(!context.mounted) return;
+                                String? sendEmail;
+                                if (_email.text.trim() != userEmail) {
+                                  sendEmail = _email.text.trim();  //Solo lo enviamos si es distinto de lo que había
+                                }
 
-                                Navigator.pushNamed(context, 'mainContainer');
+                                String? sendPassword;
+                                if(_password.text.trim() != ""){
+                                  sendPassword = _password.text.trim();
+                                }
+
+                                if(sendImage!=null || deletePhoto || sendName!=null || sendName!=null || sendUsername!=null || sendEmail!=null || sendPassword!=null){
+                                  await ref.read(createProvider.notifier).updateUser(id:usuario.id, username: sendUsername, name: sendName, email:sendEmail, password: sendPassword, image: sendImage, deletePhoto: deletePhoto, oldImageName: usuario.image);
+                                
+                                  if(sendEmail!=null){
+                                     _changeEmailConfirmation(context);
+                                  }
+
+                                  if(!context.mounted) return;
+
+                                  // Éxito
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(context.lang.user_edit)),
+                                  );
+                                
+                                }
                                 
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -637,8 +659,8 @@ Widget build(BuildContext context) {
                                     : (screenHeight + screenWidth) * 0.015,
                               ),),
                         ),
-                      // ]),
-
+                          ],
+                        ),
                             ],
                             ),
                           ),

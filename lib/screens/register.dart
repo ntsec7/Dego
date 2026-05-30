@@ -299,7 +299,10 @@ class _Register extends ConsumerState<Register> {
           Expanded(
             child: TextFormField(
               key: const Key('passwordField'),
-              validator:  (value) => CheckPassword().check(value),
+              validator:  (value) {
+                if (value == null || value.isEmpty) return context.lang.campo_obligatorio;
+                return CheckPassword().check(value);
+              },
               controller: _password,
               cursorColor: Colors.grey,
               textAlign: TextAlign.center,

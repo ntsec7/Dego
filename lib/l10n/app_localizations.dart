@@ -283,7 +283,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_credenciales.
   ///
   /// In es, this message translates to:
-  /// **'Credenciales incorrectas'**
+  /// **'Error: Credenciales incorrectas'**
   String get error_credenciales;
 
   /// No description provided for @error_servidor.
@@ -295,8 +295,14 @@ abstract class AppLocalizations {
   /// No description provided for @error_username.
   ///
   /// In es, this message translates to:
-  /// **'El nombre de usuario ya está en uso'**
+  /// **'Error: El nombre de usuario ya está en uso'**
   String get error_username;
+
+  /// No description provided for @error_email.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: El email ya está en uso'**
+  String get error_email;
 
   /// No description provided for @error_confirma_email.
   ///
@@ -307,7 +313,7 @@ abstract class AppLocalizations {
   /// No description provided for @error_internet.
   ///
   /// In es, this message translates to:
-  /// **'No hay conexión a internet'**
+  /// **'Error: No hay conexión a internet'**
   String get error_internet;
 
   /// No description provided for @error_datos.
@@ -409,13 +415,13 @@ abstract class AppLocalizations {
   /// No description provided for @username_no_existe.
   ///
   /// In es, this message translates to:
-  /// **'El username ingresado no existe'**
+  /// **'Error: El username ingresado no existe'**
   String get username_no_existe;
 
   /// No description provided for @usuario_pertenece_grupo.
   ///
   /// In es, this message translates to:
-  /// **'El usuario ya pertenece al grupo'**
+  /// **'Error: El usuario ya pertenece al grupo'**
   String get usuario_pertenece_grupo;
 
   /// No description provided for @aceptar.
@@ -519,6 +525,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Cerrar sesión'**
   String get logout;
+
+  /// No description provided for @user_edit.
+  ///
+  /// In es, this message translates to:
+  /// **'Usuario modificado'**
+  String get user_edit;
+
+  /// No description provided for @cambiar_email.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar email'**
+  String get cambiar_email;
+
+  /// No description provided for @cambiar_email_text.
+  ///
+  /// In es, this message translates to:
+  /// **'El cambio de email deberá ser confirmado mediante la antigua o nueva cuenta de correo. Para visualizar la actualización en la app es posible que tenga que reiniciar la sesión'**
+  String get cambiar_email_text;
 }
 
 class _AppLocalizationsDelegate

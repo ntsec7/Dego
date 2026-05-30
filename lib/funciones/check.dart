@@ -41,7 +41,8 @@ class CheckPassword implements Check{
   @override
   String? check(String? value){
 
-    if(value == null || value.isEmpty) return "Campo obligatorio";
+    // if(value == null || value.isEmpty) return "Campo obligatorio";
+    if(value == null || value.isEmpty) return null;
 
     bool err= false;
     String error = "La constraseña debe contener al menos: \n"; 

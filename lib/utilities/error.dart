@@ -14,8 +14,12 @@ String translateSupabaseError(BuildContext context, Object error) {
   }
 
   // Ordenamos de lo más específico a lo más genérico
-  if (errorString.contains('username_ya_existe')) {
+  if (errorString.contains('username_ya_existe') || errorString.contains('Usuario_username_key')) {
     return context.lang.error_username;
+  }
+
+  if(errorString.contains('email_exists')){
+    return context.lang.error_email;
   }
   
   if (errorString.contains('email not confirmed')) {

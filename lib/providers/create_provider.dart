@@ -61,5 +61,23 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
+  //UPDATE USER
+  Future<void> updateUser({
+    required String id,
+    String? username,
+    String? name,
+    String? email,
+    String? password,
+    Uint8List? image,
+    required bool deletePhoto,
+    String? oldImageName,
+  }) async{
+    try{
+      await createService.updateUser(id: id, username: username, name: name, email:email, password:password, image:image, deletePhoto: deletePhoto, oldImageName: oldImageName);
+    } catch (e){
+      rethrow;
+    }
+  }
+
 
 }
