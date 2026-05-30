@@ -2,8 +2,7 @@ import 'package:dego/providers/users_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
-import 'package:dego/providers/grupo_provider.dart';
-import 'package:dego/providers/current_group_provider.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
 class Userslist extends ConsumerStatefulWidget {
 
@@ -44,6 +43,9 @@ Widget build(BuildContext context) {
   bool web = screenWidth > 600 ? true : false;
 
   bool isDarkMode = Theme.of(context).brightness == Brightness.dark;  //Para ver si el tema es claro u oscuro
+
+  final usuarioAsync = ref.watch(usuarioProvider);
+  final usuarioId = usuarioAsync.value?.id;
 
   return Scaffold(
   body: SafeArea(
@@ -109,8 +111,8 @@ Widget build(BuildContext context) {
                 data: (users) {
                   if (users.isEmpty) return const Center(child: Text(""));
                   
-                  final FilterUsers = users.where((g) {
-                    return g.name.toLowerCase().contains(search) || g.username.toLowerCase().contains(search);
+                  final FilterUsers = users.where((u) {
+                    return (u.name.toLowerCase().contains(search) || u.username.toLowerCase().contains(search)) && u.id!=usuarioId;
                   }).toList();
 
                   return ListView.builder(
@@ -120,9 +122,7 @@ Widget build(BuildContext context) {
                       final user = FilterUsers[index];
                       return GestureDetector(
                         key: ValueKey(user.id),
-                        // onTap: () {
-                        //   ref.read(idCurrentGroupProvider.notifier).state = grupo.id;  //actualizamos los datos de currentGroup
-                        // },
+                        onTap: () => {Navigator.pushNamed(context, 'homePage')},  //TODO LLEVAR A EDITAR USUARIO
                         child: Container(
                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
                           padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
@@ -154,7 +154,10 @@ Widget build(BuildContext context) {
                               
                               // NOMBRE
                               Expanded(
-                                child: Text(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                Text(
                                   user.name,
                                   style:  TextStyle(
                                     fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
@@ -162,23 +165,18 @@ Widget build(BuildContext context) {
                                     color: Colors.black87,
                                   ),
                                 ),
-                              ),
 
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
-                                onPressed: () => Navigator.pushNamed(context, 'editGroup'), //TODO EDITAR USUARIO
+                                //USENAME
+                                Text(
+                                  user.username,
+                                  style:  TextStyle(
+                                    fontSize: web ? (screenHeight + screenWidth) * 0.009 : (screenHeight + screenWidth) * 0.012,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromARGB(221, 85, 85, 85),
+                                  ),
+                                ),
+                            ],),
                               ),
-
-                              //PAPELERA
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                color: Colors.redAccent,
-                                onPressed: () async{
-                                  //TODO ELIMINAR USUARIO
-                                },
-                              ),
-
                             ],
                           ),
                         ),

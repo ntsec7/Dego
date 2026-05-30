@@ -291,7 +291,7 @@ Widget build(BuildContext context) {
           ),
         ),
 
-            // LISTA DE GRUPOS
+            // LISTA DE MIEMBROS
             Expanded( // Esto hace que la lista use todo el espacio central
               child: groupMembers.when(
                 data: (members) {
@@ -307,9 +307,8 @@ Widget build(BuildContext context) {
                     itemBuilder: (context, index) {
                       final user = filteredMembers[index];
                       return GestureDetector(
-                        onTap: () {
-                          // ref.read(idCurrentGroupProvider.notifier).state = grupo.id;  //actualizamos los datos de currentGroup
-                        },
+                        // onTap: () {
+                        // },
                         child: Container(
                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
                           padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
