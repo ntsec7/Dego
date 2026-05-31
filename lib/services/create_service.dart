@@ -217,24 +217,14 @@ class CreateService {
         await supabase.from('usuario').update(updates).eq('id', id);
       }
 
-      //Cambiar email : llama a la Edge-function 
-      if(email!=null){
-        // await Supabase.instance.client.auth.updateUser(
-        //   UserAttributes(
-        //     email: email,
-        //   ),
-        // );
-      }
 
-      //Cambiar contraseña : llama a la Edge-function
-      if(password!=null){
-        // await Supabase.instance.client.auth.updateUser(
-        //   UserAttributes(
-        //     password: password,
-        //   )
-        // );
+      //Cambiar email y/o contraseña llama Edge-function
+      if(email!=null || password!=null){
+        await supabase.functions.invoke(
+          'update-user', 
+          body: { 'userIdToUpdate': id, 'newEmail':email, 'newPassword':password },
+        );
       }
-
 
     } catch(e){
       rethrow;

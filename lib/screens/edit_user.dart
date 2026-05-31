@@ -42,7 +42,7 @@ class _EditUser extends ConsumerState<EditUser> {
   bool _isInitialized = false;
   bool imageRemoved = false;
 
-  final userEmail = Supabase.instance.client.auth.currentUser?.email ?? "";
+  String userEmail="";
 
   void _changeEmailConfirmation(BuildContext context) {
 
@@ -161,12 +161,19 @@ Widget build(BuildContext context) {
     return const Center(child: Text("No hay usuario"));
   }
 
-    if (!_isInitialized) {
+    if (!_isInitialized){
       _username.text = usuario.username;
       _name.text = usuario.name;
       _email.text = userEmail;
       _type.text = usuario.tipo;
       _isInitialized = true;
+      Supabase.instance.client.rpc('get_user_email', params: {'user_id_param': usuario.id}).
+      then((response){
+        if (context.mounted) {
+          userEmail = response as String? ?? "";
+          _email.text = userEmail;
+        }
+      });
     }
 
             

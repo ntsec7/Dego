@@ -128,6 +128,18 @@ class _Profile extends ConsumerState<Profile> {
     );
   }
 
+  
+  // Liberar controladores para evitar fugas de memoria
+  @override
+  void dispose() {
+    _username.dispose();
+    _email.dispose();
+    _name.dispose();
+    _password.dispose();
+    _password2.dispose();
+    super.dispose();
+  }
+
 
 @override
 Widget build(BuildContext context) {
