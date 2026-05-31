@@ -262,7 +262,8 @@ class _ResetPassword extends ConsumerState<ResetPassword> {
                 SnackBar(content: Text(context.lang.contra_cambiada)),
               );
 
-              Navigator.of(context).pushReplacementNamed('mainContainer');
+              Navigator.pop(context);
+              // Navigator.of(context).pushReplacementNamed('mainContainer');
 
             } catch (e) {
               // Error

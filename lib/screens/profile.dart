@@ -629,7 +629,7 @@ Widget build(BuildContext context) {
                             ),
                           ],),
 
-                          SizedBox(height: screenHeight * 0.07),
+                          SizedBox(height: screenHeight * 0.03),
 
                         // BOTONES
                         Row(
@@ -737,7 +737,7 @@ Widget build(BuildContext context) {
                     ),
                     ),
 
-                    SizedBox(height: web ? screenHeight * 0.03 : screenHeight * 0.1),
+                    SizedBox(height: web ? screenHeight * 0.03 : screenHeight * 0.04),
 
                   //CERRAR SESION
                     ElevatedButton(
