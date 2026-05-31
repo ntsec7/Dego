@@ -5,29 +5,45 @@ import './usuario_provider.dart';
 
 final grupoServiceProvider = Provider<GrupoService>((ref) => GrupoService());
 
-// Este provider escuchará el stream automáticamente
+//Provider que solo escucha los IDs de los grupos del usuario actual
+final idsGruposUsuarioProvider = StreamProvider<List<String>>((ref) {
+  final service = ref.watch(grupoServiceProvider);
+  final userAsync = ref.watch(usuarioProvider);
+
+  return userAsync.maybeWhen(
+    data: (user) {
+      if (user == null) return Stream.value([]);
+      // Si es admin no filtra por miembros
+      if (user.tipo == 'admin') return Stream.value([]); 
+      
+      return service.streamIdsGruposUsuario(user.id);
+    },
+    orElse: () => Stream.value([]),
+  );
+});
+
+// Provider final que observa al anterior
 final grupoProvider = StreamProvider<List<Grupo>>((ref) {
   final service = ref.watch(grupoServiceProvider);
   final userAsync = ref.watch(usuarioProvider);
+  
+  // Obtenemos el estado de los IDs de los grupos
+  final idsGruposAsync = ref.watch(idsGruposUsuarioProvider);
+
   return userAsync.maybeWhen(
     data: (user) {
-      // Si el usuario es null (no hay sesión en Supabase), devolvemos un stream vacío
-      if (user == null) {
-        return Stream.value([]);
+      if (user == null) return Stream.value([]);
+
+      if (user.tipo == 'admin') {
+        return service.getGruposAdmin(user.id); 
       }
 
-      // Si el usuario ya está cargado
-      if(user.tipo=='admin'){
-        return service.getGruposAdmin(user.id);
-      }
-      else{
-        return service.getGrupos(user.id);
-      }
-      
-      
+      // Para usuarios normales, esperamos a tener los IDs del otro provider
+      return idsGruposAsync.maybeWhen(
+        data: (ids) => service.streamGruposPorIds(ids),
+        orElse: () => Stream.value([]),
+      );
     },
-    // Mientras el FutureProvider está cargando los datos del usuario de Supabase,
-    // o si da un error, mantenemos el stream de grupos en espera devolviendo una lista vacía.
     orElse: () => Stream.value([]),
   );
 });

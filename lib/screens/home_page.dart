@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/grupo_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
 class Homepage extends ConsumerStatefulWidget {
 
@@ -35,6 +36,9 @@ class _Homepage extends ConsumerState<Homepage> {
 Widget build(BuildContext context) {
 
   final gruposState = ref.watch(grupoProvider);
+
+  final usuarioAsync = ref.watch(usuarioProvider);
+  final currentUserType = usuarioAsync.value?.tipo;
 
   
   final screenWidth = MediaQuery.of(context).size.width;
@@ -71,16 +75,21 @@ Widget build(BuildContext context) {
                 ),
               ),
 
-              SizedBox(width: web ? screenWidth * 0.02 : screenWidth * 0.03),
+              if(currentUserType != 'admin')...[
 
-              CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                child: IconButton(
-                  icon: const Icon(Icons.add),
-                  color: Colors.white,
-                  onPressed: () => Navigator.pushNamed(context, 'createGroup'),
+                SizedBox(width: web ? screenWidth * 0.02 : screenWidth * 0.03),
+
+                CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: IconButton(
+                    icon: const Icon(Icons.add),
+                    color: Colors.white,
+                    onPressed: () => Navigator.pushNamed(context, 'createGroup'),
+                  ),
                 ),
-              ),
+
+              ],
+
             ],
           ),
           ),
