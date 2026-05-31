@@ -573,6 +573,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No hay usuario'**
   String get no_usuario;
+
+  /// No description provided for @usuario_eliminado.
+  ///
+  /// In es, this message translates to:
+  /// **'Usuario eliminado'**
+  String get usuario_eliminado;
+
+  /// No description provided for @eliminar_usuario.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar usuario'**
+  String get eliminar_usuario;
+
+  /// No description provided for @eliminar_usuario_text.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro de que quieres eliminar al usuario?'**
+  String get eliminar_usuario_text;
+
+  /// No description provided for @eliminar_cuenta.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar cuenta'**
+  String get eliminar_cuenta;
+
+  /// No description provided for @eliminar_cuenta_text.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus datos'**
+  String get eliminar_cuenta_text;
 }
 
 class _AppLocalizationsDelegate

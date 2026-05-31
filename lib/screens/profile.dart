@@ -73,6 +73,62 @@ class _Profile extends ConsumerState<Profile> {
   );
 }
 
+  void _deleteUser(BuildContext context, WidgetRef ref, String id) {
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+          return AlertDialog(
+          title: Text(context.lang.eliminar_cuenta),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.lang.eliminar_cuenta_text,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.lang.cancelar),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                
+                try{
+
+                  await  ref.read(createProvider.notifier).deleteUser(id: id);
+
+                  if(!context.mounted) return;
+
+                  Navigator.pop(context);
+                  
+                  await ref.read(authProvider.notifier).logout();
+                
+                } catch (e) {
+                  if(!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(translateSupabaseError(context, e))),
+                  );
+                }
+
+              },
+              child: Text(context.lang.aceptar),
+            ),
+          ],
+          );
+          },
+        );
+      },
+    );
+  }
+
+
 @override
 Widget build(BuildContext context) {
   final usuarioAsync = ref.watch(usuarioProvider);
@@ -156,7 +212,7 @@ Widget build(BuildContext context) {
                   icon: const Icon(Icons.delete),
                   color: Colors.redAccent,
                   onPressed: () async{
-                    //TODO ELIMINAR CUENTA
+                    _deleteUser(context, ref, usuario.id);
                   },
                 ),
                 

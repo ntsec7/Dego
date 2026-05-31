@@ -266,4 +266,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get no_usuario => 'No hay usuario';
+
+  @override
+  String get usuario_eliminado => 'Usuario eliminado';
+
+  @override
+  String get eliminar_usuario => 'Eliminar usuario';
+
+  @override
+  String get eliminar_usuario_text =>
+      '¿Estás seguro de que quieres eliminar al usuario?';
+
+  @override
+  String get eliminar_cuenta => 'Eliminar cuenta';
+
+  @override
+  String get eliminar_cuenta_text =>
+      '¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus datos';
 }

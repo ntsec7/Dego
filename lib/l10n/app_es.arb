@@ -108,5 +108,10 @@
     "tipo" : "Tipo",
     "cliente" : "Cliente",
     "admin" : "Admin",
-    "no_usuario" : "No hay usuario"
+    "no_usuario" : "No hay usuario",
+    "usuario_eliminado" : "Usuario eliminado",
+    "eliminar_usuario" : "Eliminar usuario",
+    "eliminar_usuario_text" : "¿Estás seguro de que quieres eliminar al usuario?",
+    "eliminar_cuenta" : "Eliminar cuenta",
+    "eliminar_cuenta_text" : "¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus datos"
 }

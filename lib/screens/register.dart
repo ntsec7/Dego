@@ -49,7 +49,10 @@ class _Register extends ConsumerState<Register> {
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, 'login'),
+            onPressed: () => {
+              Navigator.pop(context), 
+              Navigator.pop(context),
+            },
             child: Text(context.lang.continuar),
           ),
         ],

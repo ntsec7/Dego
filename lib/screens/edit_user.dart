@@ -63,7 +63,10 @@ class _EditUser extends ConsumerState<EditUser> {
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           ElevatedButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => {
+              Navigator.pop(context),
+              Navigator.pop(context),
+            },
             child: Text(context.lang.aceptar),
           ),
         ],
@@ -71,6 +74,64 @@ class _EditUser extends ConsumerState<EditUser> {
     },
   );
 }
+
+  void _deleteUser(BuildContext context, WidgetRef ref, String id) {
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+          return AlertDialog(
+          title: Text(context.lang.eliminar_usuario),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.lang.eliminar_usuario_text,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.lang.cancelar),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                
+                try{
+
+                  await  ref.read(createProvider.notifier).deleteUser(id: id);
+                  
+                  if(!context.mounted) return;
+
+                    // Éxito
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(context.lang.usuario_eliminado)),
+                    );     
+
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(translateSupabaseError(context, e))),
+                  );
+                }
+
+              },
+              child: Text(context.lang.aceptar),
+            ),
+          ],
+          );
+          },
+        );
+      },
+    );
+  }
 
 // Liberar controladores para evitar fugas de memoria
   @override
@@ -138,12 +199,11 @@ Widget build(BuildContext context) {
               const Spacer(),
 
               //PAPELERA
-              // if(usuario.tipo!='admin')
                 IconButton(
                   icon: const Icon(Icons.delete),
                   color: Colors.redAccent,
                   onPressed: () async{
-                    //TODO ELIMINAR CUENTA
+                    _deleteUser(context, ref, usuario.id);
                   },
                 ),
                 
@@ -689,19 +749,27 @@ Widget build(BuildContext context) {
                                   sendPassword = _password.text.trim();
                                 }
 
-                                if(sendImage!=null || deletePhoto || sendName!=null || sendName!=null || sendUsername!=null || sendEmail!=null || sendPassword!=null){
-                                  await ref.read(createProvider.notifier).updateUser(id:usuario.id, username: sendUsername, name: sendName, email:sendEmail, password: sendPassword, image: sendImage, deletePhoto: deletePhoto, oldImageName: usuario.image);
-                                
-                                  if(sendEmail!=null){
-                                     _changeEmailConfirmation(context);
-                                  }
+                                String? sendType;
+                                if(_type.text != usuario.tipo){
+                                  sendType = _type.text;
+                                }
 
+                                if(sendImage!=null || deletePhoto || sendName!=null || sendName!=null || sendUsername!=null || sendEmail!=null || sendPassword!=null || sendType!=null){
+                                  await ref.read(createProvider.notifier).updateUserAdmin(id:usuario.id, username: sendUsername, name: sendName, email:sendEmail, password: sendPassword, type:sendType,image: sendImage, deletePhoto: deletePhoto, oldImageName: usuario.image);
+                                
                                   if(!context.mounted) return;
 
                                   // Éxito
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(context.lang.user_edit)),
                                   );
+
+                                  if(sendEmail!=null){
+                                     _changeEmailConfirmation(context);
+                                  }
+                                  else{
+                                    Navigator.pop(context);
+                                  }
                                 
                                 }
                                 
