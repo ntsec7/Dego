@@ -53,7 +53,7 @@ class _ResetPassword extends ConsumerState<ResetPassword> {
               IconButton(
               icon: const Icon(Icons.arrow_back_ios_new),
               onPressed: () {
-                Navigator.pushNamed(context, 'login');
+                Navigator.pop(context);
               },
             ),
             

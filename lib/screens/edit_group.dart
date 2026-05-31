@@ -250,7 +250,7 @@ class _EditGroup extends ConsumerState<EditGroup> {
 
                                 //CANCELAR
                                 ElevatedButton(
-                                  onPressed: () => Navigator.of(context).pushReplacementNamed('mainContainer'),
+                                  onPressed: () => Navigator.pop(context),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color(0xFFCC2525), // Color personalizado
                                     foregroundColor: Colors.white, // Tamaño
@@ -292,7 +292,7 @@ class _EditGroup extends ConsumerState<EditGroup> {
 
                                         if(!context.mounted) return;
 
-                                        Navigator.pushNamed(context, 'mainContainer');
+                                        Navigator.pop(context);
                                         
                                       } catch (e) {
                                         ScaffoldMessenger.of(context).showSnackBar(

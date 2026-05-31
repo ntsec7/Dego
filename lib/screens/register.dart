@@ -87,7 +87,7 @@ class _Register extends ConsumerState<Register> {
               child: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new),
               onPressed: () {
-                Navigator.pushNamed(context, 'login');
+                Navigator.pop(context);
               },
             ),
             ),
