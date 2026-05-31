@@ -603,6 +603,42 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus datos'**
   String get eliminar_cuenta_text;
+
+  /// No description provided for @titulo.
+  ///
+  /// In es, this message translates to:
+  /// **'Título'**
+  String get titulo;
+
+  /// No description provided for @votacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Votación'**
+  String get votacion;
+
+  /// No description provided for @ruleta.
+  ///
+  /// In es, this message translates to:
+  /// **'Ruleta'**
+  String get ruleta;
+
+  /// No description provided for @ranking.
+  ///
+  /// In es, this message translates to:
+  /// **'Ranking'**
+  String get ranking;
+
+  /// No description provided for @cientifico.
+  ///
+  /// In es, this message translates to:
+  /// **'Científico'**
+  String get cientifico;
+
+  /// No description provided for @crear_decision.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear decisión'**
+  String get crear_decision;
 }
 
 class _AppLocalizationsDelegate

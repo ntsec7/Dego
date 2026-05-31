@@ -283,4 +283,22 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get eliminar_cuenta_text =>
       '¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus datos';
+
+  @override
+  String get titulo => 'Título';
+
+  @override
+  String get votacion => 'Votación';
+
+  @override
+  String get ruleta => 'Ruleta';
+
+  @override
+  String get ranking => 'Ranking';
+
+  @override
+  String get cientifico => 'Científico';
+
+  @override
+  String get crear_decision => 'Crear decisión';
 }

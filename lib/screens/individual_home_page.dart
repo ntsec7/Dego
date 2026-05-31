@@ -13,7 +13,7 @@ class Individualhomepage extends ConsumerStatefulWidget {
 
 class _Individualhomepage extends ConsumerState<Individualhomepage> {
 
-  @override
+
 @override
 Widget build(BuildContext context) {
   final usuarioAsync = ref.watch(usuarioProvider);

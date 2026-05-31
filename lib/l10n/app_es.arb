@@ -113,5 +113,11 @@
     "eliminar_usuario" : "Eliminar usuario",
     "eliminar_usuario_text" : "¿Estás seguro de que quieres eliminar al usuario?",
     "eliminar_cuenta" : "Eliminar cuenta",
-    "eliminar_cuenta_text" : "¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus datos"
+    "eliminar_cuenta_text" : "¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus datos",
+    "titulo" : "Título",
+    "votacion": "Votación",
+    "ruleta" : "Ruleta",
+    "ranking" : "Ranking",
+    "cientifico" : "Científico",
+    "crear_decision" : "Crear decisión"
 }

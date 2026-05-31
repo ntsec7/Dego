@@ -693,11 +693,11 @@ Widget build(BuildContext context) {
                                 if(sendImage!=null || deletePhoto || sendName!=null || sendName!=null || sendUsername!=null || sendEmail!=null || sendPassword!=null){
                                   await ref.read(createProvider.notifier).updateUser(id:usuario.id, username: sendUsername, name: sendName, email:sendEmail, password: sendPassword, image: sendImage, deletePhoto: deletePhoto, oldImageName: usuario.image);
                                 
+                                  if(!context.mounted) return;
+
                                   if(sendEmail!=null){
                                      _changeEmailConfirmation(context);
                                   }
-
-                                  if(!context.mounted) return;
 
                                   // Éxito
                                   ScaffoldMessenger.of(context).showSnackBar(

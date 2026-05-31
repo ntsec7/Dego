@@ -1,4 +1,3 @@
-import 'package:dego/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/current_group_provider.dart';
@@ -16,7 +15,12 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
 
 @override
 Widget build(BuildContext context) {
+
+  final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
+
+  bool web = screenWidth > 600 ? true : false;
+
   final grupo = ref.watch(currentGroupProvider);
 
   if(grupo==null){
@@ -29,32 +33,22 @@ Widget build(BuildContext context) {
     body: SafeArea(
       child: Column(
             children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SingleChildScrollView(
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 800),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text("Bienvenido a ${grupo.name}"),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () async {
-                                await ref.read(authProvider.notifier).logout();
-                              },
-                              child: const Text("Cerrar sesión"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+
+              Align(
+                alignment: AlignmentGeometry.center,
+                child: IconButton(
+                  icon: const Icon(Icons.add,
+                  weight: 900.0,),
+                  color: Color(0xFF098238),
+                  iconSize: web ? screenWidth * 0.03 : screenWidth * 0.15,
+                  onPressed: () async{
+                    Navigator.pushNamed(context, 'createDecision');
+                  },
                 ),
-              ),
+              )
+
+              
+
             ],
       ),
     ),

@@ -1,3 +1,4 @@
+import 'package:dego/screens/create_decision.dart';
 import 'package:dego/screens/create_group.dart';
 import 'package:dego/screens/edit_group.dart';
 import 'package:dego/screens/group_history.dart';
@@ -115,6 +116,7 @@ class _MyAppState extends State<MyApp> {
         'groupContainer' : (context) => GroupContainer(),
         'editGroup' : (context) => EditGroup(),
         'editUser' : (context) => EditUser(),
+        'createDecision' : (context) => CreateDecision(),
       },
     );
   }
