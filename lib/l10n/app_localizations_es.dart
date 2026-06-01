@@ -301,4 +301,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get crear_decision => 'Crear decisión';
+
+  @override
+  String get opciones => 'Opciones';
+
+  @override
+  String get abrir_opciones => 'Abrir opciones';
+
+  @override
+  String get fecha_final_opciones => 'Fecha de finalización de las opciones';
+
+  @override
+  String get fecha_final_votacion => 'Fecha de finalización de la votación';
+
+  @override
+  String get empezar => 'Empezar';
 }

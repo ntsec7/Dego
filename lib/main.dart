@@ -22,6 +22,7 @@ import 'package:dego/screens/notifications.dart';
 import 'package:dego/screens/main_container.dart';
 import 'package:dego/screens/group_container.dart';
 import 'package:dego/screens/edit_user.dart';
+import 'package:dego/screens/create_option.dart';
 
 void main() async{
 
@@ -117,6 +118,7 @@ class _MyAppState extends State<MyApp> {
         'editGroup' : (context) => EditGroup(),
         'editUser' : (context) => EditUser(),
         'createDecision' : (context) => CreateDecision(),
+        'createOption' : (context) => CreateOption(),
       },
     );
   }

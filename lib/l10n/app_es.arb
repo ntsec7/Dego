@@ -119,5 +119,10 @@
     "ruleta" : "Ruleta",
     "ranking" : "Ranking",
     "cientifico" : "Científico",
-    "crear_decision" : "Crear decisión"
+    "crear_decision" : "Crear decisión",
+    "opciones": "Opciones",
+    "abrir_opciones": "Abrir opciones",
+    "fecha_final_opciones" : "Fecha de finalización de las opciones",
+    "fecha_final_votacion" : "Fecha de finalización de la votación",
+    "empezar" : "Empezar"
 }

@@ -639,6 +639,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Crear decisión'**
   String get crear_decision;
+
+  /// No description provided for @opciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Opciones'**
+  String get opciones;
+
+  /// No description provided for @abrir_opciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir opciones'**
+  String get abrir_opciones;
+
+  /// No description provided for @fecha_final_opciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de finalización de las opciones'**
+  String get fecha_final_opciones;
+
+  /// No description provided for @fecha_final_votacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de finalización de la votación'**
+  String get fecha_final_votacion;
+
+  /// No description provided for @empezar.
+  ///
+  /// In es, this message translates to:
+  /// **'Empezar'**
+  String get empezar;
 }
 
 class _AppLocalizationsDelegate

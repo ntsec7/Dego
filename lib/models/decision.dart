@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dego/utilities/lang.dart';
 
-enum DecisionType{roulette, simple, scientific, ranking}
+// enum DecisionType{roulette, simple, scientific, ranking}
+enum DecisionType{roulette, simple, ranking}
 
 extension DecisionTypeExtension on DecisionType {
   String title(BuildContext context) {
@@ -9,7 +10,7 @@ extension DecisionTypeExtension on DecisionType {
       case DecisionType.simple: return context.lang.votacion;
       case DecisionType.roulette: return context.lang.ruleta;
       case DecisionType.ranking: return context.lang.ranking;
-      case DecisionType.scientific: return context.lang.cientifico;
+      // case DecisionType.scientific: return context.lang.cientifico;
     }
   }
 }
