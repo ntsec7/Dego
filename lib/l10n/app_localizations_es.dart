@@ -316,4 +316,20 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get empezar => 'Empezar';
+
+  @override
+  String get imagen => 'Imagen';
+
+  @override
+  String get descripcion => 'Descripción';
+
+  @override
+  String get descripcion_txt => 'Escribir una descripción';
+
+  @override
+  String get crear_opcion => 'Crear opción';
+
+  @override
+  String get error_tiempo =>
+      'Error: No puedes seleccionar una fecha u hora que ya ha pasado';
 }

@@ -20,7 +20,8 @@ class _CreateOption extends ConsumerState<CreateOption> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _name = TextEditingController();
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _description = TextEditingController();
 
   final picker = ImagePicker();
 
@@ -28,9 +29,15 @@ class _CreateOption extends ConsumerState<CreateOption> {
   XFile? selectedImage;
 
   //Bandera para asignar los valores de Riverpod solo una vez.
-  bool _isInitialized = false;
   bool imageRemoved = false;
 
+
+  @override
+  void dispose() {
+    _title.dispose();
+    _description.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +47,7 @@ class _CreateOption extends ConsumerState<CreateOption> {
 
     final grupo = ref.watch(currentGroupProvider);
 
-    if (!_isInitialized && grupo != null) {
-      _name.text = grupo.name; 
-      _isInitialized = true;
-    }
+    final labelWidth = web ? screenWidth * 0.1 : screenWidth * 0.3;
 
     return Scaffold(
       body: SafeArea(
@@ -61,7 +65,7 @@ class _CreateOption extends ConsumerState<CreateOption> {
                   Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    context.lang.editar_grupo,
+                    context.lang.crear_opcion,
                     style: TextStyle(
                       fontSize: web
                           ? (screenHeight + screenWidth) * 0.01
@@ -95,15 +99,82 @@ class _CreateOption extends ConsumerState<CreateOption> {
                               children: [
                                 SizedBox(height: screenHeight * 0.05),
                                 
-                                //NOMBRE
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
+                            //TÍTULO
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                SizedBox(
+                                  width: labelWidth,
+                                  child: 
+                                  Text.rich(
+                                    TextSpan(
+                                      text: "${context.lang.titulo} ", 
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
+                                        color: Theme.of(context).textTheme.bodyLarge?.color, 
+                                      ),
+                                      children: const [
+                                        TextSpan(
+                                          text: '*', 
+                                          style: TextStyle(
+                                            color: Colors.red, 
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: ' :', 
+                                        ),
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  )
+                                                            ),
+                                SizedBox(width: screenWidth * 0.03),
+                                Expanded(
+                                  child: TextFormField(
+                                    key: const Key('nameField'),
+                                    controller: _title,
+                                    validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
+                                    cursorColor: Colors.grey,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Arial',
+                                      fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: context.lang.titulo,
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
+                                      ),
+                                      errorStyle: TextStyle(
+                                        fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
+                                      ),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      isDense: true,
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: screenHeight * 0.04),
+
+                            //DESCRIPCIÓN
+                            Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start, // Alineado arriba porque es multilínea
                                   children: [
                                     SizedBox(
-                                      width: web ? screenWidth * 0.1 : screenWidth * 0.25,
+                                      width: labelWidth,
                                       child: Text(
-                                        "${context.lang.nombre}: ",
+                                        "${context.lang.descripcion}: ",
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
@@ -113,23 +184,32 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: web ? screenWidth * 0.015 : screenWidth * 0.03),
+                                    SizedBox(width: screenWidth * 0.03),
                                     Expanded(
                                       child: TextFormField(
-                                        key: const Key('nameField'),
-                                        validator: (value) => value == null || value.isEmpty
-                                            ? context.lang.campo_obligatorio
-                                            : null,
-                                        controller: _name,
-                                        style: const TextStyle(color: Colors.black),
+                                        key: const Key('descriptionField'),
+                                        controller: _description,
+                                        maxLines: 4, // Permite múltiples líneas para texto libre
+                                        minLines: 2,
+                                        cursorColor: Colors.grey,
+                                        textAlign: TextAlign.start, // Alineación de texto tradicional para parágrafos
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Arial',
+                                          fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
+                                        ),
                                         decoration: InputDecoration(
-                                          hintText: context.lang.nombre,
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(40)),
+                                          hintText: context.lang.descripcion_txt,
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
+                                          ),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)), // Bordes sutiles para bloques de texto
                                           filled: true,
                                           fillColor: Colors.white,
                                           isDense: true,
-                                          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                         ),
                                       ),
                                     ),
@@ -137,8 +217,26 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                 ),
 
 
-                                SizedBox(height: screenHeight * 0.04),
+                              SizedBox(height: screenHeight * 0.04),
 
+                             Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: labelWidth,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 8.0), // Nivelado visualmente con el botón
+                                        child: Text(
+                                            "${context.lang.imagen}: ", 
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
+                                                color: Theme.of(context).textTheme.bodyLarge?.color, 
+                                              ),
+                                          )
+                                      ),
+                                    ),
+                                  
                                 //FOTO
                                 Stack(  //para poder poner la x
                                   children: [
@@ -240,6 +338,8 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                       ),
                                   ],
                                 ),
+                                  ],
+                             ),
 
                                 SizedBox(height: screenHeight * 0.07),
 
@@ -272,23 +372,14 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                       setState(() => _loading = true);
                                       try {
                                         
-                                        Uint8List? sendImage;
-                                        bool deletePhoto= false;
+                                        // Uint8List? sendImage;
+                                        // bool deletePhoto= false;
 
-                                        if(imageBytes!=null){ //nueva foto
-                                          sendImage = imageBytes;
-                                        } else if(imageRemoved){  //ha borrado la foto que había
-                                          deletePhoto = true;
-                                        }
-
-                                        String? sendName;
-                                        if (_name.text.trim() != grupo?.name) {
-                                          sendName = _name.text.trim();  //Solo lo enviamos si es distinto de lo que había
-                                        }
-
-                                        if(sendImage!=null || deletePhoto || sendName!=null){
-                                          await ref.read(createProvider.notifier).updateGroup(id:grupo!.id, name: sendName, image: sendImage, deletePhoto: deletePhoto, oldImageName: grupo.image);
-                                        }
+                                        // if(imageBytes!=null){ //nueva foto
+                                        //   sendImage = imageBytes;
+                                        // } else if(imageRemoved){  //ha borrado la foto que había
+                                        //   deletePhoto = true;
+                                        // }
 
                                         if(!context.mounted) return;
 

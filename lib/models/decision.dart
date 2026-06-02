@@ -17,21 +17,21 @@ extension DecisionTypeExtension on DecisionType {
 
 enum DecisionState{draft, options, vote, finish}
 
-class DecisionModel{
-  String? id;
+class Decision{
+  String id;
   String id_creator;
   String? id_group;
-  String? title;
+  String title;
   DecisionState state;
   DateTime? options_date;
   DateTime? vote_date;
   DecisionType type;
 
-  DecisionModel({
-    this.id,
+  Decision({
+    required this.id,
     required this.id_creator,
     this.id_group,
-    this.title,
+    required this.title,
     required this.state,
     this.options_date,
     this.vote_date,
@@ -39,15 +39,22 @@ class DecisionModel{
   });
 
   //Desde Supabase 
-  factory DecisionModel.fromMap(Map<String,dynamic> map){
-    return DecisionModel(
+  factory Decision.fromMap(Map<String,dynamic> map){
+    return Decision(
       id: map['id'],
       id_creator: map['id_creator'],
       id_group: map['id_group'],
       title: map['title'],
-      state : map['state'],
-      options_date: map['options_date'],
-      vote_date: map['vote_date'],
+      state : DecisionState.values.firstWhere(
+        (e) => e.name == map['state'],
+        orElse: () => DecisionState.draft,
+      ),
+      options_date: map['options_date'] != null
+        ? DateTime.parse(map['options_date'])
+        : null,
+      vote_date: map['vote_date'] != null
+        ? DateTime.parse(map['vote_date'])
+        : null,
       type: DecisionType.values.firstWhere(
         (e) => e.name == map['type'],
         orElse: () => DecisionType.simple, 
@@ -68,4 +75,5 @@ class DecisionModel{
       'type':type.name, //name convierte el enum a String
     };
   }
+
 }

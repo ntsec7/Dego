@@ -669,6 +669,36 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Empezar'**
   String get empezar;
+
+  /// No description provided for @imagen.
+  ///
+  /// In es, this message translates to:
+  /// **'Imagen'**
+  String get imagen;
+
+  /// No description provided for @descripcion.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get descripcion;
+
+  /// No description provided for @descripcion_txt.
+  ///
+  /// In es, this message translates to:
+  /// **'Escribir una descripción'**
+  String get descripcion_txt;
+
+  /// No description provided for @crear_opcion.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear opción'**
+  String get crear_opcion;
+
+  /// No description provided for @error_tiempo.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: No puedes seleccionar una fecha u hora que ya ha pasado'**
+  String get error_tiempo;
 }
 
 class _AppLocalizationsDelegate

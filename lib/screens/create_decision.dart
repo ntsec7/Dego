@@ -59,6 +59,20 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
       time.minute,
     );
 
+    //Comprobar que no ha pasado ya esa hora
+    if (finalDateTime.isBefore(DateTime.now())) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.lang.error_tiempo),
+          // backgroundColor: Colors.redAccent,
+        ),
+      );
+
+      return; // Rompe la función y no actualiza el estado
+  }
+
     // Formato: DD-MM-AAAA HH:MM
     final formattedText = 
       "${finalDateTime.day.toString().padLeft(2, '0')}-${finalDateTime.month.toString().padLeft(2, '0')}-${finalDateTime.year} "
@@ -134,32 +148,24 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                           SizedBox(
                             width: labelWidth,
                             child: 
-                            // Text(
-                            //   "${context.lang.titulo}: ",
-                            //   textAlign: TextAlign.right,
-                            //   style: TextStyle(
-                            //     fontWeight: FontWeight.w500,
-                            //     fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
-                            //   ),
-                            // ),
                             Text.rich(
                               TextSpan(
-                                text: "${context.lang.titulo} ", // El texto normal (ej: "Título")
+                                text: "${context.lang.titulo} ", 
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
-                                  color: Theme.of(context).textTheme.bodyLarge?.color, // Color adaptativo al modo oscuro/claro
+                                  color: Theme.of(context).textTheme.bodyLarge?.color, 
                                 ),
                                 children: const [
                                   TextSpan(
-                                    text: '*', // El asterisco obligatorio
+                                    text: '*', 
                                     style: TextStyle(
-                                      color: Colors.red, // Forzamos a que siempre sea rojo
+                                      color: Colors.red, 
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   TextSpan(
-                                    text: ' :', // Los dos puntos finales si los necesitas
+                                    text: ' :', 
                                   ),
                                 ],
                               ),
@@ -417,7 +423,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                     color: Color(0xFF098238),
                                     iconSize: 30,
                                     onPressed: () async{
-                                      // Navigator.pushNamed(context, 'createDecision');
+                                      Navigator.pushNamed(context, 'createOption');
                                     },
                                   ),                              
                                 ],
@@ -440,7 +446,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, 'createOption');
+                        // Navigator.pushNamed(context, 'register');
                       },
                       child: Text(context.lang.abrir_opciones,
                             style: TextStyle(

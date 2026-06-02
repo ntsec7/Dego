@@ -124,5 +124,10 @@
     "abrir_opciones": "Abrir opciones",
     "fecha_final_opciones" : "Fecha de finalización de las opciones",
     "fecha_final_votacion" : "Fecha de finalización de la votación",
-    "empezar" : "Empezar"
+    "empezar" : "Empezar",
+    "imagen" : "Imagen",
+    "descripcion" : "Descripción",
+    "descripcion_txt" : "Escribir una descripción",
+    "crear_opcion" : "Crear opción",
+    "error_tiempo" : "Error: No puedes seleccionar una fecha u hora que ya ha pasado"
 }
