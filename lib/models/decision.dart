@@ -44,7 +44,7 @@ class Decision{
       id: map['id'],
       id_creator: map['id_creator'],
       id_group: map['id_group'],
-      title: map['title'],
+      title: map['title'] ?? "",
       state : DecisionState.values.firstWhere(
         (e) => e.name == map['state'],
         orElse: () => DecisionState.draft,

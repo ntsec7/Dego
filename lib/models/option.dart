@@ -5,6 +5,7 @@ class Option{
   String title;
   String? description;
   int? percentage;
+  String? image;
 
   Option({
     required this.id,
@@ -13,6 +14,7 @@ class Option{
     required this.title,
     this.description,
     this.percentage,
+    this.image
   });
 
   //Desde Supabase 
@@ -21,9 +23,10 @@ class Option{
       id: map['id'],
       id_decision: map['id_decision'],
       id_creator: map['id_creator'],
-      title: map['title'],
+      title: map['title'] ?? "",
       description: map['description'],
       percentage: map['percentage'],
+      image: map['image'],
     );
   }
 
@@ -36,6 +39,7 @@ class Option{
       'title' : title,
       'description' : description,
       "percentage" : percentage,
+      "image": image,
     };
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/utilities/error.dart';
+import 'package:dego/providers/decision_draft_provider.dart';
 
 class CreateDecision extends ConsumerStatefulWidget {
   const CreateDecision({super.key});
@@ -22,6 +23,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
   DateTime? _selectedDateTimeOption;
   DateTime? _selectedDateTimeVote;
 
+  bool _isInitialized = false;
   bool _loading = false;
 
   @override
@@ -82,9 +84,12 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
       if (isOptionDate) {
         _selectedDateTimeOption = finalDateTime;
         _dateControllerOption.text = formattedText;
+        ref.read(decisionDraftProvider.notifier).setOptionDate(finalDateTime);
+
       } else {
         _selectedDateTimeVote = finalDateTime;
         _dateControllerVote.text = formattedText;
+        ref.read(decisionDraftProvider.notifier).setVoteDate(finalDateTime);
       }
     });
 
@@ -104,6 +109,16 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
 
     final usuarioAsync = ref.watch(usuarioProvider);
     final currentUserId = usuarioAsync.value?.tipo;
+
+    final draft = ref.watch(decisionDraftProvider);
+
+    if(!_isInitialized){
+      _title.text = draft.title ?? "";
+      _selectedDateTimeOption = draft.options_date; 
+      _selectedDateTimeVote = draft.vote_date; 
+      _selectedType = draft.type;
+      _isInitialized = true;
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -178,6 +193,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                               key: const Key('nameField'),
                               controller: _title,
                               validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
+                              onChanged: (value) => ref.read(decisionDraftProvider.notifier).setTitle(value),
                               cursorColor: Colors.grey,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -216,14 +232,6 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                           SizedBox(
                             width: labelWidth,
                             child: 
-                            // Text(
-                            //   "${context.lang.tipo}: ",
-                            //   textAlign: TextAlign.right,
-                            //   style: TextStyle(
-                            //     fontWeight: FontWeight.w500,
-                            //     fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
-                            //   ),
-                            // ),
                             Text.rich(
                               TextSpan(
                                 text: "${context.lang.tipo} ", // El texto normal (ej: "Título")
@@ -259,6 +267,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                               onChanged: (DecisionType? newValue) {
                                 if (newValue != null) {
                                   _selectedType = newValue;
+                                  ref.read(decisionDraftProvider.notifier).setType(newValue);
                                 }
                               },
                               items: DecisionType.values.map((DecisionType type) {
@@ -301,14 +310,6 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                           SizedBox(
                             width: labelWidth,
                             child: 
-                            // Text(
-                            //   "${context.lang.opciones}: ",
-                            //   textAlign: TextAlign.right,
-                            //   style: TextStyle(
-                            //     fontWeight: FontWeight.w500,
-                            //     fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
-                            //   ),
-                            // ),
                             Text.rich(
                               TextSpan(
                                 text: "${context.lang.opciones} ", // El texto normal (ej: "Título")
@@ -491,7 +492,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                           // CANCELAR
                           ElevatedButton(
                             onPressed: () {
-                              //TODO ELIMINAR DECISION
+                              ref.read(decisionDraftProvider.notifier).reset();
                               Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(

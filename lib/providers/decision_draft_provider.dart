@@ -1,18 +1,13 @@
 import 'package:dego/models/decision.dart';
-import 'package:dego/models/option.dart';
+import 'package:dego/models/decision_draft.dart';
+import 'package:dego/models/option_draft.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DecisionNotifier extends StateNotifier<Decision> {
+class DecisionDraftNotifier extends StateNotifier<DecisionDraft> {
 
-  DecisionNotifier()
-    : super(
-        Decision(
-          id_creator: '',
-          state: DecisionState.draft,
-          type: DecisionType.simple,
-          options: [],
-        ),
-      );
+  DecisionDraftNotifier()
+      : super(DecisionDraft());
+
 
   void setTitle(String title) {
     state = state.copyWith(
@@ -32,7 +27,13 @@ class DecisionNotifier extends StateNotifier<Decision> {
     );
   }
 
-  void addOption(Option option) {
+  void setType(DecisionType type){
+    state = state.copyWith(
+      type: type,
+    );
+  }
+
+  void addOption(OptionDraft option) {
     state = state.copyWith(
       options: [
         ...state.options,
@@ -43,7 +44,7 @@ class DecisionNotifier extends StateNotifier<Decision> {
 
   void removeOpcion(int index) {
     final nuevasOpciones =
-        List<Option>.from(state.options);
+        List<OptionDraft>.from(state.options);
 
     nuevasOpciones.removeAt(index);
 
@@ -53,19 +54,14 @@ class DecisionNotifier extends StateNotifier<Decision> {
   }
 
   void reset() {
-    state = Decision(
-      id_creator: '',
-      state: DecisionState.draft,
-      type: DecisionType.simple,
-      options: [],
-    );
+    state = DecisionDraft();
   }
 }
 
-final decisionCreatorProvider =
+final decisionDraftProvider =
     StateNotifierProvider<
-      DecisionNotifier,
-      Decision
+      DecisionDraftNotifier,
+      DecisionDraft
     >(
-      (ref) => DecisionNotifier(),
+      (ref) => DecisionDraftNotifier(),
 );

@@ -28,6 +28,7 @@ class DecisionDraft{
       title: title ?? this.title,
       options_date: options_date ?? this.options_date,
       vote_date: vote_date ?? this.vote_date,
+      type: type ?? this.type,
       options: options ?? this.options,
     );
   }
