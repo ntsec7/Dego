@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dego/models/decision.dart';
 import 'package:dego/models/decision_draft.dart';
 import 'package:dego/models/option_draft.dart';
+import 'package:dego/models/option.dart';
 
 class CreateService {
 
@@ -279,7 +280,6 @@ class CreateService {
 
 
     } catch(e){
-      print("error decision: $e");
       rethrow;
     }
   }
@@ -307,7 +307,6 @@ class CreateService {
       });
 
     } catch (e){
-      print("error option: $e");
       rethrow;
     }
   }
@@ -327,6 +326,26 @@ class CreateService {
   }) async{
     try{
       await supabase.from('decision').delete().eq('id',decisionId);
+    } catch (e){
+      rethrow;
+    }
+  }
+
+  Future<void> editOption({
+    required Option option,
+  }) async{
+    try{
+      await supabase.from('option').update(option.toMap()).eq('id', option.id);
+    } catch (e){
+      rethrow;
+    }
+  }
+
+  Future<void> deleteOption({
+    required String optionId,
+  }) async{
+    try{
+      await supabase.from('option').delete().eq('id',optionId);
     } catch (e){
       rethrow;
     }

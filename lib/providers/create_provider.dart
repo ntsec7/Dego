@@ -4,6 +4,7 @@ import 'package:dego/services/create_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:typed_data';
+import 'package:dego/models/option.dart';
 
 final createServiceProvider = Provider<CreateService>((ref){
   return CreateService();
@@ -129,7 +130,7 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
-  //EDITAR DECISION
+  //EDITAR DECISIÓN
   Future<void> editDecision({
     required Decision decision,
   }) async{
@@ -141,7 +142,7 @@ class CreateNotifier extends StateNotifier<User?> {
   }
 
 
-  //BORRAR DECISION
+  //BORRAR DECISIÓN
   Future<void> deleteDecision({
     required String decisionId,
   }) async{
@@ -152,5 +153,26 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
+  //EDITAR OPCIÓN
+  Future<void> editOption({
+    required Option option,
+  }) async{
+    try{
+      await createService.editOption(option: option);
+    } catch (e){
+      rethrow;
+    }
+  }
+
+  //BORRAR OPCIÓN
+  Future<void> deleteOption({
+    required String optionId,
+  }) async{
+    try{
+      await createService.deleteOption(optionId: optionId);
+    } catch (e){
+      rethrow;
+    }
+  }
 
 }

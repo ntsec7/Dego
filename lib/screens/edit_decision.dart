@@ -6,6 +6,7 @@ import 'package:dego/utilities/error.dart';
 import 'package:dego/providers/create_provider.dart';
 import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:dego/models/option.dart';
 
 class EditDecision extends ConsumerStatefulWidget {
 
@@ -45,7 +46,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
   }
 
   // Función para seleccionar Fecha, Hora y Minuto
-  Future<void> _pickDateTime(bool isOptionDate) async {
+  Future<void> _pickDateTime(bool isOptionDate, Decision decision) async {
     DateTime? date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -88,15 +89,15 @@ class _EditDecision extends ConsumerState<EditDecision> {
   //Comprobar que optionsDate < voteDate
   bool dateError = false;
 
-  // if(isOptionDate && _dateControllerVote!=null){
-  //   if (finalDateTime.isAfter(_dateControllerVote!) || finalDateTime.isAtSameMomentAs(draft.vote_date!)) {
-  //     dateError = true;
-  //   }
-  // } else if(!isOptionDate && draft.options_date!=null){
-  //   if (draft.options_date!.isAfter(finalDateTime) || draft.options_date!.isAtSameMomentAs(finalDateTime)) {
-  //     dateError = true;
-  //   }
-  // }
+  if(isOptionDate && decision.vote_date!=null){
+    if (finalDateTime.isAfter(decision.vote_date!) || finalDateTime.isAtSameMomentAs(decision.vote_date!)) {
+      dateError = true;
+    }
+  } else if(!isOptionDate && decision.options_date!=null){
+    if (decision.options_date!.isAfter(finalDateTime) || decision.options_date!.isAtSameMomentAs(finalDateTime)) {
+      dateError = true;
+    }
+  }
 
   if(dateError){
       if (!context.mounted) return;
@@ -117,14 +118,74 @@ class _EditDecision extends ConsumerState<EditDecision> {
     setState(() {
       if (isOptionDate) {
         _dateControllerOption.text = formattedText;
-        // ref.read(decisionDraftProvider.notifier).setOptionDate(finalDateTime);
+        decision.options_date=finalDateTime;
 
       } else {
         _dateControllerVote.text = formattedText;
-        // ref.read(decisionDraftProvider.notifier).setVoteDate(finalDateTime);
+        decision.vote_date=finalDateTime;
       }
     });
 
+  }
+
+  
+  void _deleteOption(BuildContext context, Option op) {
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+          return AlertDialog(
+          title: Text(context.lang.eliminar_opcion),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                context.lang.eliminar_opcion_txt(op.title),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(context.lang.cancelar),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                
+                try {
+
+                  await ref.read(createProvider.notifier).deleteOption(optionId: op.id);
+
+                  if (context.mounted) {
+                    Navigator.pop(context);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(context.lang.exito_eliminar_opcion),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if(context.mounted){
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(translateSupabaseError(context,e))),
+                    );
+                  }
+                }
+              },
+              child: Text(context.lang.aceptar),
+            ),
+          ],
+          );
+          },
+        );
+      },
+    );
   }
 
 
@@ -146,9 +207,14 @@ class _EditDecision extends ConsumerState<EditDecision> {
 
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return decisionAsync.when(
-    data: (decision) {
-    
+    if(decisionAsync.isLoading || optionsAsync.isLoading){
+      return const Scaffold(body: Center(child: CupertinoActivityIndicator(radius: 15)));
+    }
+
+
+    final decision = decisionAsync.requireValue;
+    final options = optionsAsync.requireValue;
+
     if (!_isInitialized) {
       _title.text = decision.title;
       _selectedType = decision.type;
@@ -392,9 +458,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                           children: [
                             //Opciones
                             Expanded(
-                              child: optionsAsync.when(
-                                data: (options) {
-                              return ListView.builder(
+                              child: ListView.builder(
                                     padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.01), // Espaciado alrededor de la lista
                                     itemCount: options.length,
                                     itemBuilder: (context, index) {
@@ -428,7 +492,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                               IconButton(
                                                 icon: const Icon(Icons.edit),
                                                 color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
-                                                onPressed: () => Navigator.pushNamed(context, 'editOption', arguments: option.id),
+                                                onPressed: () => Navigator.pushNamed(context, 'editOption', arguments: option.id), //TODO EDITAR OPCION
                                               ),
 
                                               //ELIMINAR
@@ -437,7 +501,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                                 color:  const Color.fromARGB(255, 99, 99, 99),
                                                 iconSize: web ? screenWidth * 0.015 : screenWidth * 0.06,
                                                 onPressed: () {
-                                                  //TODO ELIMINAR OPCION
+                                                  _deleteOption(context, option);
                                                 },
                                               ),
 
@@ -446,10 +510,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                         ),
                                       );
                                     },
-                                  );
-                                },
-                                loading: () => const CircularProgressIndicator(),
-                                error: (e, _) => Text(e.toString()),),
+                                  ),
                             ),
 
                             // STICKY FOOTER (Fijo abajo del rectángulo)
@@ -471,7 +532,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                   TextFormField(
                                     controller: _dateControllerOption,
                                     readOnly: true,
-                                    onTap: () => _pickDateTime(true),
+                                    onTap: () => _pickDateTime(true, decision),
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       color: Colors.black, 
@@ -562,7 +623,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                     TextFormField(
                       controller: _dateControllerVote,
                       readOnly: true,
-                      onTap: () => _pickDateTime(false),
+                      onTap: () => _pickDateTime(false, decision),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.black, 
@@ -619,7 +680,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
 
                           SizedBox(width: screenWidth * 0.05),
 
-                          // EMPEZAR
+                          // GUARDAR
                           ElevatedButton(
                             onPressed: _loading
                                 ? null
@@ -627,29 +688,20 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
-                                        
-                                        //TODO ACTUALIZAR DECISIÓN
-
 
                                         //Tiene que tener al menos 2 opciones para empezar la votación
-                                        // if(draft.options.length<2){
-                                        //   ScaffoldMessenger.of(context).showSnackBar(
-                                        //     SnackBar(
-                                        //       content: Text(context.lang.error_num_opciones),
-                                        //     ),
-                                        //   );
-                                        //   _loading=false;
-                                        //   return;
-                                        // }
+                                        if(options.length<2 && decision.state==DecisionState.vote){
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(context.lang.error_num_opciones),
+                                            ),
+                                          );
+                                          _loading=false;
+                                          return;
+                                        }
 
-                                        //Elimina el tiempo de opciones
-                                        // ref.read(decisionDraftProvider.notifier).setOptionDate(null);
-
-                                        //Crear la decisión
-                                        // await ref.read(createProvider.notifier).EditDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.vote, decision: draft);
-
-                                        //Borra decisionDraft
-                                        // ref.read(decisionDraftProvider.notifier).reset();
+                                        //Actualizar la decisión
+                                        await ref.read(createProvider.notifier).editDecision(decision: decision);
                                         
                                         if (!context.mounted) return;
 
@@ -691,11 +743,6 @@ class _EditDecision extends ConsumerState<EditDecision> {
           ],
         ),
       ),
-    );
-        },
-    // loading: () => const CircularProgressIndicator(),
-    loading: () => const Scaffold(body: Center(child: CupertinoActivityIndicator(radius: 15))),
-    error: (e, _) => Text("Error: $e"),
     );
   }
 }

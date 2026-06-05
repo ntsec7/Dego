@@ -363,4 +363,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get empezar_votacion => 'Empezar votación';
+
+  @override
+  String get eliminar_opcion => 'Eliminar opción';
+
+  @override
+  String eliminar_opcion_txt(String titulo) {
+    return '¿Estás seguro de que quieres eliminar la opción $titulo';
+  }
+
+  @override
+  String get exito_eliminar_opcion => 'Opción eliminada con éxito';
 }

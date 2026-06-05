@@ -146,5 +146,16 @@
         }
     },
     "exito_eliminar_decision" : "Decisión eliminada con éxito",
-    "empezar_votacion" : "Empezar votación"
+    "empezar_votacion" : "Empezar votación",
+    "eliminar_opcion" : "Eliminar opción",
+    "eliminar_opcion_txt" : "¿Estás seguro de que quieres eliminar la opción {titulo}",
+    "@eliminar_opcion_txt" : {
+        "description" : "Eliminar opción",
+        "placeholders" : {
+            "titulo":{
+                "type":"String"
+            }
+        }
+    },
+    "exito_eliminar_opcion" : "Opción eliminada con éxito"
 }

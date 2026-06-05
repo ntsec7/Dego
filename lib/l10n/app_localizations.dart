@@ -753,6 +753,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Empezar votación'**
   String get empezar_votacion;
+
+  /// No description provided for @eliminar_opcion.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar opción'**
+  String get eliminar_opcion;
+
+  /// Eliminar opción
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro de que quieres eliminar la opción {titulo}'**
+  String eliminar_opcion_txt(String titulo);
+
+  /// No description provided for @exito_eliminar_opcion.
+  ///
+  /// In es, this message translates to:
+  /// **'Opción eliminada con éxito'**
+  String get exito_eliminar_opcion;
 }
 
 class _AppLocalizationsDelegate

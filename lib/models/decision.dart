@@ -70,8 +70,8 @@ class Decision{
       'id_group':id_group,
       'title' : title,
       'state' : state.name,
-      'options_date' : options_date,
-      'vote_date': vote_date,
+      'options_date' : options_date?.toUtc().toIso8601String(),
+      'vote_date': vote_date?.toUtc().toIso8601String(),
       'type':type.name, //name convierte el enum a String
     };
   }
