@@ -1,5 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:typed_data';
+import 'package:dego/models/decision.dart';
+import 'package:dego/models/decision_draft.dart';
+import 'package:dego/models/option_draft.dart';
 
 class CreateService {
 
@@ -246,6 +249,89 @@ class CreateService {
       rethrow;
     }
   }
+
+  Future<void> createDecision({
+    required String id_creator,
+    String? id_group,
+    required DecisionState state,
+    required DecisionDraft decision,
+  }) async{
+    try{
+
+      //Creamos la decision
+      final response = await supabase.from('decision').insert({
+        'id_creator' : id_creator,
+        'id_group' : id_group,
+        'title' : decision.title,
+        'state' : state.name,
+        'options_date' : decision.options_date?.toUtc().toIso8601String(),
+        'vote_date' : decision.vote_date?.toUtc().toIso8601String(),
+        'type': decision.type.name,
+      }).select('id').single();
+
+      final String decisionId = response['id'];
+
+      if(decision.options.isNotEmpty){
+        for(OptionDraft option in decision.options){
+          await createOption(id_decision: decisionId, option: option);
+        }
+      }
+
+
+    } catch(e){
+      print("error decision: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> createOption({
+    required String id_decision,
+    required OptionDraft option,
+  }) async{
+    try{
+
+      String? url;
+
+      if(option.image != null){
+        final name = 'options/$id_decision/${DateTime.now().millisecondsSinceEpoch}.png';
+        url = await uploadImage(name: name, image: option.image!);
+      }
+
+      await supabase.from('option').insert({
+        'id_decision' : id_decision,
+        'id_creator' : option.id_creator,
+        'title' : option.title,
+        'description': option.description,
+        'percentage' : option.percentage,
+        'image' : url,
+      });
+
+    } catch (e){
+      print("error option: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> editDecision({
+    required Decision decision,
+  }) async{
+    try{
+      await supabase.from('decision').update(decision.toMap()).eq('id', decision.id);
+    } catch (e){
+      rethrow;
+    }
+  }
+
+  Future<void> deleteDecision({
+    required String decisionId,
+  }) async{
+    try{
+      await supabase.from('decision').delete().eq('id',decisionId);
+    } catch (e){
+      rethrow;
+    }
+  }
+
 
 }
 

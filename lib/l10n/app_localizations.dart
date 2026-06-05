@@ -699,6 +699,60 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error: No puedes seleccionar una fecha u hora que ya ha pasado'**
   String get error_tiempo;
+
+  /// No description provided for @error_num_opciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Hace falta al menos 2 opciones para poder empezar'**
+  String get error_num_opciones;
+
+  /// No description provided for @exito_crear_decision.
+  ///
+  /// In es, this message translates to:
+  /// **'Decisión creada con éxito'**
+  String get exito_crear_decision;
+
+  /// No description provided for @error_tiempos.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: La fecha de votación debe ser posterior a la de opciones'**
+  String get error_tiempos;
+
+  /// No description provided for @dar_opciones.
+  ///
+  /// In es, this message translates to:
+  /// **'Dar opciones'**
+  String get dar_opciones;
+
+  /// No description provided for @votar.
+  ///
+  /// In es, this message translates to:
+  /// **'Votar'**
+  String get votar;
+
+  /// No description provided for @eliminar_decision.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar decisión'**
+  String get eliminar_decision;
+
+  /// Eliminar decisión
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro de que quieres eliminar la decisión {titulo}'**
+  String eliminar_decision_txt(String titulo);
+
+  /// No description provided for @exito_eliminar_decision.
+  ///
+  /// In es, this message translates to:
+  /// **'Decisión eliminada con éxito'**
+  String get exito_eliminar_decision;
+
+  /// No description provided for @empezar_votacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Empezar votación'**
+  String get empezar_votacion;
 }
 
 class _AppLocalizationsDelegate

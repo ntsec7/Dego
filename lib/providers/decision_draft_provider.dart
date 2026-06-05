@@ -15,13 +15,13 @@ class DecisionDraftNotifier extends StateNotifier<DecisionDraft> {
     );
   }
 
-  void setOptionDate(DateTime date) {
+  void setOptionDate(DateTime? date) {
     state = state.copyWith(
       options_date: date,
     );
   }
 
-  void setVoteDate(DateTime date) {
+  void setVoteDate(DateTime? date) {
     state = state.copyWith(
       vote_date: date,
     );
@@ -39,6 +39,16 @@ class DecisionDraftNotifier extends StateNotifier<DecisionDraft> {
         ...state.options,
         option,
       ],
+    );
+  }
+
+  void updateOption(int index, OptionDraft option) {
+    final options = List<OptionDraft>.from(state.options);
+
+    options[index] = option;
+
+    state = state.copyWith(
+      options: options,
     );
   }
 

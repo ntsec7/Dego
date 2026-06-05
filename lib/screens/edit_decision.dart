@@ -1,21 +1,23 @@
 import 'package:dego/models/decision.dart';
-import 'package:dego/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/utilities/error.dart';
-import 'package:dego/providers/decision_draft_provider.dart';
-import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/providers/create_provider.dart';
+import 'package:dego/providers/decision_provider.dart';
+import 'package:flutter/cupertino.dart';
 
-class CreateDecision extends ConsumerStatefulWidget {
-  const CreateDecision({super.key});
+class EditDecision extends ConsumerStatefulWidget {
+
+  final String id;
+
+  const EditDecision({super.key, required this.id});
 
   @override
-  ConsumerState<CreateDecision> createState() => _CreateDecision();
+  ConsumerState<EditDecision> createState() => _EditDecision();
 }
 
-class _CreateDecision extends ConsumerState<CreateDecision> {
+class _EditDecision extends ConsumerState<EditDecision> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _title = TextEditingController();
@@ -32,6 +34,14 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
     _dateControllerOption.dispose();
     _dateControllerVote.dispose();
     super.dispose();
+  }
+
+  String formatDate(DateTime date) {
+    return "${date.day.toString().padLeft(2, '0')}-"
+          "${date.month.toString().padLeft(2, '0')}-"
+          "${date.year} "
+          "${date.hour.toString().padLeft(2, '0')}:"
+          "${date.minute.toString().padLeft(2, '0')}";
   }
 
   // Función para seleccionar Fecha, Hora y Minuto
@@ -76,18 +86,17 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
   }
 
   //Comprobar que optionsDate < voteDate
-  final draft = ref.watch(decisionDraftProvider);
   bool dateError = false;
 
-  if(isOptionDate && draft.vote_date!=null){
-    if (finalDateTime.isAfter(draft.vote_date!) || finalDateTime.isAtSameMomentAs(draft.vote_date!)) {
-      dateError = true;
-    }
-  } else if(!isOptionDate && draft.options_date!=null){
-    if (draft.options_date!.isAfter(finalDateTime) || draft.options_date!.isAtSameMomentAs(finalDateTime)) {
-      dateError = true;
-    }
-  }
+  // if(isOptionDate && _dateControllerVote!=null){
+  //   if (finalDateTime.isAfter(_dateControllerVote!) || finalDateTime.isAtSameMomentAs(draft.vote_date!)) {
+  //     dateError = true;
+  //   }
+  // } else if(!isOptionDate && draft.options_date!=null){
+  //   if (draft.options_date!.isAfter(finalDateTime) || draft.options_date!.isAtSameMomentAs(finalDateTime)) {
+  //     dateError = true;
+  //   }
+  // }
 
   if(dateError){
       if (!context.mounted) return;
@@ -103,22 +112,21 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
   }
 
     // Formato: DD-MM-AAAA HH:MM
-    final formattedText = 
-      "${finalDateTime.day.toString().padLeft(2, '0')}-${finalDateTime.month.toString().padLeft(2, '0')}-${finalDateTime.year} "
-      "${finalDateTime.hour.toString().padLeft(2, '0')}:${finalDateTime.minute.toString().padLeft(2, '0')}";
+    final formattedText = formatDate(finalDateTime);
 
     setState(() {
       if (isOptionDate) {
         _dateControllerOption.text = formattedText;
-        ref.read(decisionDraftProvider.notifier).setOptionDate(finalDateTime);
+        // ref.read(decisionDraftProvider.notifier).setOptionDate(finalDateTime);
 
       } else {
         _dateControllerVote.text = formattedText;
-        ref.read(decisionDraftProvider.notifier).setVoteDate(finalDateTime);
+        // ref.read(decisionDraftProvider.notifier).setVoteDate(finalDateTime);
       }
     });
 
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,17 +140,21 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
     final double ladoDerecho = web ? screenWidth * 0.15 : screenWidth * 0.05;
     final double labelWidth = web ? screenWidth * 0.1 : screenWidth * 0.25;
 
-    final usuarioAsync = ref.watch(usuarioProvider);
-    final currentUserId = usuarioAsync.value?.id;
 
-    final currentGroupId = ref.watch(idCurrentGroupProvider);
+    final decisionAsync = ref.watch(decisionByIdProvider(widget.id));
+    final optionsAsync = ref.watch(optionsByDecisionProvider(widget.id));
 
-    final draft = ref.watch(decisionDraftProvider);
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    if(!_isInitialized){
-      _title.text = draft.title ?? "";
-      _selectedType = draft.type;
-      _isInitialized = true;
+    return decisionAsync.when(
+    data: (decision) {
+    
+    if (!_isInitialized) {
+      _title.text = decision.title;
+      _selectedType = decision.type;
+      _dateControllerOption.text = decision.options_date != null ? formatDate(decision.options_date!) : "";
+      _dateControllerVote.text = decision.vote_date != null ? formatDate(decision.vote_date!) : "";
+      _isInitialized = true; 
     }
 
     return Scaffold(
@@ -218,7 +230,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                               key: const Key('nameField'),
                               controller: _title,
                               validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
-                              onChanged: (value) => ref.read(decisionDraftProvider.notifier).setTitle(value),
+                              onChanged: (value) => decision.title=value,
                               cursorColor: Colors.grey,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -292,7 +304,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                               onChanged: (DecisionType? newValue) {
                                 if (newValue != null) {
                                   _selectedType = newValue;
-                                  ref.read(decisionDraftProvider.notifier).setType(newValue);
+                                  decision.type= newValue;
                                 }
                               },
                               items: DecisionType.values.map((DecisionType type) {
@@ -380,14 +392,16 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                           children: [
                             //Opciones
                             Expanded(
-                              child: ListView.builder(
+                              child: optionsAsync.when(
+                                data: (options) {
+                              return ListView.builder(
                                     padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.01), // Espaciado alrededor de la lista
-                                    itemCount: draft.options.length,
+                                    itemCount: options.length,
                                     itemBuilder: (context, index) {
-                                      final option = draft.options[index];
+                                      final option = options[index];
                                       return GestureDetector(
                                         onTap: () {
-                                          Navigator.pushNamed(context, 'createOption', arguments: index);
+                                          Navigator.pushNamed(context, 'createOption', arguments: index); //TODO LLEVAR A VER OPCIÓN
                                         },
                                         child: Container(
                                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
@@ -409,6 +423,13 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                                   ),
                                                 ),
                                               ),
+                                              
+                                              //EDITAR
+                                              IconButton(
+                                                icon: const Icon(Icons.edit),
+                                                color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
+                                                onPressed: () => Navigator.pushNamed(context, 'editOption', arguments: option.id),
+                                              ),
 
                                               //ELIMINAR
                                               IconButton(
@@ -416,7 +437,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                                 color:  const Color.fromARGB(255, 99, 99, 99),
                                                 iconSize: web ? screenWidth * 0.015 : screenWidth * 0.06,
                                                 onPressed: () {
-                                                  ref.read(decisionDraftProvider.notifier).removeOpcion(index);
+                                                  //TODO ELIMINAR OPCION
                                                 },
                                               ),
 
@@ -425,7 +446,10 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                         ),
                                       );
                                     },
-                                  ),
+                                  );
+                                },
+                                loading: () => const CircularProgressIndicator(),
+                                error: (e, _) => Text(e.toString()),),
                             ),
 
                             // STICKY FOOTER (Fijo abajo del rectángulo)
@@ -466,7 +490,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                           onPressed: () {
                                             setState(() {
                                               _dateControllerOption.clear(); // Borra el texto del input
-                                              ref.read(decisionDraftProvider.notifier).setOptionDate(null);
+                                              decision.options_date=null;
                                             });
                                           },
                                         )
@@ -489,7 +513,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                     color: Color(0xFF098238),
                                     iconSize: 30,
                                     onPressed: () async{
-                                      Navigator.pushNamed(context, 'createOption');
+                                      Navigator.pushNamed(context, 'createOption'); //TODO CAMBIAR EL CREAR OPCIÓN
                                     },
                                   ),                              
                                 ],
@@ -499,11 +523,10 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                         ),
                       ),
 
-                    if (currentGroupId!=null) ...[
-
                     SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.02),
 
-                    // BOTÓN ABRIR VOTACIONES
+                    // BOTÓN EMPEZAR VOTACIÓN
+                    //TODO CAMBIAR A EMPEZAR VOTACIÓN
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -515,10 +538,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                       ),
                       onPressed: () async{
                         //Crear la decisión
-                        await ref.read(createProvider.notifier).createDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.options, decision: draft);
-
-                        //Borra decisionDraft
-                        ref.read(decisionDraftProvider.notifier).reset();
+                        // await ref.read(createProvider.notifier).EditDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.options, decision: draft);
 
                         if(!context.mounted) return;
 
@@ -529,14 +549,12 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                         Navigator.pop(context);
 
                       },
-                      child: Text(context.lang.abrir_opciones,
+                      child: Text(context.lang.empezar_votacion,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
                             ),),
                     ),
-                    
-                    ],
 
                     SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
 
@@ -563,7 +581,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                             onPressed: () {
                               setState(() {
                                 _dateControllerVote.clear(); // Borra el texto del input
-                                ref.read(decisionDraftProvider.notifier).setVoteDate(null);
+                                decision.vote_date=null;
                               });
                             },
                           )
@@ -585,7 +603,6 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                           // CANCELAR
                           ElevatedButton(
                             onPressed: () {
-                              ref.read(decisionDraftProvider.notifier).reset();
                               Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
@@ -611,25 +628,28 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                       setState(() => _loading = true);
                                       try {
                                         
+                                        //TODO ACTUALIZAR DECISIÓN
+
+
                                         //Tiene que tener al menos 2 opciones para empezar la votación
-                                        if(draft.options.length<2){
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(context.lang.error_num_opciones),
-                                            ),
-                                          );
-                                          _loading=false;
-                                          return;
-                                        }
+                                        // if(draft.options.length<2){
+                                        //   ScaffoldMessenger.of(context).showSnackBar(
+                                        //     SnackBar(
+                                        //       content: Text(context.lang.error_num_opciones),
+                                        //     ),
+                                        //   );
+                                        //   _loading=false;
+                                        //   return;
+                                        // }
 
                                         //Elimina el tiempo de opciones
-                                        ref.read(decisionDraftProvider.notifier).setOptionDate(null);
+                                        // ref.read(decisionDraftProvider.notifier).setOptionDate(null);
 
                                         //Crear la decisión
-                                        await ref.read(createProvider.notifier).createDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.vote, decision: draft);
+                                        // await ref.read(createProvider.notifier).EditDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.vote, decision: draft);
 
                                         //Borra decisionDraft
-                                        ref.read(decisionDraftProvider.notifier).reset();
+                                        // ref.read(decisionDraftProvider.notifier).reset();
                                         
                                         if (!context.mounted) return;
 
@@ -655,7 +675,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                             child: _loading
                                 ? const CircularProgressIndicator(color: Colors.white)
                                 : Text(
-                                    context.lang.empezar,
+                                    context.lang.guardar,
                                     style: TextStyle(
                                       fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
                                     ),
@@ -671,6 +691,11 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
           ],
         ),
       ),
+    );
+        },
+    // loading: () => const CircularProgressIndicator(),
+    loading: () => const Scaffold(body: Center(child: CupertinoActivityIndicator(radius: 15))),
+    error: (e, _) => Text("Error: $e"),
     );
   }
 }

@@ -332,4 +332,35 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get error_tiempo =>
       'Error: No puedes seleccionar una fecha u hora que ya ha pasado';
+
+  @override
+  String get error_num_opciones =>
+      'Error: Hace falta al menos 2 opciones para poder empezar';
+
+  @override
+  String get exito_crear_decision => 'Decisión creada con éxito';
+
+  @override
+  String get error_tiempos =>
+      'Error: La fecha de votación debe ser posterior a la de opciones';
+
+  @override
+  String get dar_opciones => 'Dar opciones';
+
+  @override
+  String get votar => 'Votar';
+
+  @override
+  String get eliminar_decision => 'Eliminar decisión';
+
+  @override
+  String eliminar_decision_txt(String titulo) {
+    return '¿Estás seguro de que quieres eliminar la decisión $titulo';
+  }
+
+  @override
+  String get exito_eliminar_decision => 'Decisión eliminada con éxito';
+
+  @override
+  String get empezar_votacion => 'Empezar votación';
 }

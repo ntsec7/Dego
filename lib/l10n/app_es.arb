@@ -129,5 +129,22 @@
     "descripcion" : "Descripción",
     "descripcion_txt" : "Escribir una descripción",
     "crear_opcion" : "Crear opción",
-    "error_tiempo" : "Error: No puedes seleccionar una fecha u hora que ya ha pasado"
+    "error_tiempo" : "Error: No puedes seleccionar una fecha u hora que ya ha pasado",
+    "error_num_opciones" : "Error: Hace falta al menos 2 opciones para poder empezar",
+    "exito_crear_decision" : "Decisión creada con éxito",
+    "error_tiempos" : "Error: La fecha de votación debe ser posterior a la de opciones",
+    "dar_opciones" : "Dar opciones",
+    "votar" : "Votar",
+    "eliminar_decision" : "Eliminar decisión",
+    "eliminar_decision_txt" : "¿Estás seguro de que quieres eliminar la decisión {titulo}",
+    "@eliminar_decision_txt" : {
+        "description" : "Eliminar decisión",
+        "placeholders" : {
+            "titulo":{
+                "type":"String"
+            }
+        }
+    },
+    "exito_eliminar_decision" : "Decisión eliminada con éxito",
+    "empezar_votacion" : "Empezar votación"
 }

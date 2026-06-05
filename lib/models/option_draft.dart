@@ -1,9 +1,10 @@
+import 'dart:typed_data';
 class OptionDraft{
   String id_creator;
   String title;
   String? description;
   int? percentage;
-  String? image;
+  Uint8List? image;
 
   OptionDraft({
     required this.id_creator,

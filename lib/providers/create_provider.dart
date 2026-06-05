@@ -1,3 +1,5 @@
+import 'package:dego/models/decision.dart';
+import 'package:dego/models/decision_draft.dart';
 import 'package:dego/services/create_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -107,6 +109,45 @@ class CreateNotifier extends StateNotifier<User?> {
       await createService.deleteUser(id: id);
 
     } catch(e){
+      rethrow;
+    }
+  }
+
+  //CREAR UNA DECISIÓN
+  Future<void> createDecision({
+    required String id_creator,
+    String? id_group,
+    required DecisionState state,
+    required DecisionDraft decision,
+  }) async{
+    try{
+      
+      await createService.createDecision(id_creator: id_creator, id_group: id_group, state: state, decision: decision);
+
+    } catch(e){
+      rethrow;
+    }
+  }
+
+  //EDITAR DECISION
+  Future<void> editDecision({
+    required Decision decision,
+  }) async{
+    try{
+      await createService.editDecision(decision: decision);
+    } catch (e){
+      rethrow;
+    }
+  }
+
+
+  //BORRAR DECISION
+  Future<void> deleteDecision({
+    required String decisionId,
+  }) async{
+    try{
+      await createService.deleteDecision(decisionId: decisionId);
+    } catch (e){
       rethrow;
     }
   }

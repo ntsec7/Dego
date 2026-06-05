@@ -1,20 +1,24 @@
+import 'package:dego/models/option_draft.dart';
+import 'package:dego/providers/decision_draft_provider.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
-import 'package:dego/providers/create_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/error.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
-import 'package:dego/providers/current_group_provider.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
-class CreateOption extends ConsumerStatefulWidget {
-  const CreateOption({super.key});
+class CreateDraftOption extends ConsumerStatefulWidget {
+
+  final int? index;
+
+  const CreateDraftOption({super.key, this.index});
 
   @override
-  ConsumerState<CreateOption> createState() => _CreateOption();
+  ConsumerState<CreateDraftOption> createState() => _CreateDraftOption();
 }
 
-class _CreateOption extends ConsumerState<CreateOption> {
+class _CreateDraftOption extends ConsumerState<CreateDraftOption> {
 
   bool _loading = false;
 
@@ -26,11 +30,6 @@ class _CreateOption extends ConsumerState<CreateOption> {
   final picker = ImagePicker();
 
   Uint8List? imageBytes;
-  XFile? selectedImage;
-
-  //Bandera para asignar los valores de Riverpod solo una vez.
-  bool imageRemoved = false;
-
 
   @override
   void dispose() {
@@ -40,14 +39,28 @@ class _CreateOption extends ConsumerState<CreateOption> {
   }
 
   @override
+  void initState(){
+    super.initState();
+
+    if (widget.index != null) {
+      final option = ref.read(decisionDraftProvider).options[widget.index!];
+
+      _title.text = option.title;
+      _description.text = option.description ?? "";
+      imageBytes = option.image;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     bool web = screenWidth > 600 ? true : false;
 
-    final grupo = ref.watch(currentGroupProvider);
-
     final labelWidth = web ? screenWidth * 0.1 : screenWidth * 0.3;
+
+    final usuarioAsync = ref.watch(usuarioProvider);
+    final currentUserId = usuarioAsync.value?.id;
 
     return Scaffold(
       body: SafeArea(
@@ -168,7 +181,7 @@ class _CreateOption extends ConsumerState<CreateOption> {
                             SizedBox(height: screenHeight * 0.04),
 
                             //DESCRIPCIÓN
-                            Row(
+                            Column(
                                   crossAxisAlignment: CrossAxisAlignment.start, // Alineado arriba porque es multilínea
                                   children: [
                                     SizedBox(
@@ -185,12 +198,13 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                       ),
                                     ),
                                     SizedBox(width: screenWidth * 0.03),
-                                    Expanded(
-                                      child: TextFormField(
+                                    // Expanded(
+                                      // child: 
+                                      TextFormField(
                                         key: const Key('descriptionField'),
                                         controller: _description,
-                                        maxLines: 4, // Permite múltiples líneas para texto libre
-                                        minLines: 2,
+                                        maxLines: 8, // Permite múltiples líneas para texto libre
+                                        minLines: 4,
                                         cursorColor: Colors.grey,
                                         textAlign: TextAlign.start, // Alineación de texto tradicional para parágrafos
                                         style: TextStyle(
@@ -212,7 +226,7 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                           contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                         ),
                                       ),
-                                    ),
+                                    // ),
                                   ],
                                 ),
 
@@ -253,9 +267,7 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                           final bytes = await image.readAsBytes();
 
                                           setState(() {
-                                            selectedImage = image;
                                             imageBytes = bytes;
-                                            imageRemoved = false;
                                           });
                                         }
                                       },
@@ -285,19 +297,6 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                                 height: double.infinity,
                                               )
 
-                                              : (grupo?.image != null && grupo!.image!.isNotEmpty && !imageRemoved)
-                                                ? Image.network(
-                                                    grupo.image!, // URL de la foto actual guardada en tu BD (ej: Supabase/Firebase)
-                                                    fit: BoxFit.cover,
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    errorBuilder: (context, error, stackTrace) => Icon(
-                                                      Icons.photo,
-                                                      size: web ? screenWidth * 0.05 : screenWidth * 0.2,
-                                                      color: Colors.grey[600],
-                                                    ),
-                                                  )
-                                            
                                             :Icon(
                                                 Icons.photo,
                                                 size: web ? screenWidth * 0.05 : screenWidth * 0.2,
@@ -306,7 +305,7 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                       ),
                                     ),
 
-                                    if(imageBytes != null || (grupo?.image != null && grupo!.image!.isNotEmpty && !imageRemoved) )
+                                    if(imageBytes != null)
                                       Positioned(
                                         top: 10,
                                         right: 10,
@@ -314,9 +313,7 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                         child: GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              selectedImage = null;
                                               imageBytes = null;
-                                              imageRemoved= true;
                                             });
                                           },
 
@@ -371,15 +368,23 @@ class _CreateOption extends ConsumerState<CreateOption> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
-                                        
-                                        // Uint8List? sendImage;
-                                        // bool deletePhoto= false;
 
-                                        // if(imageBytes!=null){ //nueva foto
-                                        //   sendImage = imageBytes;
-                                        // } else if(imageRemoved){  //ha borrado la foto que había
-                                        //   deletePhoto = true;
-                                        // }
+                                        if(currentUserId==null)  return;
+                                        
+                                        OptionDraft newOption = OptionDraft(
+                                              id_creator: currentUserId, 
+                                              title: _title.text,
+                                              description: _description.text,
+                                              image: imageBytes,
+                                              );
+                                        
+                                        
+                                        if (widget.index != null) { //Editar opción
+                                          ref.read(decisionDraftProvider.notifier).updateOption(widget.index!, newOption );
+                                        }  
+                                        else {
+                                          ref.read(decisionDraftProvider.notifier).addOption(newOption);
+                                        }
 
                                         if(!context.mounted) return;
 

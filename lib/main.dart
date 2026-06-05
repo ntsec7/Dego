@@ -1,5 +1,6 @@
 import 'package:dego/screens/create_decision.dart';
 import 'package:dego/screens/create_group.dart';
+import 'package:dego/screens/edit_decision.dart';
 import 'package:dego/screens/edit_group.dart';
 import 'package:dego/screens/group_history.dart';
 import 'package:dego/screens/group_home_page.dart';
@@ -22,7 +23,7 @@ import 'package:dego/screens/notifications.dart';
 import 'package:dego/screens/main_container.dart';
 import 'package:dego/screens/group_container.dart';
 import 'package:dego/screens/edit_user.dart';
-import 'package:dego/screens/create_option.dart';
+import 'package:dego/screens/create_draft_option.dart';
 
 void main() async{
 
@@ -118,7 +119,14 @@ class _MyAppState extends State<MyApp> {
         'editGroup' : (context) => EditGroup(),
         'editUser' : (context) => EditUser(),
         'createDecision' : (context) => CreateDecision(),
-        'createOption' : (context) => CreateOption(),
+        'createOption' : (context) {
+          final int? index = ModalRoute.of(context)?.settings.arguments as int?;
+          return CreateDraftOption(index: index);
+        },
+        'editDecision' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return EditDecision(id:id);
+        }
       },
     );
   }
