@@ -27,6 +27,7 @@ import 'package:dego/screens/edit_user.dart';
 import 'package:dego/screens/create_draft_option.dart';
 import 'package:dego/screens/create_option.dart';
 import 'package:dego/screens/see_decision.dart';
+import 'package:dego/screens/see_option.dart';
 
 void main() async{
 
@@ -141,6 +142,10 @@ class _MyAppState extends State<MyApp> {
         'seeDecision' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return SeeDecision(id:id);
+        },
+        'seeOption' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return SeeOption(id:id);
         },
       },
     );

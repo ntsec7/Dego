@@ -7,9 +7,9 @@ import 'package:dego/providers/create_provider.dart';
 import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dego/models/option.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
 class SeeDecision extends ConsumerStatefulWidget {
-
   final String id;
 
   const SeeDecision({super.key, required this.id});
@@ -19,92 +19,67 @@ class SeeDecision extends ConsumerStatefulWidget {
 }
 
 class _SeeDecision extends ConsumerState<SeeDecision> {
-  final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController _title = TextEditingController();
-  final TextEditingController _dateControllerOption = TextEditingController(); // Controlador para la fecha
-  final TextEditingController _dateControllerVote = TextEditingController(); // Controlador para la fecha
-  DecisionType _selectedType = DecisionType.simple;
-
-  bool _isInitialized = false;
-  bool _loading = false;
-
-  @override
-  void dispose() {
-    _title.dispose();
-    _dateControllerOption.dispose();
-    _dateControllerVote.dispose();
-    super.dispose();
-  }
-
   String formatDate(DateTime date) {
     return "${date.day.toString().padLeft(2, '0')}-"
-          "${date.month.toString().padLeft(2, '0')}-"
-          "${date.year} "
-          "${date.hour.toString().padLeft(2, '0')}:"
-          "${date.minute.toString().padLeft(2, '0')}";
+        "${date.month.toString().padLeft(2, '0')}-"
+        "${date.year} "
+        "${date.hour.toString().padLeft(2, '0')}:"
+        "${date.minute.toString().padLeft(2, '0')}";
   }
 
-  
   void _deleteOption(BuildContext context, Option op) {
-
     showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
-          return AlertDialog(
-          title: Text(context.lang.eliminar_opcion),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.lang.eliminar_opcion_txt(op.title),
+            return AlertDialog(
+              title: Text(context.lang.eliminar_opcion),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.lang.eliminar_opcion_txt(op.title),
+                  ),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(context.lang.cancelar),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                
-                try {
-
-                  await ref.read(createProvider.notifier).deleteOption(optionId: op.id);
-
-                  if (context.mounted) {
+              actions: [
+                TextButton(
+                  onPressed: () {
                     Navigator.pop(context);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(context.lang.exito_eliminar_opcion),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  if(context.mounted){
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(translateSupabaseError(context,e))),
-                    );
-                  }
-                }
-              },
-              child: Text(context.lang.aceptar),
-            ),
-          ],
-          );
+                  },
+                  child: Text(context.lang.cancelar),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await ref.read(createProvider.notifier).deleteOption(optionId: op.id);
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(context.lang.exito_eliminar_opcion),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(translateSupabaseError(context, e))),
+                        );
+                      }
+                    }
+                  },
+                  child: Text(context.lang.aceptar),
+                ),
+              ],
+            );
           },
         );
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -113,477 +88,272 @@ class _SeeDecision extends ConsumerState<SeeDecision> {
 
     bool web = screenWidth > 600 ? true : false;
 
-    // Ajuste de márgenes para que empiece más a la izquierda y aproveche la pantalla
     final double ladoIzquierdo = web ? screenWidth * 0.15 : screenWidth * 0.05;
     final double ladoDerecho = web ? screenWidth * 0.15 : screenWidth * 0.05;
-    final double labelWidth = web ? screenWidth * 0.1 : screenWidth * 0.25;
-
+    final double labelWidth = web ? screenWidth * 0.15 : screenWidth * 0.35;
 
     final decisionAsync = ref.watch(decisionByIdProvider(widget.id));
     final optionsAsync = ref.watch(optionsByDecisionProvider(widget.id));
+    final usuarioAsync = ref.watch(usuarioProvider);
+    final currentUserId = usuarioAsync.value?.id;
+    final currentUserType = usuarioAsync.value?.tipo;
 
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    if(decisionAsync.isLoading || optionsAsync.isLoading){
+    if (decisionAsync.isLoading || optionsAsync.isLoading) {
       return const Scaffold(body: Center(child: CupertinoActivityIndicator(radius: 15)));
     }
 
-
     final decision = decisionAsync.requireValue;
     final options = optionsAsync.requireValue;
-
-    if (!_isInitialized) {
-      _title.text = decision.title;
-      _selectedType = decision.type;
-      _dateControllerOption.text = decision.options_date != null ? formatDate(decision.options_date!) : "";
-      _dateControllerVote.text = decision.vote_date != null ? formatDate(decision.vote_date!) : "";
-      _isInitialized = true; 
-    }
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            // TÍTULO DE LA PANTALLA
+            
+            // FILA SUPERIOR: FLECHA VOLVER ATRÁS + TÍTULO DE LA DECISIÓN
             Padding(
               padding: EdgeInsets.symmetric(
-                vertical: web ? screenHeight * 0.03 : screenHeight * 0.02,
-                horizontal: web ? screenWidth * 0.15 : screenWidth * 0.05,
+                vertical: web ? screenHeight * 0.02 : screenHeight * 0.015,
+                horizontal: web ? screenWidth * 0.14 : screenWidth * 0.03,
               ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  context.lang.crear_decision,
-                  style: TextStyle(
-                    fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.018,
-                    fontWeight: FontWeight.w400,
-                    decoration: TextDecoration.underline,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () => Navigator.pop(context),
                   ),
-                ),
+                  SizedBox(width: screenWidth * 0.01),
+                  Expanded(
+                    child: Text(
+                      decision.title,
+                      style: TextStyle(
+                        fontSize: web ? (screenHeight + screenWidth) * 0.014 : (screenHeight + screenWidth) * 0.02,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
             ),
 
-
             Expanded(
-              child: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.only(left: ladoIzquierdo, right: ladoDerecho, bottom: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: web ? screenHeight * 0.01 : screenHeight * 0.02),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(left: ladoIzquierdo, right: ladoDerecho, bottom: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: screenHeight * 0.01),
 
-                      //TÍTULO
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          SizedBox(
-                            width: labelWidth,
-                            child: 
-                            Text.rich(
-                              TextSpan(
-                                text: "${context.lang.titulo} ", 
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
-                                  color: Theme.of(context).textTheme.bodyLarge?.color, 
-                                ),
-                                children: const [
-                                  TextSpan(
-                                    text: '*', 
-                                    style: TextStyle(
-                                      color: Colors.red, 
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' :', 
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.right,
-                            )
-                                                      ),
-                          SizedBox(width: screenWidth * 0.03),
-                          Expanded(
-                            child: TextFormField(
-                              key: const Key('nameField'),
-                              controller: _title,
-                              validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
-                              onChanged: (value) => decision.title=value,
-                              cursorColor: Colors.grey,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Arial',
-                                fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: context.lang.titulo,
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
-                                ),
-                                errorStyle: TextStyle(
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
-                                ),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
-                                filled: true,
-                                fillColor: Colors.white,
-                                isDense: true,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                              ),
+                    // FILA: TIPO DE DECISIÓN
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: labelWidth,
+                          child: Text(
+                            "${context.lang.tipo}:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
                             ),
+                            textAlign: TextAlign.right,
                           ),
-                        ],
-                      ),
-
-                      SizedBox(height: screenHeight * 0.02),
-
-                      //TIPO
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          SizedBox(
-                            width: labelWidth,
-                            child: 
-                            Text.rich(
-                              TextSpan(
-                                text: "${context.lang.tipo} ", // El texto normal (ej: "Título")
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
-                                  color: Theme.of(context).textTheme.bodyLarge?.color, // Color adaptativo al modo oscuro/claro
-                                ),
-                                children: const [
-                                  TextSpan(
-                                    text: '*', // El asterisco obligatorio
-                                    style: TextStyle(
-                                      color: Colors.red, // Forzamos a que siempre sea rojo
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' :', // Los dos puntos finales si los necesitas
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.right,
-                            )
-                          ),
-                          SizedBox(width: screenWidth * 0.03),
-                          Expanded(
-                            child: DropdownButtonFormField<DecisionType>(
-                              key: const Key('typeField'),
-                              dropdownColor: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              initialValue: _selectedType,
-                              validator: (value) => value == null ? context.lang.campo_obligatorio : null,
-                              onChanged: (DecisionType? newValue) {
-                                if (newValue != null) {
-                                  _selectedType = newValue;
-                                  decision.type= newValue;
-                                }
-                              },
-                              items: DecisionType.values.map((DecisionType type) {
-                                return DropdownMenuItem<DecisionType>(
-                                  value: type,
-                                  child: Text(type.title(context)),
-                                );
-                              }).toList(),
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: context.lang.nombre,
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
-                                ),
-                                errorStyle: TextStyle(
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
-                                ),
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
-                                filled: true,
-                                fillColor: Colors.white,
-                                isDense: true,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                              ),
-                              alignment: Alignment.center,
-                              icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: screenHeight * 0.03),
-
-                      //OPCIONES
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: labelWidth,
-                            child: 
-                            Text.rich(
-                              TextSpan(
-                                text: "${context.lang.opciones} ", // El texto normal (ej: "Título")
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
-                                  color: Theme.of(context).textTheme.bodyLarge?.color, // Color adaptativo al modo oscuro/claro
-                                ),
-                                children: const [
-                                  TextSpan(
-                                    text: '*', // El asterisco obligatorio
-                                    style: TextStyle(
-                                      color: Colors.red, // Forzamos a que siempre sea rojo
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' :', // Los dos puntos finales si los necesitas
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.right,
-                            )
-                          ),
-                          SizedBox(width: screenWidth * 0.03),
-                          const Expanded(child: SizedBox()), // Espacio vacío para mantener alineación del título
-                        ],
-                      ),
-
-                      SizedBox(height: screenHeight * 0.01),
-
-                      // RECTÁNGULO CON SCROLL INTERNO Y STICKY FOOTER
-                      Container(
-                        height: web ? screenHeight * 0.35 : screenHeight * 0.5, // Altura fija para el contenedor de opciones
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          // color: Colors.white,
-                          color: Theme.of(context).cardColor,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color.fromARGB(255, 143, 143, 143)),
                         ),
-                        child: Column(
-                          children: [
-                            //Opciones
-                            Expanded(
-                              child: ListView.builder(
-                                    padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.01), // Espaciado alrededor de la lista
-                                    itemCount: options.length,
-                                    itemBuilder: (context, index) {
-                                      final option = options[index];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.pushNamed(context, 'editOption', arguments: option.id); 
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
-                                          padding: EdgeInsets.symmetric( horizontal: web ? (screenHeight + screenWidth) * 0.003 : (screenHeight + screenWidth) * 0.008),
-                                          decoration: BoxDecoration(
-                                            color: Color.fromARGB(255, 224, 224, 224), 
-                                            borderRadius: BorderRadius.circular(30), // Bordes redondeados
-                                          ),
-                                          child: Row(
-                                            children: [                                              
-                                              //TITULO
-                                              Expanded(
-                                                child: Text(
-                                                  option.title,
-                                                  style:  TextStyle(
-                                                    fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.013,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black87,
-                                                  ),
-                                                ),
-                                              ),
-                                              
-                                              // //EDITAR
-                                              IconButton(
-                                                icon: const Icon(Icons.edit),
-                                                color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
-                                                onPressed: () => Navigator.pushNamed(context, 'editOption', arguments: option.id), 
-                                              ),
+                        SizedBox(width: screenWidth * 0.04),
+                        Expanded(
+                          child: Text(
+                            decision.type.title(context),
+                            style: TextStyle(
+                              fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
 
-                                              //ELIMINAR
-                                              IconButton(
-                                                icon: const Icon(Icons.delete),
-                                                color:  const Color.fromARGB(255, 99, 99, 99),
-                                                iconSize: web ? screenWidth * 0.015 : screenWidth * 0.06,
-                                                onPressed: () {
-                                                  _deleteOption(context, option);
-                                                },
-                                              ),
+                    SizedBox(height: screenHeight * 0.02),
 
-                                            ],
+                    // FILA: FECHA FINAL VOTACIÓN
+                    if(decision.vote_date!=null)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: labelWidth,
+                          child: Text(
+                            "${context.lang.fecha_final_votacion_min}:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                        SizedBox(width: screenWidth * 0.04),
+                        Expanded(
+                          child: Text(
+                            formatDate(decision.vote_date!),
+                            style: TextStyle(
+                              fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // ETIQUETA SECCIÓN OPCIONES
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: labelWidth,
+                          child: Text(
+                            "${context.lang.opciones}:",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                        SizedBox(width: screenWidth * 0.03),
+                        const Expanded(child: SizedBox()),
+                      ],
+                    ),
+
+                    SizedBox(height: screenHeight * 0.015),
+
+                    // BLOQUE DE OPCIONES
+                    Container(
+                      height: web ? screenHeight * 0.35 : screenHeight * 0.45,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: const Color.fromARGB(255, 143, 143, 143)),
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.01),
+                              itemCount: options.length,
+                              itemBuilder: (context, index) {
+                                final option = options[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, 'seeOption', arguments: option.id);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: screenHeight * 0.015),
+                                    padding: EdgeInsets.symmetric(horizontal: web ? (screenHeight + screenWidth) * 0.003 : (screenHeight + screenWidth) * 0.008),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(255, 224, 224, 224),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            option.title,
+                                            style: TextStyle(
+                                              fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.013,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87,
+                                            ),
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                            ),
 
-                            // STICKY FOOTER (Fijo abajo del rectángulo)
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                                border: Border(top: BorderSide(color: const Color.fromARGB(255, 143, 143, 143))),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-
-                                  //FECHA FINAL OPCIONES
-                                  TextFormField(
-                                    controller: _dateControllerOption,
-                                    readOnly: true,
-                                    onTap: () => _pickDateTime(true, decision),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.black, 
-                                    ),
-                                    //validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
-                                    decoration: InputDecoration(
-                                      hintText: context.lang.fecha_final_opciones,
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
-                                      ),
-                                      prefixIcon: const Icon(Icons.calendar_today, size: 18, color:Colors.black),
-                                      suffixIcon: _dateControllerVote.text.isNotEmpty
-                                      ? IconButton(
-                                          icon: const Icon(Icons.clear, size: 18, color: Colors.grey),
+                                        if(decision.id_creator == currentUserId || option.id_creator==currentUserId || currentUserType=='admin') ...[
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
+                                          onPressed: () => Navigator.pushNamed(context, 'editOption', arguments: option.id),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          color: const Color.fromARGB(255, 99, 99, 99),
+                                          iconSize: web ? screenWidth * 0.015 : screenWidth * 0.06,
                                           onPressed: () {
-                                            setState(() {
-                                              _dateControllerOption.clear(); // Borra el texto del input
-                                              decision.options_date=null;
-                                            });
+                                            _deleteOption(context, option);
                                           },
-                                        )
-                                      : null, // Si está vacío, no muestra nada en la derecha
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      isDense: true,
-                                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                                        ),
+                                        ],
+
+                                      ],
                                     ),
                                   ),
+                                );
+                              },
+                            ),
+                          ),
 
-
-                                  const SizedBox(height: 8),
-
-                                  //AÑADIR MÁS OPCIONES
-                                  IconButton(
-                                    icon: const Icon(Icons.add,
-                                    weight: 700.0,),
-                                    color: Color(0xFF098238),
-                                    iconSize: 30,
-                                    onPressed: () async{
-                                      Navigator.pushNamed(context, 'createOption', arguments: decision.id);
-                                    },
-                                  ),                              
-                                ],
+                          // STICKY FOOTER DEL CUADRO DE OPCIONES
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
                               ),
+                              border: const Border(top: BorderSide(color: Color.fromARGB(255, 143, 143, 143))),
                             ),
-                          ],
-                        ),
-                      ),
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
 
-                    SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.02),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: labelWidth,
+                                      child: Text(
+                                        "${context.lang.fecha_final_opciones_min}:",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
+                                        ),
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ),
+                                    SizedBox(width: screenWidth * 0.04),
+                                    Expanded(
+                                      child: Text(
+                                        formatDate(decision.options_date!),
+                                        style: TextStyle(
+                                          fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
 
-                    // BOTÓN EMPEZAR VOTACIÓN
-                    if(decision.state==DecisionState.options)
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.secondary,
-                        foregroundColor: Theme.of(context).colorScheme.primary, 
-                        side: BorderSide( //Borde
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 1.5,
-                        ),
-                      ),
-                      onPressed: () async{
-
-                        //Tiene que tener al menos 2 opciones para empezar la votación
-                        if(options.length<2){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(context.lang.error_num_opciones),
+                                const SizedBox(height: 4),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  color: const Color(0xFF098238),
+                                  iconSize: 28,
+                                  onPressed: () async {
+                                    Navigator.pushNamed(context, 'createOption', arguments: decision.id);
+                                  },
+                                ),
+                              ],
                             ),
-                          );
-                          _loading=false;
-                          return;
-                        }
-
-                        decision.state = DecisionState.vote;
-
-                        //Actualizar la decisión
-                        await ref.read(createProvider.notifier).editDecision(decision: decision);
-
-                        if(!context.mounted) return;
-
-                        Navigator.pop(context);
-
-                      },
-                      child: Text(context.lang.empezar_votacion,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
-                            ),),
-                    ),
-
-                    SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
-
-                    //FECHA FINAL VOTACIÓN
-                    TextFormField(
-                      controller: _dateControllerVote,
-                      readOnly: true,
-                      onTap: () => _pickDateTime(false, decision),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.black, 
-                      ),
-                      //validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
-                      decoration: InputDecoration(
-                        hintText: context.lang.fecha_final_votacion,
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
-                        ),
-                        prefixIcon: const Icon(Icons.calendar_today, size: 18, color:Colors.black),
-                        suffixIcon: _dateControllerVote.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear, size: 18, color: Colors.grey),
-                            onPressed: () {
-                              setState(() {
-                                _dateControllerVote.clear(); // Borra el texto del input
-                                decision.vote_date=null;
-                              });
-                            },
-                          )
-                        : null, // Si está vacío, no muestra nada en la derecha
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                        filled: true,
-                        fillColor: Colors.white,
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                          ),
+                        ],
                       ),
                     ),
 
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),

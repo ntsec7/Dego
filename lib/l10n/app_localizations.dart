@@ -658,11 +658,23 @@ abstract class AppLocalizations {
   /// **'Fecha de finalización de las opciones'**
   String get fecha_final_opciones;
 
+  /// No description provided for @fecha_final_opciones_min.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha opciones'**
+  String get fecha_final_opciones_min;
+
   /// No description provided for @fecha_final_votacion.
   ///
   /// In es, this message translates to:
   /// **'Fecha de finalización de la votación'**
   String get fecha_final_votacion;
+
+  /// No description provided for @fecha_final_votacion_min.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha votación'**
+  String get fecha_final_votacion_min;
 
   /// No description provided for @empezar.
   ///

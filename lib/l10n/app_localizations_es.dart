@@ -312,7 +312,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fecha_final_opciones => 'Fecha de finalización de las opciones';
 
   @override
+  String get fecha_final_opciones_min => 'Fecha opciones';
+
+  @override
   String get fecha_final_votacion => 'Fecha de finalización de la votación';
+
+  @override
+  String get fecha_final_votacion_min => 'Fecha votación';
 
   @override
   String get empezar => 'Empezar';
