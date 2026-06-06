@@ -254,6 +254,11 @@ class _SeeDecision extends ConsumerState<SeeDecision> {
                                   child: Container(
                                     margin: EdgeInsets.only(bottom: screenHeight * 0.015),
                                     padding: EdgeInsets.symmetric(horizontal: web ? (screenHeight + screenWidth) * 0.003 : (screenHeight + screenWidth) * 0.008),
+
+                                    constraints: BoxConstraints(
+                                      minHeight: web ? screenHeight * 0.05 : 50.0, 
+                                    ),
+
                                     decoration: BoxDecoration(
                                       color: const Color.fromARGB(255, 224, 224, 224),
                                       borderRadius: BorderRadius.circular(30),
