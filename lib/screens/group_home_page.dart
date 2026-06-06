@@ -236,8 +236,9 @@ Widget build(BuildContext context) {
                     itemBuilder: (context, index) {
                       final opDec = optionsDec[index];
                       return GestureDetector(
-                        // onTap: () {
-                        // },
+                        onTap: () {
+                          Navigator.pushNamed(context, 'seeDecision');
+                        },
                         child: Container(
                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
                           padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
