@@ -387,7 +387,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                       final option = draft.options[index];
                                       return GestureDetector(
                                         onTap: () {
-                                          Navigator.pushNamed(context, 'createOption', arguments: index);
+                                          Navigator.pushNamed(context, 'createOptionDraft', arguments: index);
                                         },
                                         child: Container(
                                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
@@ -489,7 +489,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                     color: Color(0xFF098238),
                                     iconSize: 30,
                                     onPressed: () async{
-                                      Navigator.pushNamed(context, 'createOption');
+                                      Navigator.pushNamed(context, 'createOptionDraft');
                                     },
                                   ),                              
                                 ],

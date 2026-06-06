@@ -61,6 +61,11 @@ final decisionByIdProvider = StreamProvider.family<Decision, String>((ref, id) {
 });
 
 final optionsByDecisionProvider = StreamProvider.family<List<Option>, String>((ref, decisionId) {
-    final service = ref.watch(decisionServiceProvider);
-    return service.getOptionsByDecision(decisionId);
+  final service = ref.watch(decisionServiceProvider);
+  return service.getOptionsByDecision(decisionId);
+});
+
+final optionByIdProvider = StreamProvider.family<Option,String> ((ref, id) {
+  final service = ref.watch(decisionServiceProvider);
+  return service.getOptionById(id);
 });

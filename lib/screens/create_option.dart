@@ -1,36 +1,43 @@
+import 'package:dego/models/option_draft.dart';
+import 'package:dego/providers/create_provider.dart';
+import 'package:dego/providers/decision_draft_provider.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
-import 'package:dego/providers/create_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/error.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
-import 'package:dego/providers/current_group_provider.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
-class EditGroup extends ConsumerStatefulWidget {
-  const EditGroup({super.key});
+class CreateOption extends ConsumerStatefulWidget {
+
+  final String decisionId;
+
+  const CreateOption({super.key, required this.decisionId});
 
   @override
-  ConsumerState<EditGroup> createState() => _EditGroup();
+  ConsumerState<CreateOption> createState() => _CreateOption();
 }
 
-class _EditGroup extends ConsumerState<EditGroup> {
+class _CreateOption extends ConsumerState<CreateOption> {
 
   bool _loading = false;
 
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _name = TextEditingController();
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _description = TextEditingController();
 
   final picker = ImagePicker();
 
   Uint8List? imageBytes;
-  XFile? selectedImage;
 
-  //Bandera para asignar los valores de Riverpod solo una vez.
-  bool _isInitialized = false;
-  bool imageRemoved = false;
-
+  @override
+  void dispose() {
+    _title.dispose();
+    _description.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +45,10 @@ class _EditGroup extends ConsumerState<EditGroup> {
     final screenHeight = MediaQuery.of(context).size.height;
     bool web = screenWidth > 600 ? true : false;
 
-    final grupo = ref.watch(currentGroupProvider);
+    final labelWidth = web ? screenWidth * 0.1 : screenWidth * 0.3;
 
-    if (!_isInitialized && grupo != null) {
-      _name.text = grupo.name; 
-      _isInitialized = true;
-    }
+    final usuarioAsync = ref.watch(usuarioProvider);
+    final currentUserId = usuarioAsync.value?.id;
 
     return Scaffold(
       body: SafeArea(
@@ -61,7 +66,7 @@ class _EditGroup extends ConsumerState<EditGroup> {
                   Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    context.lang.editar_grupo,
+                    context.lang.crear_opcion,
                     style: TextStyle(
                       fontSize: web
                           ? (screenHeight + screenWidth) * 0.01
@@ -95,15 +100,82 @@ class _EditGroup extends ConsumerState<EditGroup> {
                               children: [
                                 SizedBox(height: screenHeight * 0.05),
                                 
-                                //NOMBRE
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
+                            //TÍTULO
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                SizedBox(
+                                  width: labelWidth,
+                                  child: 
+                                  Text.rich(
+                                    TextSpan(
+                                      text: "${context.lang.titulo} ", 
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
+                                        color: Theme.of(context).textTheme.bodyLarge?.color, 
+                                      ),
+                                      children: const [
+                                        TextSpan(
+                                          text: '*', 
+                                          style: TextStyle(
+                                            color: Colors.red, 
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: ' :', 
+                                        ),
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.right,
+                                  )
+                                                            ),
+                                SizedBox(width: screenWidth * 0.03),
+                                Expanded(
+                                  child: TextFormField(
+                                    key: const Key('nameField'),
+                                    controller: _title,
+                                    validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
+                                    cursorColor: Colors.grey,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontFamily: 'Arial',
+                                      fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: context.lang.titulo,
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
+                                      ),
+                                      errorStyle: TextStyle(
+                                        fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
+                                      ),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      isDense: true,
+                                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: screenHeight * 0.04),
+
+                            //DESCRIPCIÓN
+                            Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start, // Alineado arriba porque es multilínea
                                   children: [
                                     SizedBox(
-                                      width: web ? screenWidth * 0.1 : screenWidth * 0.25,
+                                      width: labelWidth,
                                       child: Text(
-                                        "${context.lang.nombre}: ",
+                                        "${context.lang.descripcion}: ",
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
@@ -113,32 +185,60 @@ class _EditGroup extends ConsumerState<EditGroup> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: web ? screenWidth * 0.015 : screenWidth * 0.03),
-                                    Expanded(
-                                      child: TextFormField(
-                                        key: const Key('nameField'),
-                                        validator: (value) => value == null || value.isEmpty
-                                            ? context.lang.campo_obligatorio
-                                            : null,
-                                        controller: _name,
-                                        style: const TextStyle(color: Colors.black),
+                                    SizedBox(width: screenWidth * 0.03),
+                                    // Expanded(
+                                      // child: 
+                                      TextFormField(
+                                        key: const Key('descriptionField'),
+                                        controller: _description,
+                                        maxLines: 8, // Permite múltiples líneas para texto libre
+                                        minLines: 4,
+                                        cursorColor: Colors.grey,
+                                        textAlign: TextAlign.start, // Alineación de texto tradicional para parágrafos
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                          fontFamily: 'Arial',
+                                          fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
+                                        ),
                                         decoration: InputDecoration(
-                                          hintText: context.lang.nombre,
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(40)),
+                                          hintText: context.lang.descripcion_txt,
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
+                                          ),
+                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)), // Bordes sutiles para bloques de texto
                                           filled: true,
                                           fillColor: Colors.white,
                                           isDense: true,
-                                          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                                          contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                                         ),
                                       ),
-                                    ),
+                                    // ),
                                   ],
                                 ),
 
 
-                                SizedBox(height: screenHeight * 0.04),
+                              SizedBox(height: screenHeight * 0.04),
 
+                             Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: labelWidth,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 8.0), // Nivelado visualmente con el botón
+                                        child: Text(
+                                            "${context.lang.imagen}: ", 
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
+                                                color: Theme.of(context).textTheme.bodyLarge?.color, 
+                                              ),
+                                          )
+                                      ),
+                                    ),
+                                  
                                 //FOTO
                                 Stack(  //para poder poner la x
                                   children: [
@@ -155,9 +255,7 @@ class _EditGroup extends ConsumerState<EditGroup> {
                                           final bytes = await image.readAsBytes();
 
                                           setState(() {
-                                            selectedImage = image;
                                             imageBytes = bytes;
-                                            imageRemoved = false;
                                           });
                                         }
                                       },
@@ -187,19 +285,6 @@ class _EditGroup extends ConsumerState<EditGroup> {
                                                 height: double.infinity,
                                               )
 
-                                              : (grupo?.image != null && grupo!.image!.isNotEmpty && !imageRemoved)
-                                                ? Image.network(
-                                                    grupo.image!, // URL de la foto actual guardada en tu BD 
-                                                    fit: BoxFit.cover,
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    errorBuilder: (context, error, stackTrace) => Icon(
-                                                      Icons.photo,
-                                                      size: web ? screenWidth * 0.05 : screenWidth * 0.2,
-                                                      color: Colors.grey[600],
-                                                    ),
-                                                  )
-                                            
                                             :Icon(
                                                 Icons.photo,
                                                 size: web ? screenWidth * 0.05 : screenWidth * 0.2,
@@ -208,7 +293,7 @@ class _EditGroup extends ConsumerState<EditGroup> {
                                       ),
                                     ),
 
-                                    if(imageBytes != null || (grupo?.image != null && grupo!.image!.isNotEmpty && !imageRemoved) )
+                                    if(imageBytes != null)
                                       Positioned(
                                         top: 10,
                                         right: 10,
@@ -216,9 +301,7 @@ class _EditGroup extends ConsumerState<EditGroup> {
                                         child: GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              selectedImage = null;
                                               imageBytes = null;
-                                              imageRemoved= true;
                                             });
                                           },
 
@@ -240,6 +323,8 @@ class _EditGroup extends ConsumerState<EditGroup> {
                                       ),
                                   ],
                                 ),
+                                  ],
+                             ),
 
                                 SizedBox(height: screenHeight * 0.07),
 
@@ -271,24 +356,18 @@ class _EditGroup extends ConsumerState<EditGroup> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
+
+                                        if(currentUserId==null)  return;
                                         
-                                        Uint8List? sendImage;
-                                        bool deletePhoto= false;
-
-                                        if(imageBytes!=null){ //nueva foto
-                                          sendImage = imageBytes;
-                                        } else if(imageRemoved){  //ha borrado la foto que había
-                                          deletePhoto = true;
-                                        }
-
-                                        String? sendName;
-                                        if (_name.text.trim() != grupo?.name) {
-                                          sendName = _name.text.trim();  //Solo lo enviamos si es distinto de lo que había
-                                        }
-
-                                        if(sendImage!=null || deletePhoto || sendName!=null){
-                                          await ref.read(createProvider.notifier).updateGroup(id:grupo!.id, name: sendName, image: sendImage, deletePhoto: deletePhoto, oldImageName: grupo.image);
-                                        }
+                                        OptionDraft newOption = OptionDraft(
+                                          id_creator: currentUserId, 
+                                          title: _title.text,
+                                          description: _description.text,
+                                          image: imageBytes,
+                                         );
+                                        
+                                        
+                                        await ref.read(createProvider.notifier).createOption(id_decision: widget.decisionId, option:newOption);
 
                                         if(!context.mounted) return;
 

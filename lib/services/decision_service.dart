@@ -44,4 +44,13 @@ class DecisionService {
       );
   }
 
+  
+  Stream <Option> getOptionById(String id){
+    return supabase
+      .from('option')
+      .stream(primaryKey: ['id'])
+      .eq('id', id)
+       .map((data) => Option.fromMap(data.first));
+  }
+
 }

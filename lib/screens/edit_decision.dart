@@ -205,7 +205,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
     final decisionAsync = ref.watch(decisionByIdProvider(widget.id));
     final optionsAsync = ref.watch(optionsByDecisionProvider(widget.id));
 
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     if(decisionAsync.isLoading || optionsAsync.isLoading){
       return const Scaffold(body: Center(child: CupertinoActivityIndicator(radius: 15)));
@@ -465,7 +465,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                       final option = options[index];
                                       return GestureDetector(
                                         onTap: () {
-                                          Navigator.pushNamed(context, 'createOption', arguments: index); //TODO LLEVAR A VER OPCIÓN
+                                          Navigator.pushNamed(context, 'editOption', arguments: option.id); 
                                         },
                                         child: Container(
                                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
@@ -488,12 +488,12 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                                 ),
                                               ),
                                               
-                                              //EDITAR
-                                              IconButton(
-                                                icon: const Icon(Icons.edit),
-                                                color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
-                                                onPressed: () => Navigator.pushNamed(context, 'editOption', arguments: option.id), //TODO EDITAR OPCION
-                                              ),
+                                              // //EDITAR
+                                              // IconButton(
+                                              //   icon: const Icon(Icons.edit),
+                                              //   color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
+                                              //   onPressed: () => Navigator.pushNamed(context, 'editOption', arguments: option.id), 
+                                              // ),
 
                                               //ELIMINAR
                                               IconButton(
@@ -574,7 +574,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                     color: Color(0xFF098238),
                                     iconSize: 30,
                                     onPressed: () async{
-                                      Navigator.pushNamed(context, 'createOption'); //TODO CAMBIAR EL CREAR OPCIÓN
+                                      Navigator.pushNamed(context, 'createOption', arguments: decision.id);
                                     },
                                   ),                              
                                 ],
@@ -587,7 +587,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                     SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.02),
 
                     // BOTÓN EMPEZAR VOTACIÓN
-                    //TODO CAMBIAR A EMPEZAR VOTACIÓN
+                    if(decision.state==DecisionState.options)
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -598,14 +598,24 @@ class _EditDecision extends ConsumerState<EditDecision> {
                         ),
                       ),
                       onPressed: () async{
-                        //Crear la decisión
-                        // await ref.read(createProvider.notifier).EditDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.options, decision: draft);
+
+                        //Tiene que tener al menos 2 opciones para empezar la votación
+                        if(options.length<2){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(context.lang.error_num_opciones),
+                            ),
+                          );
+                          _loading=false;
+                          return;
+                        }
+
+                        decision.state = DecisionState.vote;
+
+                        //Actualizar la decisión
+                        await ref.read(createProvider.notifier).editDecision(decision: decision);
 
                         if(!context.mounted) return;
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(context.lang.exito_crear_decision)),
-                        );
 
                         Navigator.pop(context);
 
@@ -704,10 +714,6 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                         await ref.read(createProvider.notifier).editDecision(decision: decision);
                                         
                                         if (!context.mounted) return;
-
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text(context.lang.exito_crear_decision)),
-                                        );
 
                                         Navigator.pop(context);
                                         

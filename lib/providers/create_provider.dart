@@ -1,5 +1,6 @@
 import 'package:dego/models/decision.dart';
 import 'package:dego/models/decision_draft.dart';
+import 'package:dego/models/option_draft.dart';
 import 'package:dego/services/create_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -153,12 +154,26 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
+  //CREAR UNA OPCIÓN
+  Future<void> createOption({
+    required String id_decision,
+    required OptionDraft option,
+  }) async{
+    try{
+      await createService.createOption(id_decision: id_decision, option: option);
+    } catch (e){
+      rethrow;
+    }
+  }
+
   //EDITAR OPCIÓN
   Future<void> editOption({
     required Option option,
+    Uint8List? image,
+    required bool deletePhoto
   }) async{
     try{
-      await createService.editOption(option: option);
+      await createService.editOption(option: option, image:image, deletePhoto:deletePhoto);
     } catch (e){
       rethrow;
     }

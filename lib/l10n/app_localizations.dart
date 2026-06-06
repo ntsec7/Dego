@@ -771,6 +771,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Opción eliminada con éxito'**
   String get exito_eliminar_opcion;
+
+  /// No description provided for @editar_opcion.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar opción'**
+  String get editar_opcion;
 }
 
 class _AppLocalizationsDelegate

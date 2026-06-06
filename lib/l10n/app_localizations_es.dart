@@ -374,4 +374,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get exito_eliminar_opcion => 'Opción eliminada con éxito';
+
+  @override
+  String get editar_opcion => 'Editar opción';
 }

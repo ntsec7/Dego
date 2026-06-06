@@ -333,8 +333,25 @@ class CreateService {
 
   Future<void> editOption({
     required Option option,
+    Uint8List? image,
+    required bool deletePhoto
   }) async{
     try{
+
+      if( (deletePhoto || image!= null) && option.image!=null){
+        //borrar la imagen subida
+        await deleteImage(option.image!);
+      }
+
+      if(deletePhoto){
+       option.image = null;
+      }
+      else if(image!=null){
+        final name = 'options/${option.id_decision}/${DateTime.now().millisecondsSinceEpoch}.png';
+        String url = await uploadImage(name: name, image: image);
+        option.image=url;
+      }
+
       await supabase.from('option').update(option.toMap()).eq('id', option.id);
     } catch (e){
       rethrow;
