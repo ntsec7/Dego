@@ -466,7 +466,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                           onPressed: () {
                                             setState(() {
                                               _dateControllerOption.clear(); // Borra el texto del input
-                                              ref.read(decisionDraftProvider.notifier).setOptionDate(null);
+                                              draft.options_date=null;
                                             });
                                           },
                                         )
@@ -514,6 +514,12 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                         ),
                       ),
                       onPressed: () async{
+
+                        //Elimina el tiempo de votación si es de tipo ruleta
+                        if(draft.type==DecisionType.roulette) {
+                          draft.vote_date=null;
+                        }
+
                         //Crear la decisión
                         await ref.read(createProvider.notifier).createDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.options, decision: draft);
 
@@ -541,6 +547,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                     SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
 
                     //FECHA FINAL VOTACIÓN
+                    if(draft.type!=DecisionType.roulette) ...[
                     TextFormField(
                       controller: _dateControllerVote,
                       readOnly: true,
@@ -563,7 +570,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                             onPressed: () {
                               setState(() {
                                 _dateControllerVote.clear(); // Borra el texto del input
-                                ref.read(decisionDraftProvider.notifier).setVoteDate(null);
+                                draft.vote_date=null;
                               });
                             },
                           )
@@ -577,6 +584,8 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                     ),
 
                     SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+
+                    ],
 
                       // BOTONES
                       Row(
@@ -623,7 +632,12 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                         }
 
                                         //Elimina el tiempo de opciones
-                                        ref.read(decisionDraftProvider.notifier).setOptionDate(null);
+                                          draft.options_date=null;
+
+                                        //Elimina el tiempo de votación si es de tipo ruleta
+                                        if(draft.type==DecisionType.roulette) {
+                                          draft.vote_date=null;
+                                        }
 
                                         //Crear la decisión
                                         await ref.read(createProvider.notifier).createDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.vote, decision: draft);

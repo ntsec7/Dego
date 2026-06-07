@@ -616,6 +616,11 @@ class _EditDecision extends ConsumerState<EditDecision> {
                           return;
                         }
 
+                        //Elimina el tiempo de votación si es de tipo ruleta
+                        if(decision.type==DecisionType.roulette) {
+                          decision.vote_date=null;
+                        }
+
                         decision.state = DecisionState.vote;
 
                         //Actualizar la decisión
@@ -636,6 +641,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                     SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
 
                     //FECHA FINAL VOTACIÓN
+                    if(decision.type!=DecisionType.roulette) ...[
                     TextFormField(
                       controller: _dateControllerVote,
                       readOnly: true,
@@ -672,6 +678,8 @@ class _EditDecision extends ConsumerState<EditDecision> {
                     ),
 
                     SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+                    ],
+
 
                       // BOTONES
                       Row(
@@ -714,6 +722,11 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                           );
                                           _loading=false;
                                           return;
+                                        }
+
+                                        //Elimina el tiempo de votación si es de tipo ruleta
+                                        if(decision.type==DecisionType.roulette) {
+                                          decision.vote_date=null;
                                         }
 
                                         //Actualizar la decisión
