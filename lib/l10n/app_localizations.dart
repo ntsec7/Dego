@@ -789,6 +789,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Editar opción'**
   String get editar_opcion;
+
+  /// No description provided for @editar_decision.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar decisión'**
+  String get editar_decision;
 }
 
 class _AppLocalizationsDelegate

@@ -160,5 +160,6 @@
         }
     },
     "exito_eliminar_opcion" : "Opción eliminada con éxito",
-    "editar_opcion" : "Editar opción"
+    "editar_opcion" : "Editar opción",
+    "editar_decision" : "Editar decisión"
 }

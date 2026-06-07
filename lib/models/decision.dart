@@ -50,10 +50,10 @@ class Decision{
         orElse: () => DecisionState.draft,
       ),
       options_date: map['options_date'] != null
-        ? DateTime.parse(map['options_date'])
+        ? DateTime.parse(map['options_date']).toLocal()
         : null,
       vote_date: map['vote_date'] != null
-        ? DateTime.parse(map['vote_date'])
+        ? DateTime.parse(map['vote_date']).toLocal()
         : null,
       type: DecisionType.values.firstWhere(
         (e) => e.name == map['type'],

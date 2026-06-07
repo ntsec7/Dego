@@ -460,7 +460,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                         fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
                                       ),
                                       prefixIcon: const Icon(Icons.calendar_today, size: 18, color:Colors.black),
-                                      suffixIcon: _dateControllerVote.text.isNotEmpty
+                                      suffixIcon: _dateControllerOption.text.isNotEmpty
                                       ? IconButton(
                                           icon: const Icon(Icons.clear, size: 18, color: Colors.grey),
                                           onPressed: () {

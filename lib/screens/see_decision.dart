@@ -132,7 +132,8 @@ class _SeeDecision extends ConsumerState<SeeDecision> {
                         fontSize: web ? (screenHeight + screenWidth) * 0.014 : (screenHeight + screenWidth) * 0.02,
                         fontWeight: FontWeight.bold,
                       ),
-                      overflow: TextOverflow.ellipsis,
+                      // overflow: TextOverflow.ellipsis,
+                      // maxLines: 3,
                     ),
                   ),
                 ],
@@ -314,7 +315,13 @@ class _SeeDecision extends ConsumerState<SeeDecision> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-
+                                
+                                Visibility(
+                                  visible: decision.options_date!=null, //si no está en options no es visible
+                                  maintainSize: true,
+                                  maintainAnimation: true,
+                                  maintainState: true,
+                                  child:
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
@@ -332,7 +339,7 @@ class _SeeDecision extends ConsumerState<SeeDecision> {
                                     SizedBox(width: screenWidth * 0.04),
                                     Expanded(
                                       child: Text(
-                                        formatDate(decision.options_date!),
+                                        decision.options_date != null ? formatDate(decision.options_date!) : "",
                                         style: TextStyle(
                                           fontSize: web ? (screenHeight + screenWidth) * 0.011 : (screenHeight + screenWidth) * 0.013,
                                           fontWeight: FontWeight.normal,
@@ -340,6 +347,7 @@ class _SeeDecision extends ConsumerState<SeeDecision> {
                                       ),
                                     ),
                                   ],
+                                ),
                                 ),
 
                                 const SizedBox(height: 4),

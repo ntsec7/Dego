@@ -236,7 +236,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  context.lang.crear_decision,
+                  context.lang.editar_decision,
                   style: TextStyle(
                     fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.018,
                     fontWeight: FontWeight.w400,
@@ -529,7 +529,12 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                 children: [
 
                                   //FECHA FINAL OPCIONES
-                                  TextFormField(
+                                  Visibility(
+                                  visible: decision.state == DecisionState.options, //si no está en options no es visible
+                                  maintainSize: true,
+                                  maintainAnimation: true,
+                                  maintainState: true,
+                                  child:TextFormField(
                                     controller: _dateControllerOption,
                                     readOnly: true,
                                     onTap: () => _pickDateTime(true, decision),
@@ -545,7 +550,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                         fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
                                       ),
                                       prefixIcon: const Icon(Icons.calendar_today, size: 18, color:Colors.black),
-                                      suffixIcon: _dateControllerVote.text.isNotEmpty
+                                      suffixIcon: _dateControllerOption.text.isNotEmpty
                                       ? IconButton(
                                           icon: const Icon(Icons.clear, size: 18, color: Colors.grey),
                                           onPressed: () {
@@ -562,6 +567,7 @@ class _EditDecision extends ConsumerState<EditDecision> {
                                       isDense: true,
                                       contentPadding: const EdgeInsets.symmetric(vertical: 8),
                                     ),
+                                  ),
                                   ),
 
 

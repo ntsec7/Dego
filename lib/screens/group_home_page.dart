@@ -237,6 +237,7 @@ Widget build(BuildContext context) {
                       final opDec = optionsDec[index];
                       return GestureDetector(
                         onTap: () {
+                          print("id:  ${opDec.id}");
                           Navigator.pushNamed(context, 'seeDecision', arguments: opDec.id);
                         },
                         child: Container(

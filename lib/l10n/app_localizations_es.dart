@@ -383,4 +383,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get editar_opcion => 'Editar opción';
+
+  @override
+  String get editar_decision => 'Editar decisión';
 }
