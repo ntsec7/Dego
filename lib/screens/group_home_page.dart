@@ -146,8 +146,19 @@ Widget build(BuildContext context) {
                     itemBuilder: (context, index) {
                       final votDec = voteDec[index];
                       return GestureDetector(
-                        // onTap: () {
-                        // },
+                        onTap: () {
+                          switch(votDec.type){
+                            case DecisionType.simple:
+                              Navigator.pushNamed(context, 'simpleVote', arguments: votDec.id);
+                            break;
+                            case DecisionType.ranking:
+                              //TODO RANKING
+                            break;
+                            case DecisionType.roulette:
+                              //TODO RULETA
+                            break;
+                          }
+                        },
                         child: Container(
                           margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
                           padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
@@ -237,7 +248,6 @@ Widget build(BuildContext context) {
                       final opDec = optionsDec[index];
                       return GestureDetector(
                         onTap: () {
-                          print("id:  ${opDec.id}");
                           Navigator.pushNamed(context, 'seeDecision', arguments: opDec.id);
                         },
                         child: Container(

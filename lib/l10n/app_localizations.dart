@@ -795,6 +795,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Editar decisión'**
   String get editar_decision;
+
+  /// No description provided for @error_ya_votado.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Ya has votado en esta decisión'**
+  String get error_ya_votado;
 }
 
 class _AppLocalizationsDelegate

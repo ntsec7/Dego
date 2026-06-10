@@ -7,6 +7,7 @@ import 'package:dego/screens/group_history.dart';
 import 'package:dego/screens/group_home_page.dart';
 import 'package:dego/screens/group_members.dart';
 import 'package:dego/screens/reset_password.dart';
+import 'package:dego/screens/simple_vote.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';  //activa riverpod en toda la app
@@ -146,6 +147,10 @@ class _MyAppState extends State<MyApp> {
         'seeOption' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return SeeOption(id:id);
+        },
+        'simpleVote' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return SimpleVote(id:id);
         },
       },
     );

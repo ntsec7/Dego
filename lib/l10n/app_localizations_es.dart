@@ -386,4 +386,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get editar_decision => 'Editar decisión';
+
+  @override
+  String get error_ya_votado => 'Error: Ya has votado en esta decisión';
 }

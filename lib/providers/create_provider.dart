@@ -190,4 +190,29 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
+  //CREAR SIMPLE VOTE
+  Future<void> createSimpleVote({
+    required String id_option,
+    required String id_decision,
+    required String id_user,
+  }) async{
+    try{
+      await createService.createSimpleVote(id_option:id_option, id_decision: id_decision, id_user:id_user);
+    } catch (e){
+      rethrow;
+    }
+  }
+
+  //HAS ALREADY VOTE
+  Future<bool> hasAlreadyVote({
+    required String id_decision, 
+    required String id_user,
+  }) async{
+    try{
+      return createService.hasAlreadyVote(id_decision:id_decision,id_user:id_user);
+    } catch(e){
+      rethrow;
+    }
+  }
+
 }

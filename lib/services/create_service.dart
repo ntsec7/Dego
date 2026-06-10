@@ -368,6 +368,41 @@ class CreateService {
     }
   }
 
+  Future<void> createSimpleVote({
+    required String id_option,
+    required String id_decision,
+    required String id_user,
+  }) async{
+    try{
+      await supabase.from('simple_vote').insert({
+        'id_option' : id_option,
+        'id_decision' : id_decision,
+        'id_user' : id_user,
+      });
+    } catch (e){
+      rethrow;
+    }
+  }
+
+  Future<bool> hasAlreadyVote({
+    required String id_decision, 
+    required String id_user,
+  }) async{
+    try{
+      final vote = await supabase.from('simple_vote').select().eq('id_decision', id_decision).eq('id_user',id_user).maybeSingle();
+
+      if(vote!=null){
+        return true;
+      } 
+      else{
+         return false;
+      }
+
+    } catch(e){
+      rethrow;
+    }
+  }
+
 
 }
 
