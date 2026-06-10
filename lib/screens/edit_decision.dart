@@ -258,6 +258,19 @@ class _EditDecision extends ConsumerState<EditDecision> {
                     children: [
                       SizedBox(height: web ? screenHeight * 0.01 : screenHeight * 0.02),
 
+
+                      if(decision.votes==true)...[
+                        Text(context.lang.edit_decision_votos,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
+                          color: Theme.of(context).textTheme.bodyLarge?.color, 
+                        ),),
+
+                        SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+                      ]else ...[
+
                       //TÍTULO
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -639,6 +652,8 @@ class _EditDecision extends ConsumerState<EditDecision> {
                     ),
 
                     SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+
+                  ],
 
                     //FECHA FINAL VOTACIÓN
                     if(decision.type!=DecisionType.roulette) ...[

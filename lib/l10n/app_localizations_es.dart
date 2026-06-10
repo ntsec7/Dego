@@ -389,4 +389,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get error_ya_votado => 'Error: Ya has votado en esta decisión';
+
+  @override
+  String get edit_decision_votos =>
+      'Ya ha votos registrados, solo se puede modificar la fecha de finalización';
 }

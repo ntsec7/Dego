@@ -26,6 +26,7 @@ class Decision{
   DateTime? options_date;
   DateTime? vote_date;
   DecisionType type;
+  bool votes;
 
   Decision({
     required this.id,
@@ -36,6 +37,7 @@ class Decision{
     this.options_date,
     this.vote_date,
     required this.type,
+    required this.votes,
   });
 
   //Desde Supabase 
@@ -59,6 +61,7 @@ class Decision{
         (e) => e.name == map['type'],
         orElse: () => DecisionType.simple, 
       ),
+      votes : map['votes'] ?? false,
     );
   }
 
@@ -73,6 +76,7 @@ class Decision{
       'options_date' : options_date?.toUtc().toIso8601String(),
       'vote_date': vote_date?.toUtc().toIso8601String(),
       'type':type.name, //name convierte el enum a String
+      'votes':votes,
     };
   }
 

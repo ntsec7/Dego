@@ -163,5 +163,6 @@
     "editar_opcion" : "Editar opción",
     "editar_decision" : "Editar decisión",
     "votar" : "Votar",
-    "error_ya_votado" : "Error: Ya has votado en esta decisión"
+    "error_ya_votado" : "Error: Ya has votado en esta decisión",
+    "edit_decision_votos" : "Ya ha votos registrados, solo se puede modificar la fecha de finalización"
 }

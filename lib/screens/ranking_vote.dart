@@ -7,16 +7,16 @@ import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dego/providers/usuario_provider.dart';
 
-class SimpleVote extends ConsumerStatefulWidget {
+class RankingVote extends ConsumerStatefulWidget {
   final String id;
 
-  const SimpleVote({super.key, required this.id});
+  const RankingVote({super.key, required this.id});
 
   @override
-  ConsumerState<SimpleVote> createState() => _SimpleVote();
+  ConsumerState<RankingVote> createState() => _RankingVote();
 }
 
-class _SimpleVote extends ConsumerState<SimpleVote> {
+class _RankingVote extends ConsumerState<RankingVote> {
   bool _loading = false;
   // Guardamos el ID de la opción seleccionada (será null al principio)
   String? _selectedOptionId;
@@ -213,7 +213,10 @@ class _SimpleVote extends ConsumerState<SimpleVote> {
                               }
 
                               //Vota
-                              await ref.read(createProvider.notifier).createSimpleVote(id_option: _selectedOptionId!, id_decision: decision.id, id_user: currentUserId);
+
+                              //TODO meter un bucle for que manda las votaciones de todos las opciones
+
+                              // await ref.read(createProvider.notifier).createRankingVote(id_option: _selectedOptionId!, id_decision: decision.id, id_user: currentUserId);
 
                               if (!context.mounted) return;
                               Navigator.pop(context);
