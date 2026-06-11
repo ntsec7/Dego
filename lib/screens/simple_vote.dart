@@ -107,11 +107,11 @@ class _SimpleVote extends ConsumerState<SimpleVote> {
                         ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? const Color.fromARGB(255, 200, 230, 201)
+                              ? Theme.of(context).colorScheme.secondary
                               : const Color.fromARGB(255, 224, 224, 224),
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
-                            color: isSelected ? Colors.green : Colors.transparent,
+                            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.transparent,
                             width: 2,
                           ),
                         ),
@@ -136,7 +136,7 @@ class _SimpleVote extends ConsumerState<SimpleVote> {
                                 isSelected
                                     ? Icons.check_circle
                                     : Icons.radio_button_unchecked,
-                                color: isSelected ? Colors.green : Colors.black38,
+                                color: isSelected ? const Color.fromARGB(255, 77, 77, 77) : Colors.black38,
                               ),
                               onPressed: () {
                                 // Cambiamos la selección de voto solo al presionar este botón
@@ -188,8 +188,8 @@ class _SimpleVote extends ConsumerState<SimpleVote> {
                             // Validación: Verificar que haya seleccionado una opción antes de votar
                             if (_selectedOptionId == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Por favor, selecciona una opción para votar.'),
+                                SnackBar(
+                                  content: Text(context.lang.error_votar_simple_no_ops),
                                 ),
                               );
                               return;

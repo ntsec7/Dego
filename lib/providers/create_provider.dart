@@ -215,4 +215,30 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
+  //HAS ALREADY VOTE FOR RANKING
+  Future<bool> hasAlreadyRankingVote({
+    required String id_decision, 
+    required String id_user,
+  }) async{
+    try{
+      return createService.hasAlreadyRankingVote(id_decision:id_decision,id_user:id_user);
+    } catch(e){
+      rethrow;
+    }
+  }
+
+  //CREAR RANKING VOTE
+  Future<void> createRankingVote({
+    required String id_option,
+    required String id_decision,
+    required String id_user,
+    required int number,
+  }) async{
+    try{
+      await createService.createRankingVote(id_option:id_option, id_decision: id_decision, id_user:id_user, number:number);
+    } catch (e){
+      rethrow;
+    }
+  }
+
 }

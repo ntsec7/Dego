@@ -398,4 +398,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String votar_ranking(int num1, int num2) {
     return 'Ordena de $num1 a $num2 en orden de preferencia, siendo $num1 la más preferente';
   }
+
+  @override
+  String get error_votar_ranking_no_ops =>
+      'Error: Todas las opciones deben tener un número';
+
+  @override
+  String get error_votar_ranking_repe =>
+      'Error: Elige un número distinto para cada opción';
+
+  @override
+  String get error_votar_simple_no_ops =>
+      'Error: Selecciona una opción para votar';
 }

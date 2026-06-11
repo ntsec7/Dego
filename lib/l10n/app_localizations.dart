@@ -813,6 +813,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ordena de {num1} a {num2} en orden de preferencia, siendo {num1} la más preferente'**
   String votar_ranking(int num1, int num2);
+
+  /// No description provided for @error_votar_ranking_no_ops.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Todas las opciones deben tener un número'**
+  String get error_votar_ranking_no_ops;
+
+  /// No description provided for @error_votar_ranking_repe.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Elige un número distinto para cada opción'**
+  String get error_votar_ranking_repe;
+
+  /// No description provided for @error_votar_simple_no_ops.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Selecciona una opción para votar'**
+  String get error_votar_simple_no_ops;
 }
 
 class _AppLocalizationsDelegate

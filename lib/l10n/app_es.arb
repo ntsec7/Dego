@@ -176,5 +176,8 @@
                 "type":"int"
             }
         }
-    }
+    },
+    "error_votar_ranking_no_ops": "Error: Todas las opciones deben tener un número",
+    "error_votar_ranking_repe" : "Error: Elige un número distinto para cada opción",
+    "error_votar_simple_no_ops": "Error: Selecciona una opción para votar"
 }

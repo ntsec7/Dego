@@ -403,6 +403,43 @@ class CreateService {
     }
   }
 
+  Future<bool> hasAlreadyRankingVote({
+    required String id_decision, 
+    required String id_user,
+  }) async{
+    try{
+      final vote = await supabase.from('ranking_vote').select().eq('id_decision', id_decision).eq('id_user',id_user).maybeSingle();
+
+      if(vote!=null){
+        return true;
+      } 
+      else{
+         return false;
+      }
+
+    } catch(e){
+      rethrow;
+    }
+  }
+
+  Future<void> createRankingVote({
+    required String id_option,
+    required String id_decision,
+    required String id_user,
+    required int number,
+  }) async{
+    try{
+      await supabase.from('ranking_vote').insert({
+        'id_option' : id_option,
+        'id_decision' : id_decision,
+        'id_user' : id_user,
+        'number' : number,
+      });
+    } catch (e){
+      rethrow;
+    }
+  }
+
 
 }
 
