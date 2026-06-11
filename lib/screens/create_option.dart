@@ -1,6 +1,5 @@
 import 'package:dego/models/option_draft.dart';
 import 'package:dego/providers/create_provider.dart';
-import 'package:dego/providers/decision_draft_provider.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -29,6 +29,7 @@ import 'package:dego/screens/create_draft_option.dart';
 import 'package:dego/screens/create_option.dart';
 import 'package:dego/screens/see_decision.dart';
 import 'package:dego/screens/see_option.dart';
+import 'package:dego/screens/ranking_vote.dart';
 
 void main() async{
 
@@ -151,6 +152,10 @@ class _MyAppState extends State<MyApp> {
         'simpleVote' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return SimpleVote(id:id);
+        },
+        'rankingVote' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return RankingVote(id:id);
         },
       },
     );

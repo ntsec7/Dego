@@ -807,6 +807,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ya ha votos registrados, solo se puede modificar la fecha de finalización'**
   String get edit_decision_votos;
+
+  /// Votar ranking
+  ///
+  /// In es, this message translates to:
+  /// **'Ordena de {num1} a {num2} en orden de preferencia, siendo {num1} la más preferente'**
+  String votar_ranking(int num1, int num2);
 }
 
 class _AppLocalizationsDelegate

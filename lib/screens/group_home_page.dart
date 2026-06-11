@@ -152,7 +152,7 @@ Widget build(BuildContext context) {
                               Navigator.pushNamed(context, 'simpleVote', arguments: votDec.id);
                             break;
                             case DecisionType.ranking:
-                              //TODO RANKING
+                              Navigator.pushNamed(context, 'rankingVote', arguments: votDec.id);
                             break;
                             case DecisionType.roulette:
                               //TODO RULETA

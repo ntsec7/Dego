@@ -75,6 +75,19 @@ class _RankingVote extends ConsumerState<RankingVote> {
                 ),
               ),
 
+              SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.02),
+
+            //EXPLICACIÓN SOBRE COMO VOTAR
+              Text(context.lang.votar_ranking(1, options.length),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
+                color: Theme.of(context).textTheme.bodyLarge?.color, 
+              ),),
+
+              SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+
               // BLOQUE DE OPCIONES (Se expande para ocupar el espacio restante)
               Expanded(
                 child: ListView.builder(

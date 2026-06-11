@@ -164,5 +164,17 @@
     "editar_decision" : "Editar decisión",
     "votar" : "Votar",
     "error_ya_votado" : "Error: Ya has votado en esta decisión",
-    "edit_decision_votos" : "Ya ha votos registrados, solo se puede modificar la fecha de finalización"
+    "edit_decision_votos" : "Ya ha votos registrados, solo se puede modificar la fecha de finalización",
+    "votar_ranking" : "Ordena de {num1} a {num2} en orden de preferencia, siendo {num1} la más preferente",
+    "@votar_ranking" : {
+        "description" : "Votar ranking",
+        "placeholders" : {
+            "num1":{
+                "type":"int"
+            },
+            "num2":{
+                "type":"int"
+            }
+        }
+    }
 }

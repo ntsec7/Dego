@@ -46,6 +46,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
     if (date == null) return;
 
     TimeOfDay? time = await showTimePicker(
+      // ignore: use_build_context_synchronously
       context: context,
       initialTime: TimeOfDay.now(),
     );
@@ -65,8 +66,10 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
     if (finalDateTime.isBefore(DateTime.now())) {
       if (!context.mounted) return;
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          // ignore: use_build_context_synchronously
           content: Text(context.lang.error_tiempo),
           // backgroundColor: Colors.redAccent,
         ),
@@ -92,8 +95,10 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
   if(dateError){
       if (!context.mounted) return;
 
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          // ignore: use_build_context_synchronously
           content: Text(context.lang.error_tiempos),
           // backgroundColor: Colors.redAccent,
         ),

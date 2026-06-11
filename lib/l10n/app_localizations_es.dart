@@ -393,4 +393,9 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get edit_decision_votos =>
       'Ya ha votos registrados, solo se puede modificar la fecha de finalización';
+
+  @override
+  String votar_ranking(int num1, int num2) {
+    return 'Ordena de $num1 a $num2 en orden de preferencia, siendo $num1 la más preferente';
+  }
 }
