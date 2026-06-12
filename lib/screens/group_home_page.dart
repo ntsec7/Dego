@@ -155,7 +155,7 @@ Widget build(BuildContext context) {
                               Navigator.pushNamed(context, 'rankingVote', arguments: votDec.id);
                             break;
                             case DecisionType.roulette:
-                              //TODO RULETA
+                                Navigator.pushNamed(context, 'rouletteVote', arguments: votDec.id);
                             break;
                           }
                         },

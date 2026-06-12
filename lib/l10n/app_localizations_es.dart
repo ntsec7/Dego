@@ -410,4 +410,14 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get error_votar_simple_no_ops =>
       'Error: Selecciona una opción para votar';
+
+  @override
+  String get girar => 'Girar';
+
+  @override
+  String get ganador => '¡Ganador!';
+
+  @override
+  String get error_ruleta_girar =>
+      'Solo puede decidir el creador en decisiones de tipo ruleta';
 }

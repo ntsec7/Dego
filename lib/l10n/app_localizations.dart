@@ -831,6 +831,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error: Selecciona una opción para votar'**
   String get error_votar_simple_no_ops;
+
+  /// No description provided for @girar.
+  ///
+  /// In es, this message translates to:
+  /// **'Girar'**
+  String get girar;
+
+  /// No description provided for @ganador.
+  ///
+  /// In es, this message translates to:
+  /// **'¡Ganador!'**
+  String get ganador;
+
+  /// No description provided for @error_ruleta_girar.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo puede decidir el creador en decisiones de tipo ruleta'**
+  String get error_ruleta_girar;
 }
 
 class _AppLocalizationsDelegate
