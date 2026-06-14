@@ -28,7 +28,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
   bool _loading = false;
 
   // Estados locales para los filtros (puedes migrarlos a tu draft provider después)
-  final List<String> _selectedTypes = [];
+  String _selectedType = "";
   final List<int> _selectedProviders = [];
   final List<int> _selectedGenres = [];
   RangeValues _scoreRange = const RangeValues(0, 10);
@@ -252,10 +252,10 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [context.lang.peli, context.lang.serie].map((type) {
-                            final isSelected = _selectedTypes.contains(type);
+                            final isSelected = _selectedType == type;
                             return Padding(
                               padding: const EdgeInsets.only(right: 8.0),
-                              child: FilterChip(
+                              child: ChoiceChip(
                                 label: Text(type),
                                 selected: isSelected,
                                 selectedColor: Theme.of(context).colorScheme.primary, 
@@ -264,13 +264,11 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                 shape: const StadiumBorder(),
                                 showCheckmark: false,
                                 onSelected: (bool selected) {
-                                  setState(() {
-                                    if (selected) {
-                                      _selectedTypes.add(type);
-                                    } else {
-                                      _selectedTypes.remove(type);
-                                    }
-                                  });
+                                  if (selected) { 
+                                    setState(() {
+                                      _selectedType = type; 
+                                    });
+                                  }
                                 },
                               ),
                             );
@@ -312,7 +310,9 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                         ),
                       ),
 
+
                       // GÉNERO PELI (Wrap - Varias Filas)
+                      if(_selectedType == context.lang.peli) ...[
                       _buildFilterContainer(
                         title: context.lang.genero_peli,
                         child: Wrap(
@@ -341,8 +341,11 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                           }).toList(),
                         ),
                       ),
+                      ],
+
 
                       // GÉNERO SERIE (Wrap - Varias Filas)
+                       if(_selectedType == context.lang.serie) ...[
                       _buildFilterContainer(
                         title: context.lang.genero_serie,
                         child: Wrap(
@@ -371,6 +374,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                           }).toList(),
                         ),
                       ),
+                      ],
 
                       //PUNTUACIÓN (Deslizable Rango)
                       _buildFilterContainer(
@@ -403,6 +407,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                       ),
 
                       //DURACIÓN PELI (Deslizable Rango)
+                       if(_selectedType == context.lang.peli) ...[
                       _buildFilterContainer(
                         title: context.lang.duracion_peli,
                         child: Column(
@@ -431,6 +436,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                           ],
                         ),
                       ),
+                       ],
 
                       //FECHA DE ESTRENO
                       _buildFilterContainer(

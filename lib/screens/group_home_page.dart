@@ -306,7 +306,7 @@ Widget build(BuildContext context) {
               ),
             ),
 
-            SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
+            // SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
 
             Row(
 
@@ -354,7 +354,7 @@ Widget build(BuildContext context) {
             ],
             ),
 
-            SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
+            // SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
 
             ],
       ),
