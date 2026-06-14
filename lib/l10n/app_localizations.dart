@@ -1131,6 +1131,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Más vistas'**
   String get mas_vistas;
+
+  /// No description provided for @error_opciones_decision_watch.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Debes seleccionar al menos un apartado de cada categoría'**
+  String get error_opciones_decision_watch;
+
+  /// No description provided for @error_titulo.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Debes introducir un título'**
+  String get error_titulo;
 }
 
 class _AppLocalizationsDelegate

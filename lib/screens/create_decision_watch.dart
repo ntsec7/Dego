@@ -10,6 +10,7 @@ import 'package:dego/providers/decision_draft_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/providers/create_provider.dart';
 import 'package:dego/models/tmdb_info.dart';
+import 'package:dego/config/constants.dart';
 
 class CreateDecisionWatch extends ConsumerStatefulWidget {
   const CreateDecisionWatch({super.key});
@@ -24,13 +25,13 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _dateControllerVote = TextEditingController();
 
-  bool _isInitialized = false;
   bool _loading = false;
 
   // Estados locales para los filtros (puedes migrarlos a tu draft provider después)
   String _selectedType = "";
   final List<int> _selectedProviders = [];
-  final List<int> _selectedGenres = [];
+  final List<int> _selectedFilmGenres = [];
+  final List<int> _selectedSerieGenres = [];
   RangeValues _scoreRange = const RangeValues(0, 10);
   RangeValues _durationRange = const RangeValues(30, 210);
   final int _currentYear = DateTime.now().year;
@@ -131,6 +132,68 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
     );
   }
 
+  String generateUrl() {
+
+    String endpoint = _selectedType == context.lang.peli ? 'movie' : 'tv';
+
+    // Base de los parámetros obligatorios
+    final Map<String, String> queryParameters = {
+      'api_key': AppConstants.tmdbApiKey,
+      'language': 'es-ES',
+      'sort_by': _selectedOrder.key,
+    };
+
+    // Plataformas
+    queryParameters['with_watch_providers'] = _selectedProviders.join('|'); // '|' funciona como un "OR" en TMDB
+    queryParameters['watch_region'] = 'ES'; // Requerido por TMDB al usar proveedores
+    
+
+    String yearStart = "${_yearRange.start.round()}-01-01"; //primer día del año
+    String yearEnd = "${_yearRange.end.round()}-12-31"; //último  día del año
+
+    // Si es peli
+    if (endpoint=='movie') {
+
+      queryParameters['with_genres'] = _selectedFilmGenres.join(','); //género
+
+      //Duración (es solo en pelis)
+      queryParameters['with_runtime.gte'] = _durationRange.start.round().toString();
+      queryParameters['with_runtime.lte'] = _durationRange.end.round().toString();
+
+      //Año de estreno (movie: release_date)
+      queryParameters['primary_release_date.gte'] = yearStart;
+      queryParameters['primary_release_date.lte'] = yearEnd;
+
+
+    } else{ //Si es serie
+
+      queryParameters['with_genres'] = _selectedSerieGenres.join(',');
+
+      // Año de estreno (tv : first_air_date)
+      queryParameters['first_air_date.gte'] = yearStart;
+      queryParameters['first_air_date.lte'] = yearEnd;
+
+    }
+
+    // Puntuación 
+    queryParameters['vote_average.gte'] = _scoreRange.start.toStringAsFixed(1);
+    queryParameters['vote_average.lte'] = _scoreRange.end.toStringAsFixed(1);
+
+    //Tipo de pago
+    queryParameters['with_watch_monetization_types'] = 
+          _selectedWatchTypes.map((type) => type.name).join('|');
+
+
+    // Construcción de la URI final
+    final Uri uri = Uri.https(
+      AppConstants.tmdbBaseUrl,
+      '/3/discover/$endpoint',
+      queryParameters,
+    );
+
+    return uri.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -145,12 +208,9 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
     final usuarioAsync = ref.watch(usuarioProvider);
     final currentUserId = usuarioAsync.value?.id;
     final currentGroupId = ref.watch(idCurrentGroupProvider);
-    final draft = ref.watch(decisionDraftProvider);
 
-    if(!_isInitialized){
-      _title.text = draft.title ?? "";
-      _isInitialized = true;
-    }
+    final film = context.lang.peli;
+    final serie = context.lang.serie;
 
     return Scaffold(
       body: SafeArea(
@@ -251,7 +311,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                         title: context.lang.tipo,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [context.lang.peli, context.lang.serie].map((type) {
+                          children: [film, serie].map((type) {
                             final isSelected = _selectedType == type;
                             return Padding(
                               padding: const EdgeInsets.only(right: 8.0),
@@ -312,14 +372,14 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
 
 
                       // GÉNERO PELI (Wrap - Varias Filas)
-                      if(_selectedType == context.lang.peli) ...[
+                      if(_selectedType == film) ...[
                       _buildFilterContainer(
                         title: context.lang.genero_peli,
                         child: Wrap(
                           spacing: 8.0, // Espacio horizontal entre óvalos
                           runSpacing: 4.0, // Espacio vertical entre filas
                           children: TMDBData.filmGenres(context).map((genero) {
-                            final isSelected = _selectedGenres.contains(genero.id);
+                            final isSelected = _selectedFilmGenres.contains(genero.id);
                             return FilterChip(
                               label: Text(genero.name),
                               selected: isSelected,
@@ -331,9 +391,9 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                               onSelected: (bool selected) {
                                 setState(() {
                                   if (selected) {
-                                    _selectedGenres.add(genero.id);
+                                    _selectedFilmGenres.add(genero.id);
                                   } else {
-                                    _selectedGenres.remove(genero.id);
+                                    _selectedFilmGenres.remove(genero.id);
                                   }
                                 });
                               },
@@ -345,14 +405,14 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
 
 
                       // GÉNERO SERIE (Wrap - Varias Filas)
-                       if(_selectedType == context.lang.serie) ...[
+                       if(_selectedType == serie) ...[
                       _buildFilterContainer(
                         title: context.lang.genero_serie,
                         child: Wrap(
                           spacing: 8.0, // Espacio horizontal entre óvalos
                           runSpacing: 4.0, // Espacio vertical entre filas
                           children: TMDBData.serieGenres(context).map((genero) {
-                            final isSelected = _selectedGenres.contains(genero.id);
+                            final isSelected = _selectedSerieGenres.contains(genero.id);
                             return FilterChip(
                               label: Text(genero.name),
                               selected: isSelected,
@@ -364,9 +424,9 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                               onSelected: (bool selected) {
                                 setState(() {
                                   if (selected) {
-                                    _selectedGenres.add(genero.id);
+                                    _selectedSerieGenres.add(genero.id);
                                   } else {
-                                    _selectedGenres.remove(genero.id);
+                                    _selectedSerieGenres.remove(genero.id);
                                   }
                                 });
                               },
@@ -407,7 +467,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                       ),
 
                       //DURACIÓN PELI (Deslizable Rango)
-                       if(_selectedType == context.lang.peli) ...[
+                       if(_selectedType == film) ...[
                       _buildFilterContainer(
                         title: context.lang.duracion_peli,
                         child: Column(
@@ -592,7 +652,6 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                     onPressed: () {
                                       setState(() {
                                         _dateControllerVote.clear();
-                                        draft.vote_date = null;
                                       });
                                     },
                                   )
@@ -638,31 +697,26 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
-                                        if (draft.options.length < 2) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text(context.lang.error_num_opciones)),
+
+                                        print("llega hasta aqui");
+                                        
+                                        //Comprueba que haya al menos una opción seleccionada de cada categoría
+                                        if(_selectedType.isEmpty || _selectedProviders.isEmpty || _selectedWatchTypes.isEmpty || (_selectedType==film && _selectedFilmGenres.isEmpty) || (_selectedType==serie && _selectedSerieGenres.isEmpty)){
+                                           ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(context.lang.error_opciones_decision_watch),
+                                            ),
                                           );
-                                          setState(() => _loading = false);
+                                          _loading=false;
                                           return;
                                         }
 
-                                        draft.options_date = null;
+                                        //Crea la url
+                                        final url = generateUrl();
 
-                                        if (draft.type == DecisionType.roulette) {
-                                          draft.vote_date = null;
-                                        }
+                                        print(url);
 
-                                        // NOTA: Aquí puedes mapear las variables locales (_selectedTypes, _selectedProviders, etc.)
-                                        // a tu objeto 'draft' antes de guardarlo si tu backend o provider las necesita.
-
-                                        await ref.read(createProvider.notifier).createDecision(
-                                              id_creator: currentUserId!,
-                                              id_group: currentGroupId,
-                                              state: DecisionState.vote,
-                                              decision: draft,
-                                            );
-
-                                        ref.read(decisionDraftProvider.notifier).reset();
+                                        //Crea la decisión
 
                                         if (!context.mounted) return;
 
@@ -677,6 +731,13 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                         );
                                       }
                                       setState(() => _loading = false);
+                                    }
+                                    else{
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(context.lang.error_titulo),
+                                        ),
+                                      );
                                     }
                                   },
                             style: ElevatedButton.styleFrom(

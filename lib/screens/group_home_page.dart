@@ -97,7 +97,8 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            // ==================== SECCIÓN 1: VOTAR ====================
+            
+            //VOTAR
             Padding(
               padding: EdgeInsets.only(
                 left: web ? screenWidth * 0.01 : screenWidth * 0.03,
@@ -127,7 +128,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
               ),
             ),
 
-            // LISTA DE VOTOS (Ocupa su respectiva mitad superior)
+            // LISTA DE VOTOS
             Expanded(
               child: voteDecisions.when(
                 data: (voteDec) {
@@ -199,10 +200,10 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
               ),
             ),
 
-            // Espaciador controlado entre bloques de listas para que no se encimen
+
             SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.015),
 
-            // ==================== SECCIÓN 2: DAR OPCIONES ====================
+            // DAR OPCIONES 
             Padding(
               padding: EdgeInsets.only(
                 left: web ? screenWidth * 0.01 : screenWidth * 0.03,
@@ -231,7 +232,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
               ),
             ),
 
-            // LISTA DE OPCIONES (Ocupa su respectiva mitad inferior)
+            // LISTA DE OPCIONES 
             Expanded(
               child: optionDecisions.when(
                 data: (optionsDec) {
@@ -293,7 +294,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
               ),
             ),
 
-            // ==================== SECCIÓN 3: FOOTER ACCIONES ====================
+            // FOOTER ACCIONES 
             Padding(
               padding: EdgeInsets.only(
                 top: web ? 16.0 : 10.0,
@@ -303,6 +304,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
                   // NUEVA DECISIÓN DE CINE/SERIES
                   Container(
                     width: web ? screenWidth * 0.04 : screenWidth * 0.15,

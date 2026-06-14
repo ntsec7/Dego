@@ -237,5 +237,7 @@
     "mas_taquilleras" : "Más taquilleras",
     "mas_recientes" : "Más recientes",
     "mejor_valoradas" : "Mejor valoradas",
-    "mas_vistas" : "Más vistas"
+    "mas_vistas" : "Más vistas",
+    "error_opciones_decision_watch" : "Error: Debes seleccionar al menos un apartado de cada categoría",
+    "error_titulo" : "Error: Debes introducir un título"
 }

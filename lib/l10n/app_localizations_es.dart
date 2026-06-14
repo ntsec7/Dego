@@ -561,4 +561,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mas_vistas => 'Más vistas';
+
+  @override
+  String get error_opciones_decision_watch =>
+      'Error: Debes seleccionar al menos un apartado de cada categoría';
+
+  @override
+  String get error_titulo => 'Error: Debes introducir un título';
 }
