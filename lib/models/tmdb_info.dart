@@ -14,7 +14,7 @@ class TMDBProvider {
 
 class TMDBData{
 
-  //https://api.themoviedb.org/3/watch/providers/movie?api_key=3ab6e2904dd7507576e1341f27941769&language=es-ES&watch_region=ES
+  //https://api.themoviedb.org/3/watch/providers/movie?api_key=<api-key>&language=es-ES&watch_region=ES
   static const List<TMDBProvider> providers =[
     TMDBProvider(id: 8, name: "Netflix"),
     TMDBProvider(id: 119, name: "Amazon"),
@@ -27,7 +27,7 @@ class TMDBData{
     TMDBProvider(id: 1899, name: "HBO Max")
   ];
 
-  //https://api.themoviedb.org/3/genre/movie/list?api_key=3ab6e2904dd7507576e1341f27941769&language=es-ES
+  //https://api.themoviedb.org/3/genre/movie/list?api_key=<api-key>&language=es-ES
   static List<TMDBProvider> filmGenres(BuildContext context) {
     return [
     TMDBProvider(id: 12, name: context.lang.aventura),
@@ -51,7 +51,7 @@ class TMDBData{
     ];
   }
 
-  //https://api.themoviedb.org/3/genre/tv/list?api_key=3ab6e2904dd7507576e1341f27941769&language=es-ES
+  //https://api.themoviedb.org/3/genre/tv/list?api_key=<api-key>&language=es-ES
   static List<TMDBProvider> serieGenres(BuildContext context) { 
     return
   [
