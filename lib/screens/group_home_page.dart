@@ -211,6 +211,8 @@ Widget build(BuildContext context) {
               ),
             ),
 
+            SizedBox(height: web ? screenHeight * 0.03 : 0),
+
               //DAR OPCIONES
               Padding(
                 padding:EdgeInsets.symmetric( horizontal: web ? screenWidth * 0.01 : screenWidth * 0.03 ,),
@@ -304,6 +306,38 @@ Widget build(BuildContext context) {
               ),
             ),
 
+            SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
+
+            Row(
+
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children :[
+              //NUEVA DECISIÓN DE CINE/SERIES
+              Container(
+                width: web ? screenWidth * 0.04 : screenWidth * 0.15, 
+                height: web ? screenWidth * 0.04 : screenWidth * 0.15, 
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary, 
+                  shape: BoxShape.circle, 
+                ),
+                child: GestureDetector(
+                  onTap: () async {
+                    Navigator.pushNamed(context, 'createDecisionWatch');
+                  },
+                  child: FractionallySizedBox( // Controla el tamaño de la imagen dentro del boton
+                    widthFactor: 0.95, 
+                    child: Image.asset(
+                      'assets/images/popcorn_icon.png',
+                      fit: BoxFit.contain, // Imagen contenida dentro del espacio
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(width: web ? screenWidth * 0.06 : screenWidth*0.07),
+
               //NUEVA DECISIÓN
               Align(
                 alignment: AlignmentGeometry.center,
@@ -317,8 +351,10 @@ Widget build(BuildContext context) {
                   },
                 ),
               )
+            ],
+            ),
 
-              
+            SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
 
             ],
       ),

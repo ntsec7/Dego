@@ -420,4 +420,82 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get error_ruleta_girar =>
       'Solo puede decidir el creador en decisiones de tipo ruleta';
+
+  @override
+  String get aventura => 'Aventura';
+
+  @override
+  String get animacion => 'Animación';
+
+  @override
+  String get comedia => 'Comedia';
+
+  @override
+  String get crimen => 'Crimen';
+
+  @override
+  String get documental => 'Documental';
+
+  @override
+  String get drama => 'Drama';
+
+  @override
+  String get familia => 'Familia';
+
+  @override
+  String get fantasia => 'Fantasía';
+
+  @override
+  String get historia => 'Historia';
+
+  @override
+  String get terror => 'Terror';
+
+  @override
+  String get musica => 'Música';
+
+  @override
+  String get misterio => 'Misterio';
+
+  @override
+  String get romance => 'Romance';
+
+  @override
+  String get ciencia_ficcion => 'Ciencia ficción';
+
+  @override
+  String get pelicula_tv => 'Película de TV';
+
+  @override
+  String get suspense => 'Suspense';
+
+  @override
+  String get belica => 'Bélica';
+
+  @override
+  String get western => 'Western';
+
+  @override
+  String get accion_aventura => 'Acción y Aventura';
+
+  @override
+  String get infantil => 'Infantil';
+
+  @override
+  String get noticias => 'Noticias';
+
+  @override
+  String get reality_show => 'Reality show';
+
+  @override
+  String get scifi_fantasia => 'Sci-Fi y Fantasía';
+
+  @override
+  String get telenovelas => 'Telenovelas';
+
+  @override
+  String get talk_show => 'Talk show';
+
+  @override
+  String get guerra_politica => 'Guerra y Políticas';
 }

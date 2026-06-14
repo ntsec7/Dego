@@ -849,6 +849,162 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Solo puede decidir el creador en decisiones de tipo ruleta'**
   String get error_ruleta_girar;
+
+  /// No description provided for @aventura.
+  ///
+  /// In es, this message translates to:
+  /// **'Aventura'**
+  String get aventura;
+
+  /// No description provided for @animacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Animación'**
+  String get animacion;
+
+  /// No description provided for @comedia.
+  ///
+  /// In es, this message translates to:
+  /// **'Comedia'**
+  String get comedia;
+
+  /// No description provided for @crimen.
+  ///
+  /// In es, this message translates to:
+  /// **'Crimen'**
+  String get crimen;
+
+  /// No description provided for @documental.
+  ///
+  /// In es, this message translates to:
+  /// **'Documental'**
+  String get documental;
+
+  /// No description provided for @drama.
+  ///
+  /// In es, this message translates to:
+  /// **'Drama'**
+  String get drama;
+
+  /// No description provided for @familia.
+  ///
+  /// In es, this message translates to:
+  /// **'Familia'**
+  String get familia;
+
+  /// No description provided for @fantasia.
+  ///
+  /// In es, this message translates to:
+  /// **'Fantasía'**
+  String get fantasia;
+
+  /// No description provided for @historia.
+  ///
+  /// In es, this message translates to:
+  /// **'Historia'**
+  String get historia;
+
+  /// No description provided for @terror.
+  ///
+  /// In es, this message translates to:
+  /// **'Terror'**
+  String get terror;
+
+  /// No description provided for @musica.
+  ///
+  /// In es, this message translates to:
+  /// **'Música'**
+  String get musica;
+
+  /// No description provided for @misterio.
+  ///
+  /// In es, this message translates to:
+  /// **'Misterio'**
+  String get misterio;
+
+  /// No description provided for @romance.
+  ///
+  /// In es, this message translates to:
+  /// **'Romance'**
+  String get romance;
+
+  /// No description provided for @ciencia_ficcion.
+  ///
+  /// In es, this message translates to:
+  /// **'Ciencia ficción'**
+  String get ciencia_ficcion;
+
+  /// No description provided for @pelicula_tv.
+  ///
+  /// In es, this message translates to:
+  /// **'Película de TV'**
+  String get pelicula_tv;
+
+  /// No description provided for @suspense.
+  ///
+  /// In es, this message translates to:
+  /// **'Suspense'**
+  String get suspense;
+
+  /// No description provided for @belica.
+  ///
+  /// In es, this message translates to:
+  /// **'Bélica'**
+  String get belica;
+
+  /// No description provided for @western.
+  ///
+  /// In es, this message translates to:
+  /// **'Western'**
+  String get western;
+
+  /// No description provided for @accion_aventura.
+  ///
+  /// In es, this message translates to:
+  /// **'Acción y Aventura'**
+  String get accion_aventura;
+
+  /// No description provided for @infantil.
+  ///
+  /// In es, this message translates to:
+  /// **'Infantil'**
+  String get infantil;
+
+  /// No description provided for @noticias.
+  ///
+  /// In es, this message translates to:
+  /// **'Noticias'**
+  String get noticias;
+
+  /// No description provided for @reality_show.
+  ///
+  /// In es, this message translates to:
+  /// **'Reality show'**
+  String get reality_show;
+
+  /// No description provided for @scifi_fantasia.
+  ///
+  /// In es, this message translates to:
+  /// **'Sci-Fi y Fantasía'**
+  String get scifi_fantasia;
+
+  /// No description provided for @telenovelas.
+  ///
+  /// In es, this message translates to:
+  /// **'Telenovelas'**
+  String get telenovelas;
+
+  /// No description provided for @talk_show.
+  ///
+  /// In es, this message translates to:
+  /// **'Talk show'**
+  String get talk_show;
+
+  /// No description provided for @guerra_politica.
+  ///
+  /// In es, this message translates to:
+  /// **'Guerra y Políticas'**
+  String get guerra_politica;
 }
 
 class _AppLocalizationsDelegate

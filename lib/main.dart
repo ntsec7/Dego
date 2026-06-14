@@ -31,6 +31,7 @@ import 'package:dego/screens/see_decision.dart';
 import 'package:dego/screens/see_option.dart';
 import 'package:dego/screens/ranking_vote.dart';
 import 'package:dego/screens/roulette_vote.dart';
+import 'package:dego/screens/create_decision_watch.dart';
 
 void main() async{
 
@@ -162,6 +163,7 @@ class _MyAppState extends State<MyApp> {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return RouletteVote(id:id);
         },
+        'createDecisionWatch' : (context) => CreateDecisionWatch(),
       },
     );
   }
