@@ -1005,6 +1005,132 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Guerra y Políticas'**
   String get guerra_politica;
+
+  /// No description provided for @que_ver.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué ver?'**
+  String get que_ver;
+
+  /// No description provided for @peli.
+  ///
+  /// In es, this message translates to:
+  /// **'Peli'**
+  String get peli;
+
+  /// No description provided for @serie.
+  ///
+  /// In es, this message translates to:
+  /// **'Serie'**
+  String get serie;
+
+  /// No description provided for @plataforma.
+  ///
+  /// In es, this message translates to:
+  /// **'Plataforma'**
+  String get plataforma;
+
+  /// No description provided for @genero_peli.
+  ///
+  /// In es, this message translates to:
+  /// **'Género Pelis'**
+  String get genero_peli;
+
+  /// No description provided for @genero_serie.
+  ///
+  /// In es, this message translates to:
+  /// **'Género Series'**
+  String get genero_serie;
+
+  /// No description provided for @puntuacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Puntuación'**
+  String get puntuacion;
+
+  /// No description provided for @rango.
+  ///
+  /// In es, this message translates to:
+  /// **'Rango'**
+  String get rango;
+
+  /// No description provided for @duracion_peli.
+  ///
+  /// In es, this message translates to:
+  /// **'Duración peli'**
+  String get duracion_peli;
+
+  /// No description provided for @estreno.
+  ///
+  /// In es, this message translates to:
+  /// **'Estreno'**
+  String get estreno;
+
+  /// No description provided for @tipo_pago.
+  ///
+  /// In es, this message translates to:
+  /// **'Tipo de Pago'**
+  String get tipo_pago;
+
+  /// No description provided for @orden.
+  ///
+  /// In es, this message translates to:
+  /// **'Orden'**
+  String get orden;
+
+  /// No description provided for @suscripcion.
+  ///
+  /// In es, this message translates to:
+  /// **'Suscripción'**
+  String get suscripcion;
+
+  /// No description provided for @compra.
+  ///
+  /// In es, this message translates to:
+  /// **'Compra'**
+  String get compra;
+
+  /// No description provided for @alquiler.
+  ///
+  /// In es, this message translates to:
+  /// **'Alquiler'**
+  String get alquiler;
+
+  /// No description provided for @gratis.
+  ///
+  /// In es, this message translates to:
+  /// **'Gratis'**
+  String get gratis;
+
+  /// No description provided for @mas_populares.
+  ///
+  /// In es, this message translates to:
+  /// **'Más populares'**
+  String get mas_populares;
+
+  /// No description provided for @mas_taquilleras.
+  ///
+  /// In es, this message translates to:
+  /// **'Más taquilleras'**
+  String get mas_taquilleras;
+
+  /// No description provided for @mas_recientes.
+  ///
+  /// In es, this message translates to:
+  /// **'Más recientes'**
+  String get mas_recientes;
+
+  /// No description provided for @mejor_valoradas.
+  ///
+  /// In es, this message translates to:
+  /// **'Mejor valoradas'**
+  String get mejor_valoradas;
+
+  /// No description provided for @mas_vistas.
+  ///
+  /// In es, this message translates to:
+  /// **'Más vistas'**
+  String get mas_vistas;
 }
 
 class _AppLocalizationsDelegate

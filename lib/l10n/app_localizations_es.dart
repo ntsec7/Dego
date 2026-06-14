@@ -498,4 +498,67 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get guerra_politica => 'Guerra y Políticas';
+
+  @override
+  String get que_ver => '¿Qué ver?';
+
+  @override
+  String get peli => 'Peli';
+
+  @override
+  String get serie => 'Serie';
+
+  @override
+  String get plataforma => 'Plataforma';
+
+  @override
+  String get genero_peli => 'Género Pelis';
+
+  @override
+  String get genero_serie => 'Género Series';
+
+  @override
+  String get puntuacion => 'Puntuación';
+
+  @override
+  String get rango => 'Rango';
+
+  @override
+  String get duracion_peli => 'Duración peli';
+
+  @override
+  String get estreno => 'Estreno';
+
+  @override
+  String get tipo_pago => 'Tipo de Pago';
+
+  @override
+  String get orden => 'Orden';
+
+  @override
+  String get suscripcion => 'Suscripción';
+
+  @override
+  String get compra => 'Compra';
+
+  @override
+  String get alquiler => 'Alquiler';
+
+  @override
+  String get gratis => 'Gratis';
+
+  @override
+  String get mas_populares => 'Más populares';
+
+  @override
+  String get mas_taquilleras => 'Más taquilleras';
+
+  @override
+  String get mas_recientes => 'Más recientes';
+
+  @override
+  String get mejor_valoradas => 'Mejor valoradas';
+
+  @override
+  String get mas_vistas => 'Más vistas';
 }

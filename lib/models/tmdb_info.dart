@@ -35,7 +35,7 @@ class TMDBData{
     TMDBProvider(id: 35, name: context.lang.comedia),
     TMDBProvider(id: 80, name: context.lang.crimen),
     TMDBProvider(id: 99, name: context.lang.documental),
-    TMDBProvider(id: 18, name: context.lang.documental),
+    TMDBProvider(id: 18, name: context.lang.drama),
     TMDBProvider(id: 10751, name: context.lang.familia),
     TMDBProvider(id: 14, name: context.lang.fantasia),
     TMDBProvider(id: 36, name: context.lang.historia),
@@ -74,4 +74,58 @@ class TMDBData{
   ];
   }
 
+}
+
+enum TMDBWatchType {
+  subscription('flatrate'),
+  free('free'),
+  rent('rent'),
+  buy('buy');
+
+
+  final String key;
+  const TMDBWatchType(this.key);
+
+
+  String getLabel(BuildContext context) {
+    switch (this) {
+      case TMDBWatchType.subscription:
+        return context.lang.suscripcion; 
+      case TMDBWatchType.free:
+        return context.lang.gratis;       
+      case TMDBWatchType.rent:
+        return context.lang.alquiler;    
+      case TMDBWatchType.buy:
+        return context.lang.compra;      
+    }
+  }
+}
+
+
+enum TMDBOrder {
+  popularityDesc('popularity.desc'),
+  revenueDesc('revenue.desc'),
+  primaryReleaseDateDesc('primary_release_date.desc'),
+  voteAverageDesc('vote_average.desc'),
+  voteCountDesc('vote_count.desc');
+
+
+  final String key;
+  const TMDBOrder(this.key);
+
+
+  String getLabel(BuildContext context) {
+    switch (this) {
+      case TMDBOrder.popularityDesc:
+        return context.lang.mas_populares; 
+      case TMDBOrder.revenueDesc:
+        return context.lang.mas_taquilleras;
+      case TMDBOrder.primaryReleaseDateDesc:
+        return context.lang.mas_recientes;
+      case TMDBOrder.voteAverageDesc:
+        return context.lang.mejor_valoradas;
+      case TMDBOrder.voteCountDesc:
+        return context.lang.mas_vistas;
+    }
+  }
 }

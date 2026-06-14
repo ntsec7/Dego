@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dego/models/decision.dart';
 import 'package:dego/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:dego/utilities/error.dart';
 import 'package:dego/providers/decision_draft_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/providers/create_provider.dart';
+import 'package:dego/models/tmdb_info.dart';
 
 class CreateDecisionWatch extends ConsumerStatefulWidget {
   const CreateDecisionWatch({super.key});
@@ -19,10 +22,21 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _title = TextEditingController();
-  final TextEditingController _dateControllerVote = TextEditingController(); // Controlador para la fecha
+  final TextEditingController _dateControllerVote = TextEditingController();
 
   bool _isInitialized = false;
   bool _loading = false;
+
+  // Estados locales para los filtros (puedes migrarlos a tu draft provider después)
+  final List<String> _selectedTypes = [];
+  final List<int> _selectedProviders = [];
+  final List<int> _selectedGenres = [];
+  RangeValues _scoreRange = const RangeValues(0, 10);
+  RangeValues _durationRange = const RangeValues(30, 210);
+  final int _currentYear = DateTime.now().year;
+  late RangeValues _yearRange = RangeValues(1950, _currentYear.toDouble());
+  final List<TMDBWatchType> _selectedWatchTypes = [];
+  TMDBOrder _selectedOrder = TMDBOrder.voteAverageDesc;
 
   @override
   void dispose() {
@@ -31,7 +45,6 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
     super.dispose();
   }
 
-  // Función para seleccionar Fecha, Hora y Minuto
   Future<void> _pickDateTime(bool isOptionDate) async {
     DateTime? date = await showDatePicker(
       context: context,
@@ -43,13 +56,11 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
     if (date == null) return;
 
     TimeOfDay? time = await showTimePicker(
-      // ignore: use_build_context_synchronously
       context: context,
       initialTime: TimeOfDay.now(),
     );
 
     if (time == null) return;
-
 
     final finalDateTime = DateTime(
       date.year,
@@ -59,23 +70,17 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
       time.minute,
     );
 
-    //Comprobar que no ha pasado ya esa hora
     if (finalDateTime.isBefore(DateTime.now())) {
       if (!context.mounted) return;
 
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          // ignore: use_build_context_synchronously
           content: Text(context.lang.error_tiempo),
-          // backgroundColor: Colors.redAccent,
         ),
       );
+      return;
+    }
 
-      return; // Rompe la función y no actualiza el estado
-  }
-
-    // Formato: DD-MM-AAAA HH:MM
     final formattedText = 
       "${finalDateTime.day.toString().padLeft(2, '0')}-${finalDateTime.month.toString().padLeft(2, '0')}-${finalDateTime.year} "
       "${finalDateTime.hour.toString().padLeft(2, '0')}:${finalDateTime.minute.toString().padLeft(2, '0')}";
@@ -84,7 +89,46 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
         _dateControllerVote.text = formattedText;
         ref.read(decisionDraftProvider.notifier).setVoteDate(finalDateTime);
     });
+  }
 
+  // WIDGET CONTENEDOR CON TÍTULO EN EL BORDE
+  Widget _buildFilterContainer({required String title, required Widget child}) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    bool web = screenWidth > 600 ? true : false;    
+
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 10, bottom: 20),
+          padding: const EdgeInsets.fromLTRB(16, 22, 16, 16),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(color: Colors.grey.shade400, width: 1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: child,
+        ),
+        Positioned(
+          left: 12,
+          top: 0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            color: Theme.of(context).scaffoldBackgroundColor, // Para tapar el borde de abajo
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: web ? const Color.fromARGB(255, 179, 179, 179) : Colors.grey.shade700,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -94,16 +138,13 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
 
     bool web = screenWidth > 600 ? true : false;
 
-    // Ajuste de márgenes para que empiece más a la izquierda y aproveche la pantalla
     final double ladoIzquierdo = web ? screenWidth * 0.15 : screenWidth * 0.05;
     final double ladoDerecho = web ? screenWidth * 0.15 : screenWidth * 0.05;
     final double labelWidth = web ? screenWidth * 0.1 : screenWidth * 0.25;
 
     final usuarioAsync = ref.watch(usuarioProvider);
     final currentUserId = usuarioAsync.value?.id;
-
     final currentGroupId = ref.watch(idCurrentGroupProvider);
-
     final draft = ref.watch(decisionDraftProvider);
 
     if(!_isInitialized){
@@ -124,7 +165,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  context.lang.crear_decision,
+                  context.lang.que_ver,
                   style: TextStyle(
                     fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.018,
                     fontWeight: FontWeight.w400,
@@ -133,7 +174,6 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                 ),
               ),
             ),
-
 
             Expanded(
               child: Form(
@@ -146,38 +186,29 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                     children: [
                       SizedBox(height: web ? screenHeight * 0.01 : screenHeight * 0.02),
 
-                      //TÍTULO
+                      // TÍTULO FORMULARIO
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           SizedBox(
                             width: labelWidth,
-                            child: 
-                            Text.rich(
+                            child: Text.rich(
                               TextSpan(
                                 text: "${context.lang.titulo} ", 
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.012 : (screenHeight + screenWidth) * 0.014,
+                                  fontSize: web ? (screenHeight + screenWidth) * 0.009 : (screenHeight + screenWidth) * 0.014,
                                   color: Theme.of(context).textTheme.bodyLarge?.color, 
                                 ),
                                 children: const [
-                                  TextSpan(
-                                    text: '*', 
-                                    style: TextStyle(
-                                      color: Colors.red, 
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' :', 
-                                  ),
+                                  TextSpan(text: '*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                  TextSpan(text: ' :'),
                                 ],
                               ),
                               textAlign: TextAlign.right,
-                            )
-                                                      ),
+                            ),
+                          ),
                           SizedBox(width: screenWidth * 0.03),
                           Expanded(
                             child: TextFormField(
@@ -191,13 +222,13 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal,
                                 fontFamily: 'Arial',
-                                fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.0125,
+                                fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.0125,
                               ),
                               decoration: InputDecoration(
                                 hintText: context.lang.titulo,
                                 hintStyle: TextStyle(
                                   color: Colors.grey,
-                                  fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
+                                  fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
                                 ),
                                 errorStyle: TextStyle(
                                   fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
@@ -213,48 +244,361 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                         ],
                       ),
 
-                    SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+                      SizedBox(height: web ? screenHeight * 0.03 : screenHeight * 0.03),
 
-                    //FECHA FINAL VOTACIÓN
-                    if(draft.type!=DecisionType.roulette) ...[
-                    TextFormField(
-                      controller: _dateControllerVote,
-                      readOnly: true,
-                      onTap: () => _pickDateTime(false),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.black, 
-                      ),
-                      //validator: (value) => value == null || value.isEmpty ? context.lang.campo_obligatorio : null,
-                      decoration: InputDecoration(
-                        hintText: context.lang.fecha_final_votacion,
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
+                      // TIPO (Peli o Serie)
+                      _buildFilterContainer(
+                        title: context.lang.tipo,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [context.lang.peli, context.lang.serie].map((type) {
+                            final isSelected = _selectedTypes.contains(type);
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: FilterChip(
+                                label: Text(type),
+                                selected: isSelected,
+                                selectedColor: Theme.of(context).colorScheme.primary, 
+                                backgroundColor: Colors.grey.shade200,
+                                labelStyle: TextStyle(color: isSelected ? Colors.white : const Color.fromARGB(255, 88, 88, 88) ),
+                                shape: const StadiumBorder(),
+                                showCheckmark: false,
+                                onSelected: (bool selected) {
+                                  setState(() {
+                                    if (selected) {
+                                      _selectedTypes.add(type);
+                                    } else {
+                                      _selectedTypes.remove(type);
+                                    }
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
                         ),
-                        prefixIcon: const Icon(Icons.calendar_today, size: 18, color:Colors.black),
-                        suffixIcon: _dateControllerVote.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear, size: 18, color: Colors.grey),
-                            onPressed: () {
-                              setState(() {
-                                _dateControllerVote.clear(); // Borra el texto del input
-                                draft.vote_date=null;
-                              });
-                            },
-                          )
-                        : null, // Si está vacío, no muestra nada en la derecha
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-                        filled: true,
-                        fillColor: Colors.white,
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 8),
                       ),
+
+                      // PLATAFORMA (Scroll Horizontal)
+                      _buildFilterContainer(
+                        title: context.lang.plataforma,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: TMDBData.providers.map((provider) {
+                              final isSelected = _selectedProviders.contains(provider.id);
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: FilterChip(
+                                  label: Text(provider.name),
+                                  selected: isSelected,
+                                  selectedColor: Theme.of(context).colorScheme.primary, 
+                                  backgroundColor: Colors.grey.shade200,
+                                  labelStyle: TextStyle(color: isSelected ? Colors.white : const Color.fromARGB(255, 88, 88, 88) ),
+                                  shape: const StadiumBorder(),
+                                  showCheckmark: false,
+                                  onSelected: (bool selected) {
+                                    setState(() {
+                                      if (selected) {
+                                        _selectedProviders.add(provider.id);
+                                      } else {
+                                        _selectedProviders.remove(provider.id);
+                                      }
+                                    });
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+
+                      // GÉNERO PELI (Wrap - Varias Filas)
+                      _buildFilterContainer(
+                        title: context.lang.genero_peli,
+                        child: Wrap(
+                          spacing: 8.0, // Espacio horizontal entre óvalos
+                          runSpacing: 4.0, // Espacio vertical entre filas
+                          children: TMDBData.filmGenres(context).map((genero) {
+                            final isSelected = _selectedGenres.contains(genero.id);
+                            return FilterChip(
+                              label: Text(genero.name),
+                              selected: isSelected,
+                              selectedColor: Theme.of(context).colorScheme.primary,
+                              backgroundColor: Colors.grey.shade200,
+                              labelStyle: TextStyle(color: isSelected ? Colors.white : const Color.fromARGB(255, 88, 88, 88) ),
+                              shape: const StadiumBorder(),
+                              showCheckmark: false,
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  if (selected) {
+                                    _selectedGenres.add(genero.id);
+                                  } else {
+                                    _selectedGenres.remove(genero.id);
+                                  }
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+
+                      // GÉNERO SERIE (Wrap - Varias Filas)
+                      _buildFilterContainer(
+                        title: context.lang.genero_serie,
+                        child: Wrap(
+                          spacing: 8.0, // Espacio horizontal entre óvalos
+                          runSpacing: 4.0, // Espacio vertical entre filas
+                          children: TMDBData.serieGenres(context).map((genero) {
+                            final isSelected = _selectedGenres.contains(genero.id);
+                            return FilterChip(
+                              label: Text(genero.name),
+                              selected: isSelected,
+                              selectedColor: Theme.of(context).colorScheme.primary,
+                              backgroundColor: Colors.grey.shade200,
+                              labelStyle: TextStyle(color: isSelected ? Colors.white : const Color.fromARGB(255, 88, 88, 88) ),
+                              shape: const StadiumBorder(),
+                              showCheckmark: false,
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  if (selected) {
+                                    _selectedGenres.add(genero.id);
+                                  } else {
+                                    _selectedGenres.remove(genero.id);
+                                  }
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+
+                      //PUNTUACIÓN (Deslizable Rango)
+                      _buildFilterContainer(
+                        title: context.lang.puntuacion,
+                        child: Column(
+                          children: [
+                            RangeSlider(
+                              values: _scoreRange,
+                              min: 0,
+                              max: 10,
+                              divisions: 20,
+                              activeColor: Theme.of(context).colorScheme.primary, 
+                              inactiveColor: Colors.grey.shade300,
+                              labels: RangeLabels(
+                                _scoreRange.start.toStringAsFixed(1),
+                                _scoreRange.end.toStringAsFixed(1),
+                              ),
+                              onChanged: (RangeValues values) {
+                                setState(() {
+                                  _scoreRange = values;
+                                });
+                              },
+                            ),
+                            Text(
+                              "${context.lang.rango}: ${_scoreRange.start.toStringAsFixed(1)} - ${_scoreRange.end.toStringAsFixed(1)}",
+                              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                            )
+                          ],
+                        ),
+                      ),
+
+                      //DURACIÓN PELI (Deslizable Rango)
+                      _buildFilterContainer(
+                        title: context.lang.duracion_peli,
+                        child: Column(
+                          children: [
+                            RangeSlider(
+                              values: _durationRange,
+                              min: 30,  //30 min
+                              max: 210, //3h:30min
+                              divisions: 12,
+                              activeColor: Theme.of(context).colorScheme.primary, 
+                              inactiveColor: Colors.grey.shade300,
+                              labels: RangeLabels(
+                                _durationRange.start.round().toString(),
+                                _durationRange.end.round().toString(),
+                              ),
+                              onChanged: (RangeValues values) {
+                                setState(() {
+                                  _durationRange = values;
+                                });
+                              },
+                            ),
+                            Text(
+                              "${context.lang.rango}: ${_durationRange.start.round()} - ${_durationRange.end.round()} min",
+                              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                            )
+                          ],
+                        ),
+                      ),
+
+                      //FECHA DE ESTRENO
+                      _buildFilterContainer(
+                        title: context.lang.estreno,
+                        child: Column(
+                          children: [
+                            RangeSlider(
+                              values: _yearRange,
+                              min: 1950,  
+                              max: _currentYear.toDouble(), 
+                              divisions: 12,
+                              activeColor: Theme.of(context).colorScheme.primary, 
+                              inactiveColor: Colors.grey.shade300,
+                              labels: RangeLabels(
+                                _yearRange.start.round().toString(),
+                                _yearRange.end.round().toString(),
+                              ),
+                              onChanged: (RangeValues values) {
+                                setState(() {
+                                  _yearRange = values;
+                                });
+                              },
+                            ),
+                            Text(
+                              "${context.lang.rango}: ${_yearRange.start.round()} - ${_yearRange.end.round()}",
+                              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                            )
+                          ],
+                        ),
+                      ),
+
+                      // TIPO DE PAGO
+                      _buildFilterContainer(
+                        title: context.lang.tipo_pago,
+                        child: Wrap(
+                          spacing: 8.0, // Espacio horizontal entre óvalos
+                          runSpacing: 4.0, // Espacio vertical entre filas
+                          children: TMDBWatchType.values.map((type) {
+                            final isSelected = _selectedWatchTypes.contains(type);
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: FilterChip(
+                                label: Text(type.getLabel(context)),
+                                selected: isSelected,
+                                selectedColor: Theme.of(context).colorScheme.primary, 
+                                backgroundColor: Colors.grey.shade200,
+                                labelStyle: TextStyle(color: isSelected ? Colors.white : const Color.fromARGB(255, 88, 88, 88) ),
+                                shape: const StadiumBorder(),
+                                showCheckmark: false,
+                                onSelected: (bool selected) {
+                                  setState(() {
+                                    if (selected) {
+                                      _selectedWatchTypes.add(type);
+                                    } else {
+                                      _selectedWatchTypes.remove(type);
+                                    }
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+
+                    // ORDENAR POR (Desplegable)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center, 
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: web ? screenWidth * 0.02 : 0, 
+                            right: 12.0, 
+                          ),
+                          child: Text(
+                            "${context.lang.orden}: ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: web
+                                  ? (screenHeight + screenWidth) * 0.012
+                                  : (screenHeight + screenWidth) * 0.014,
+                            ),
+                          ),
+                        ),
+                        
+                        Expanded(
+                          child: DropdownButtonFormField<TMDBOrder>(
+                            key: const Key('orderField'),
+                            dropdownColor: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            initialValue: _selectedOrder, 
+                            onChanged: (TMDBOrder? newValue) {
+                              if (newValue != null) {
+                                setState(() {
+                                  _selectedOrder = newValue;
+                                });
+                              }
+                            },
+                            items: TMDBOrder.values.map((TMDBOrder order) {
+                              return DropdownMenuItem<TMDBOrder>(
+                                value: order,
+                                child: Text(order.getLabel(context)), 
+                              );
+                            }).toList(),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: web 
+                                  ? (screenHeight + screenWidth) * 0.01 
+                                  : (screenHeight + screenWidth) * 0.0125,
+                            ),
+                            decoration: InputDecoration(
+                              errorStyle: TextStyle(
+                                fontSize: web 
+                                    ? (screenHeight + screenWidth) * 0.007 
+                                    : (screenHeight + screenWidth) * 0.012,
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade200, 
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none, 
+                              ),
+                              isDense: true,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                          ),
+                        ),
+                      ],
                     ),
 
-                    SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+                    SizedBox(height: web ? screenHeight * 0.03 : screenHeight * 0.03),
 
-                    ],
+                      // =======================================
+
+                      // FECHA FINAL VOTACIÓN
+                        TextFormField(
+                          controller: _dateControllerVote,
+                          readOnly: true,
+                          onTap: () => _pickDateTime(false),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                            hintText: context.lang.fecha_final_votacion,
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.012,
+                            ),
+                            prefixIcon: const Icon(Icons.calendar_today, size: 18, color: Colors.black),
+                            suffixIcon: _dateControllerVote.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear, size: 18, color: Colors.grey),
+                                    onPressed: () {
+                                      setState(() {
+                                        _dateControllerVote.clear();
+                                        draft.vote_date = null;
+                                      });
+                                    },
+                                  )
+                                : null,
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                            filled: true,
+                            fillColor: Colors.white,
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                          ),
+                        ),
+                        SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
 
                       // BOTONES
                       Row(
@@ -288,32 +632,32 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
-                                        
-                                        //Tiene que tener al menos 2 opciones para empezar la votación
-                                        if(draft.options.length<2){
+                                        if (draft.options.length < 2) {
                                           ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(context.lang.error_num_opciones),
-                                            ),
+                                            SnackBar(content: Text(context.lang.error_num_opciones)),
                                           );
-                                          _loading=false;
+                                          setState(() => _loading = false);
                                           return;
                                         }
 
-                                        //Elimina el tiempo de opciones
-                                          draft.options_date=null;
+                                        draft.options_date = null;
 
-                                        //Elimina el tiempo de votación si es de tipo ruleta
-                                        if(draft.type==DecisionType.roulette) {
-                                          draft.vote_date=null;
+                                        if (draft.type == DecisionType.roulette) {
+                                          draft.vote_date = null;
                                         }
 
-                                        //Crear la decisión
-                                        await ref.read(createProvider.notifier).createDecision(id_creator: currentUserId!, id_group: currentGroupId, state: DecisionState.vote, decision: draft);
+                                        // NOTA: Aquí puedes mapear las variables locales (_selectedTypes, _selectedProviders, etc.)
+                                        // a tu objeto 'draft' antes de guardarlo si tu backend o provider las necesita.
 
-                                        //Borra decisionDraft
+                                        await ref.read(createProvider.notifier).createDecision(
+                                              id_creator: currentUserId!,
+                                              id_group: currentGroupId,
+                                              state: DecisionState.vote,
+                                              decision: draft,
+                                            );
+
                                         ref.read(decisionDraftProvider.notifier).reset();
-                                        
+
                                         if (!context.mounted) return;
 
                                         ScaffoldMessenger.of(context).showSnackBar(
@@ -321,8 +665,6 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                         );
 
                                         Navigator.pop(context);
-                                        
-
                                       } catch (e) {
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(content: Text(translateSupabaseError(context, e))),
