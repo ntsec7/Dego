@@ -9,7 +9,6 @@ import 'package:dego/utilities/error.dart';
 import 'package:dego/models/decision.dart';
 
 class GroupHomePage extends ConsumerStatefulWidget {
-
   const GroupHomePage({super.key});
 
   @override
@@ -17,188 +16,177 @@ class GroupHomePage extends ConsumerStatefulWidget {
 }
 
 class _GroupHomePage extends ConsumerState<GroupHomePage> {
-
   void _deleteDecision(BuildContext context, Decision dec) {
-
     showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
-          return AlertDialog(
-          title: Text(context.lang.eliminar_decision),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                context.lang.eliminar_decision_txt(dec.title),
+            return AlertDialog(
+              title: Text(context.lang.eliminar_decision),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.lang.eliminar_decision_txt(dec.title),
+                  ),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(context.lang.cancelar),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                
-                try {
-
-                  await ref.read(createProvider.notifier).deleteDecision(decisionId: dec.id);
-
-                  if (context.mounted) {
+              actions: [
+                TextButton(
+                  onPressed: () {
                     Navigator.pop(context);
+                  },
+                  child: Text(context.lang.cancelar),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await ref.read(createProvider.notifier).deleteDecision(decisionId: dec.id);
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(context.lang.exito_eliminar_decision),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  if(context.mounted){
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(translateSupabaseError(context,e))),
-                    );
-                  }
-                }
-              },
-              child: Text(context.lang.aceptar),
-            ),
-          ],
-          );
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(context.lang.exito_eliminar_decision),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(translateSupabaseError(context, e))),
+                        );
+                      }
+                    }
+                  },
+                  child: Text(context.lang.aceptar),
+                ),
+              ],
+            );
           },
         );
       },
     );
   }
 
-@override
-Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-  final screenWidth = MediaQuery.of(context).size.width;
-  final screenHeight = MediaQuery.of(context).size.height;
+    bool web = screenWidth > 600 ? true : false;
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-  bool web = screenWidth > 600 ? true : false;
+    final grupo = ref.watch(currentGroupProvider);
+    final optionDecisions = ref.watch(optionDecisionsProvider);
+    final voteDecisions = ref.watch(voteDecisionsProvider);
 
-  
-  bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final usuarioAsync = ref.watch(usuarioProvider);
+    final currentUserId = usuarioAsync.value?.id;
+    final currentUserType = usuarioAsync.value?.tipo;
 
-  final grupo = ref.watch(currentGroupProvider);
-  final optionDecisions = ref.watch(optionDecisionsProvider);
-  final voteDecisions = ref.watch(voteDecisionsProvider);
-
-  final usuarioAsync = ref.watch(usuarioProvider);
-  final currentUserId = usuarioAsync.value?.id;
-  final currentUserType = usuarioAsync.value?.tipo;
-
-  if(grupo==null){
-    return Scaffold(
+    if (grupo == null) {
+      return Scaffold(
         body: Center(child: Text(context.lang.error_carga_grupo)),
-    );
-  }
+      );
+    }
 
-  return Scaffold(
-    body: SafeArea(
-      child: Column(
-            children: [
-
-              //VOTAR
-              Padding(
-                padding:EdgeInsets.only( 
-                  left: web ? screenWidth * 0.01 : screenWidth * 0.03 , 
-                  right: web ? screenWidth * 0.01 : screenWidth * 0.03 , 
-                  top: web ? screenHeight * 0.01 : screenHeight * 0.015),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ==================== SECCIÓN 1: VOTAR ====================
+            Padding(
+              padding: EdgeInsets.only(
+                left: web ? screenWidth * 0.01 : screenWidth * 0.03,
+                right: web ? screenWidth * 0.01 : screenWidth * 0.03,
+                top: web ? screenHeight * 0.015 : screenHeight * 0.02,
+                bottom: 8.0,
+              ),
               child: Align(
-                    alignment: Alignment.centerLeft,    
+                alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                  Text(
-                  "${context.lang.votar}:",
-                  style: TextStyle(
-                    fontSize: web ? (screenHeight + screenWidth) *0.009 : (screenHeight + screenWidth) *0.015,
-                    fontWeight: FontWeight.w400,
-                    decoration: TextDecoration.underline, 
-                  )
-                  ),
-                  SizedBox(width: web ? screenWidth * 0.007 : screenWidth * 0.02),
-                  Icon(
-                    Icons.how_to_vote_outlined,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                    Text(
+                      "${context.lang.votar}:",
+                      style: TextStyle(
+                        fontSize: web ? (screenHeight + screenWidth) * 0.009 : (screenHeight + screenWidth) * 0.015,
+                        fontWeight: FontWeight.w400,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    SizedBox(width: web ? screenWidth * 0.007 : screenWidth * 0.02),
+                    Icon(
+                      Icons.how_to_vote_outlined,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ],
                 ),
               ),
-              ),
+            ),
 
-            Expanded( // Esto hace que la lista use todo el espacio central
+            // LISTA DE VOTOS (Ocupa su respectiva mitad superior)
+            Expanded(
               child: voteDecisions.when(
                 data: (voteDec) {
                   if (voteDec.isEmpty) return const Center(child: Text(""));
 
                   return ListView.builder(
-                    padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.01), // Espaciado alrededor de la lista
+                    padding: EdgeInsets.symmetric(
+                      horizontal: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
+                    ),
                     itemCount: voteDec.length,
                     itemBuilder: (context, index) {
                       final votDec = voteDec[index];
                       return GestureDetector(
                         onTap: () {
-                          switch(votDec.type){
+                          switch (votDec.type) {
                             case DecisionType.simple:
                               Navigator.pushNamed(context, 'simpleVote', arguments: votDec.id);
-                            break;
+                              break;
                             case DecisionType.ranking:
                               Navigator.pushNamed(context, 'rankingVote', arguments: votDec.id);
-                            break;
+                              break;
                             case DecisionType.roulette:
-                                Navigator.pushNamed(context, 'rouletteVote', arguments: votDec.id);
-                            break;
+                              Navigator.pushNamed(context, 'rouletteVote', arguments: votDec.id);
+                              break;
                           }
                         },
                         child: Container(
-                          margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
+                          margin: EdgeInsets.only(bottom: web ? screenHeight * 0.015 : screenHeight * 0.015),
                           padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
                           decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 224, 224, 224), 
-                            borderRadius: BorderRadius.circular(30), // Bordes redondeados
+                            color: const Color.fromARGB(255, 224, 224, 224),
+                            borderRadius: BorderRadius.circular(30),
                           ),
                           child: Row(
                             children: [
-                              
-                              //TITULO
                               Expanded(
                                 child: Text(
                                   votDec.title,
-                                  style:  TextStyle(
+                                  style: TextStyle(
                                     fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
                                   ),
                                 ),
                               ),
-
-                            if(votDec.id_creator == currentUserId || currentUserType=='admin' ) ...[
-                              //EDITAR
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
-                                onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: votDec.id),
-                              ),
-
-                              //ELIMINAR
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                color: Colors.redAccent,
-                                onPressed: () {
-                                  _deleteDecision(context, votDec);
-                                },
-                              ),
-                            ],
-
+                              if (votDec.id_creator == currentUserId || currentUserType == 'admin') ...[
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
+                                  onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: votDec.id),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  color: Colors.redAccent,
+                                  onPressed: () {
+                                    _deleteDecision(context, votDec);
+                                  },
+                                ),
+                              ],
                             ],
                           ),
                         ),
@@ -211,40 +199,48 @@ Widget build(BuildContext context) {
               ),
             ),
 
-            SizedBox(height: web ? screenHeight * 0.03 : 0),
+            // Espaciador controlado entre bloques de listas para que no se encimen
+            SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.015),
 
-              //DAR OPCIONES
-              Padding(
-                padding:EdgeInsets.symmetric( horizontal: web ? screenWidth * 0.01 : screenWidth * 0.03 ,),
+            // ==================== SECCIÓN 2: DAR OPCIONES ====================
+            Padding(
+              padding: EdgeInsets.only(
+                left: web ? screenWidth * 0.01 : screenWidth * 0.03,
+                right: web ? screenWidth * 0.01 : screenWidth * 0.03,
+                bottom: 8.0,
+              ),
               child: Align(
-                    alignment: Alignment.centerLeft,    
+                alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                  Text(
-                  "${context.lang.dar_opciones}:",
-                  style: TextStyle(
-                    fontSize: web ? (screenHeight + screenWidth) *0.009 : (screenHeight + screenWidth) *0.015,
-                    fontWeight: FontWeight.w400,
-                    decoration: TextDecoration.underline, 
-                  )
-                  ),
-                  SizedBox(width: web ? screenWidth * 0.003 : screenWidth * 0.01),
-                  Icon(
-                    Icons.emoji_objects,
-                    color: Colors.amber,
-                  ),
+                    Text(
+                      "${context.lang.dar_opciones}:",
+                      style: TextStyle(
+                        fontSize: web ? (screenHeight + screenWidth) * 0.009 : (screenHeight + screenWidth) * 0.015,
+                        fontWeight: FontWeight.w400,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    SizedBox(width: web ? screenWidth * 0.003 : screenWidth * 0.01),
+                    const Icon(
+                      Icons.emoji_objects,
+                      color: Colors.amber,
+                    ),
                   ],
                 ),
-                ),
               ),
+            ),
 
-            Expanded( // Esto hace que la lista use todo el espacio central
+            // LISTA DE OPCIONES (Ocupa su respectiva mitad inferior)
+            Expanded(
               child: optionDecisions.when(
                 data: (optionsDec) {
                   if (optionsDec.isEmpty) return const Center(child: Text(""));
 
                   return ListView.builder(
-                    padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.01), // Espaciado alrededor de la lista
+                    padding: EdgeInsets.symmetric(
+                      horizontal: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
+                    ),
                     itemCount: optionsDec.length,
                     itemBuilder: (context, index) {
                       final opDec = optionsDec[index];
@@ -253,47 +249,38 @@ Widget build(BuildContext context) {
                           Navigator.pushNamed(context, 'seeDecision', arguments: opDec.id);
                         },
                         child: Container(
-                          margin: EdgeInsets.only(bottom: web ? screenHeight * 0.02 : screenHeight * 0.02), // Separación entre cuadros
+                          margin: EdgeInsets.only(bottom: web ? screenHeight * 0.015 : screenHeight * 0.015),
                           padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
                           decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 224, 224, 224), 
-                            borderRadius: BorderRadius.circular(30), // Bordes redondeados
+                            color: const Color.fromARGB(255, 224, 224, 224),
+                            borderRadius: BorderRadius.circular(30),
                           ),
                           child: Row(
                             children: [
-                              
-                              //TITULO
                               Expanded(
                                 child: Text(
                                   opDec.title,
-                                  style:  TextStyle(
+                                  style: TextStyle(
                                     fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black87,
                                   ),
                                 ),
                               ),
-
-                              if(opDec.id_creator == currentUserId || currentUserType=='admin' ) ...[
-                              
-                              //EDITAR
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                color: isDarkMode ? Color.fromARGB(255, 145, 162, 169) : Color.fromARGB(255, 95, 104, 108),
-                                onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: opDec.id),
-                              ),
-
-                              //ELIMINAR
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                color: Colors.redAccent,
-                                onPressed: () {
-                                  _deleteDecision(context, opDec);
-                                },
-                              ),
-
+                              if (opDec.id_creator == currentUserId || currentUserType == 'admin') ...[
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
+                                  onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: opDec.id),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete),
+                                  color: Colors.redAccent,
+                                  onPressed: () {
+                                    _deleteDecision(context, opDec);
+                                  },
+                                ),
                               ],
-
                             ],
                           ),
                         ),
@@ -306,59 +293,58 @@ Widget build(BuildContext context) {
               ),
             ),
 
-            // SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
-
-            Row(
-
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-
-              children :[
-              //NUEVA DECISIÓN DE CINE/SERIES
-              Container(
-                width: web ? screenWidth * 0.04 : screenWidth * 0.15, 
-                height: web ? screenWidth * 0.04 : screenWidth * 0.15, 
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary, 
-                  shape: BoxShape.circle, 
-                ),
-                child: GestureDetector(
-                  onTap: () async {
-                    Navigator.pushNamed(context, 'createDecisionWatch');
-                  },
-                  child: FractionallySizedBox( // Controla el tamaño de la imagen dentro del boton
-                    widthFactor: 0.95, 
-                    child: Image.asset(
-                      'assets/images/popcorn_icon.png',
-                      fit: BoxFit.contain, // Imagen contenida dentro del espacio
+            // ==================== SECCIÓN 3: FOOTER ACCIONES ====================
+            Padding(
+              padding: EdgeInsets.only(
+                top: web ? 16.0 : 10.0,
+                bottom: web ? 24.0 : 16.0, // Asegura separación limpia respecto al fondo físico de la pantalla
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // NUEVA DECISIÓN DE CINE/SERIES
+                  Container(
+                    width: web ? screenWidth * 0.04 : screenWidth * 0.15,
+                    height: web ? screenWidth * 0.04 : screenWidth * 0.15,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: GestureDetector(
+                      onTap: () async {
+                        Navigator.pushNamed(context, 'createDecisionWatch');
+                      },
+                      child: FractionallySizedBox(
+                        widthFactor: 0.95,
+                        child: Image.asset(
+                          'assets/images/popcorn_icon.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+
+                  SizedBox(width: web ? screenWidth * 0.06 : screenWidth * 0.07),
+
+                  // NUEVA DECISIÓN GENERAL
+                  IconButton(
+                    icon: const Icon(
+                      Icons.add,
+                      weight: 900.0,
+                    ),
+                    color: const Color(0xFF098238),
+                    iconSize: web ? screenWidth * 0.03 : screenWidth * 0.15,
+                    onPressed: () async {
+                      Navigator.pushNamed(context, 'createDecision');
+                    },
+                  ),
+                ],
               ),
-
-              SizedBox(width: web ? screenWidth * 0.06 : screenWidth*0.07),
-
-              //NUEVA DECISIÓN
-              Align(
-                alignment: AlignmentGeometry.center,
-                child: IconButton(
-                  icon: const Icon(Icons.add,
-                  weight: 900.0,),
-                  color: Color(0xFF098238),
-                  iconSize: web ? screenWidth * 0.03 : screenWidth * 0.15,
-                  onPressed: () async{
-                    Navigator.pushNamed(context, 'createDecision');
-                  },
-                ),
-              )
-            ],
             ),
-
-            // SizedBox(height: web ? screenHeight * 0.05 : screenHeight * 0.1),
-
-            ],
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
