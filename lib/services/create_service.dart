@@ -440,6 +440,31 @@ class CreateService {
     }
   }
 
+  Future<void> createWatchDecision({
+    required String id_creator,
+    String? id_group,
+    required String title,
+    DateTime? finish_hour,
+    required String url,
+
+  }) async{
+    try{
+      
+      //Creamos la watch decision
+      await supabase.from('watch_decision').insert({
+        'id_creator' : id_creator,
+        'id_group' : id_group,
+        'title' : title,
+        'finish_hour' : finish_hour,
+        'url' : url,
+        'finish' : false,
+      });
+
+    } catch(e){
+      rethrow;
+    }
+  }
+
 
 }
 

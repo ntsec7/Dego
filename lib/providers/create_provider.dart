@@ -241,4 +241,22 @@ class CreateNotifier extends StateNotifier<User?> {
     }
   }
 
+  //CREAR WATCH DECISION 
+  Future<void> createWatchDecision({
+    required String id_creator,
+    String? id_group,
+    required String title,
+    DateTime? finish_hour,
+    required String url,
+
+  }) async{
+    try{
+      
+      await createService.createWatchDecision(id_creator: id_creator, id_group: id_group, title: title, finish_hour: finish_hour, url: url);
+
+    } catch(e){
+      rethrow;
+    }
+  }
+
 }

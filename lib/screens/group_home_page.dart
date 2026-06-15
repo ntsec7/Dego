@@ -1,5 +1,6 @@
 import 'package:dego/providers/create_provider.dart';
 import 'package:dego/providers/decision_provider.dart';
+import 'package:dego/providers/watch_decision_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/current_group_provider.dart';
@@ -82,6 +83,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
     final grupo = ref.watch(currentGroupProvider);
     final optionDecisions = ref.watch(optionDecisionsProvider);
     final voteDecisions = ref.watch(voteDecisionsProvider);
+    final watchDecisions = ref.watch(voteWatchDecisionsProvider);
 
     final usuarioAsync = ref.watch(usuarioProvider);
     final currentUserId = usuarioAsync.value?.id;
@@ -130,76 +132,157 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
 
             // LISTA DE VOTOS
             Expanded(
-              child: voteDecisions.when(
-                data: (voteDec) {
-                  if (voteDec.isEmpty) return const Center(child: Text(""));
+              child: CustomScrollView(
+                slivers: [
+                  
+                  voteDecisions.when(
+                    data: (voteDec) {
+                      if (voteDec.isEmpty) {
+                        return const SliverToBoxAdapter(child: SizedBox.shrink());
+                      }
 
-                  return ListView.builder(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
-                    ),
-                    itemCount: voteDec.length,
-                    itemBuilder: (context, index) {
-                      final votDec = voteDec[index];
-                      return GestureDetector(
-                        onTap: () {
-                          switch (votDec.type) {
-                            case DecisionType.simple:
-                              Navigator.pushNamed(context, 'simpleVote', arguments: votDec.id);
-                              break;
-                            case DecisionType.ranking:
-                              Navigator.pushNamed(context, 'rankingVote', arguments: votDec.id);
-                              break;
-                            case DecisionType.roulette:
-                              Navigator.pushNamed(context, 'rouletteVote', arguments: votDec.id);
-                              break;
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: web ? screenHeight * 0.015 : screenHeight * 0.015),
-                          padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 224, 224, 224),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  votDec.title,
-                                  style: TextStyle(
-                                    fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
+                      return SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
+                        ),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final votDec = voteDec[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  switch (votDec.type) {
+                                    case DecisionType.simple:
+                                      Navigator.pushNamed(context, 'simpleVote', arguments: votDec.id);
+                                      break;
+                                    case DecisionType.ranking:
+                                      Navigator.pushNamed(context, 'rankingVote', arguments: votDec.id);
+                                      break;
+                                    case DecisionType.roulette:
+                                      Navigator.pushNamed(context, 'rouletteVote', arguments: votDec.id);
+                                      break;
+                                  }
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: screenHeight * 0.015),
+                                  padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 224, 224, 224),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          votDec.title,
+                                          style: TextStyle(
+                                            fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                      if (votDec.id_creator == currentUserId || currentUserType == 'admin') ...[
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
+                                          onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: votDec.id),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          color: Colors.redAccent,
+                                          onPressed: () => _deleteDecision(context, votDec),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
-                              ),
-                              if (votDec.id_creator == currentUserId || currentUserType == 'admin') ...[
-                                IconButton(
-                                  icon: const Icon(Icons.edit),
-                                  color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
-                                  onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: votDec.id),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  color: Colors.redAccent,
-                                  onPressed: () {
-                                    _deleteDecision(context, votDec);
-                                  },
-                                ),
-                              ],
-                            ],
+                              );
+                            },
+                            childCount: voteDec.length,
                           ),
                         ),
                       );
                     },
-                  );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, st) => Center(child: Text("Error: $e")),
+                    loading: () => const SliverToBoxAdapter(
+                      child: Center(child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator())),
+                    ),
+                    error: (e, st) => SliverToBoxAdapter(
+                      child: Center(child: Text("Error en Votos: $e")),
+                    ),
+                  ),
+
+                  watchDecisions.when(
+                    data: (watchDecs) {
+                      if (watchDecs.isEmpty) {
+                        return const SliverToBoxAdapter(child: SizedBox.shrink());
+                      }
+
+                      return SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
+                        ),
+                        sliver: SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final watchDec = watchDecs[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  // Acción al pulsar una watchDecision
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: screenHeight * 0.015),
+                                  padding: EdgeInsets.all(web ? (screenHeight + screenWidth) * 0.008 : (screenHeight + screenWidth) * 0.01),
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(255, 224, 224, 224),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          watchDec.title,
+                                          style: TextStyle(
+                                            fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                      if (watchDec.id_creator == currentUserId || currentUserType == 'admin') ...[
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
+                                          onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: watchDec.id),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          color: Colors.redAccent,
+                                          onPressed: () {
+                                            // _deleteWatchDecision(context, watchDec);
+                                          },
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            childCount: watchDecs.length,
+                          ),
+                        ),
+                      );
+                    },
+                    loading: () => const SliverToBoxAdapter(
+                      child: Center(child: Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator())),
+                    ),
+                    error: (e, st) => SliverToBoxAdapter(
+                      child: Center(child: Text("Error en Visualizaciones: $e")),
+                    ),
+                  ),
+                ],
               ),
             ),
-
 
             SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.015),
 

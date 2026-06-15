@@ -697,8 +697,6 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
-
-                                        print("llega hasta aqui");
                                         
                                         //Comprueba que haya al menos una opción seleccionada de cada categoría
                                         if(_selectedType.isEmpty || _selectedProviders.isEmpty || _selectedWatchTypes.isEmpty || (_selectedType==film && _selectedFilmGenres.isEmpty) || (_selectedType==serie && _selectedSerieGenres.isEmpty)){
@@ -714,9 +712,12 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                         //Crea la url
                                         final url = generateUrl();
 
-                                        print(url);
-
                                         //Crea la decisión
+
+                                        final DateTime? parsedDate = DateTime.tryParse(_dateControllerVote.text);
+                                        final DateTime? finishDateTime = parsedDate?.toLocal();
+
+                                        await ref.read(createProvider.notifier).createWatchDecision(id_creator: currentUserId!, id_group: currentGroupId, title: _title.text, finish_hour: finishDateTime, url: url);
 
                                         if (!context.mounted) return;
 
