@@ -249,17 +249,22 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                                           ),
                                         ),
                                       ),
+                                        IconButton(
+                                          icon: const Icon(Icons.visibility),
+                                          color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
+                                          onPressed: () => null,  //TODO VER PELIS VOTADAS
+                                        ),
                                       if (watchDec.id_creator == currentUserId || currentUserType == 'admin') ...[
                                         IconButton(
-                                          icon: const Icon(Icons.edit),
+                                          icon: const Icon(Icons.hourglass_empty_rounded),
                                           color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
-                                          onPressed: () => Navigator.pushNamed(context, 'editDecision', arguments: watchDec.id),
+                                          onPressed: () => null,  //TODO _finishWatchDecision(context,watchDec.id)
                                         ),
                                         IconButton(
                                           icon: const Icon(Icons.delete),
                                           color: Colors.redAccent,
                                           onPressed: () {
-                                            // _deleteWatchDecision(context, watchDec);
+                                            // _deleteWatchDecision(context, watchDec); //TODO DELETE DECISION
                                           },
                                         ),
                                       ],

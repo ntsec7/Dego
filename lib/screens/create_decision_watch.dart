@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dego/models/decision.dart';
 import 'package:dego/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +9,6 @@ import 'package:dego/providers/decision_draft_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/providers/create_provider.dart';
 import 'package:dego/models/tmdb_info.dart';
-import 'package:dego/config/constants.dart';
 
 class CreateDecisionWatch extends ConsumerStatefulWidget {
   const CreateDecisionWatch({super.key});
@@ -138,14 +136,14 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
 
     // Base de los parámetros obligatorios
     final Map<String, String> queryParameters = {
-      'api_key': AppConstants.tmdbApiKey,
+      'endpoint': endpoint,
       'language': 'es-ES',
       'sort_by': _selectedOrder.key,
+      'watch_region': 'ES',
     };
 
     // Plataformas
     queryParameters['with_watch_providers'] = _selectedProviders.join('|'); // '|' funciona como un "OR" en TMDB
-    queryParameters['watch_region'] = 'ES'; // Requerido por TMDB al usar proveedores
     
 
     String yearStart = "${_yearRange.start.round()}-01-01"; //primer día del año
@@ -184,14 +182,9 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
           _selectedWatchTypes.map((type) => type.name).join('|');
 
 
-    // Construcción de la URI final
-    final Uri uri = Uri.https(
-      AppConstants.tmdbBaseUrl,
-      '/3/discover/$endpoint',
-      queryParameters,
-    );
+    final queryString = Uri(queryParameters: queryParameters).query;
 
-    return uri.toString();
+    return '/discover/$endpoint?$queryString';
   }
 
   @override
@@ -709,7 +702,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                           return;
                                         }
 
-                                        //Crea la url
+                                        //Coge los filtros
                                         final url = generateUrl();
 
                                         //Crea la decisión
