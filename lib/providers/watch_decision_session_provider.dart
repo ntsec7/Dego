@@ -1,19 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/models/watch_decision_session.dart';
 import 'package:dego/services/tmdb_service.dart';
+import 'package:dego/services/watch_decision_service.dart';
 
 final tmdbServiceProvider = Provider<TmdbService>((ref) {
   return TmdbService();
+});
+
+final watchDecisionServiceProvider = Provider<WatchDecisionService>((ref){
+  return WatchDecisionService();
 });
 
 // Definimos el provider de la sesión
 final watchDecisionSessionProvider = StateNotifierProvider.family<WatchDecisionSessionNotifier, WatchDecisionSessionState, String>((ref, decisionId) {
   
   final tmdbService = ref.read(tmdbServiceProvider);
+  final service = ref.read(watchDecisionServiceProvider);
 
   return WatchDecisionSessionNotifier(
     decisionId: decisionId,
     tmdbService: tmdbService,
+    service: service,
   );
 
 });
@@ -22,8 +29,9 @@ class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionSta
   
   final String decisionId;
   final TmdbService _tmdbService;
+  final WatchDecisionService service;
   
-  WatchDecisionSessionNotifier({required this.decisionId, required TmdbService tmdbService,
+  WatchDecisionSessionNotifier({required this.decisionId, required TmdbService tmdbService, required this.service,
   }) : _tmdbService = tmdbService,
       super(
           WatchDecisionSessionState(
@@ -38,18 +46,32 @@ class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionSta
   
   // Carga inicial leyendo supabase
    Future<void> _init() async {
-    //TODO CARGAR SUPABASE
-    final savedPage = 1;
-    final savedIndex = 0;
-    final savedPath = "/discover/movie?sort_by=popularity.desc";
+
+    final decision = await service.getWatchDecision(decisionId);
+    final position = await service.getWatchPosition(decisionId);
+
+    final savedPage = position.page;
+    final lastId= position.last_id;
+    final savedPath = decision.url;
 
     state = state.copyWith(
       currentPage: savedPage,
-      currentIndex: savedIndex,
       path: savedPath,
     );
 
     await _loadPage(savedPage);
+
+    _restoreIndex(lastId);
+  }
+
+  void _restoreIndex(int lastId) {
+    final index = state.queue.indexWhere(
+      (data) => data.id == lastId,
+    );
+
+    if (index == -1) return;
+
+    state = state.copyWith(currentIndex: index);
   }
 
   Future<void> _loadPage(int page) async {

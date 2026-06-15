@@ -228,7 +228,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                               final watchDec = watchDecs[index];
                               return GestureDetector(
                                 onTap: () {
-                                  // Acción al pulsar una watchDecision
+                                  Navigator.pushNamed(context, 'watchVote', arguments: watchDec.id);
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(bottom: screenHeight * 0.015),

@@ -30,7 +30,7 @@ serve(async (req) => {
     const body = await req.json();
 
     const {
-      path,        // /discover/movie?...
+      path,        
       page = 1,
     } = body;
 

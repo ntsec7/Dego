@@ -21,7 +21,7 @@ class Decision{
   String id;
   String id_creator;
   String? id_group;
-  String title;
+  String title;   
   DecisionState state;
   DateTime? options_date;
   DateTime? vote_date;
