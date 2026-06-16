@@ -6,7 +6,8 @@ class MovieSerie {
   final String? backdropPath;
   final String releaseDate; 
   final double voteAverage;
-  final List<int> genreIds;  
+  final List<int> genreIds; 
+  final int voteCount; 
 
   MovieSerie({
     required this.id,
@@ -17,6 +18,7 @@ class MovieSerie {
     required this.releaseDate,
     required this.voteAverage,
     required this.genreIds,
+    required this.voteCount,
   });
 
   // Getter para la URL de la imagen
@@ -43,6 +45,7 @@ class MovieSerie {
           : (json['first_air_date'] ?? ''),
       voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0.0,
       genreIds: List<int>.from(json['genre_ids'] ?? []),
+      voteCount: json['voteCount'] ?? '',
     );
   }
 }
