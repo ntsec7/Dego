@@ -18,7 +18,7 @@ class WatchVote extends ConsumerWidget {
     // Si la lista esta vacia
     if (state.queue.isEmpty) {
       return const Scaffold(
-        body: Center(child: Text("No hay resultados")),
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
