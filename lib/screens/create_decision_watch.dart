@@ -34,7 +34,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
   RangeValues _durationRange = const RangeValues(30, 210);
   final int _currentYear = DateTime.now().year;
   late RangeValues _yearRange = RangeValues(1950, _currentYear.toDouble());
-  final List<TMDBWatchType> _selectedWatchTypes = [];
+  // final List<TMDBWatchType> _selectedWatchTypes = [];
   TMDBOrder _selectedOrder = TMDBOrder.voteAverageDesc;
 
   @override
@@ -142,6 +142,11 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
       'watch_region': 'ES',
     };
 
+    // Si se ordena por nota, exijimos al menos 100 votos para que no salgan películas raras
+    if (_selectedOrder.key == 'vote_average.desc') {
+      queryParameters['vote_count.gte'] = '100'; 
+    }
+
     // Plataformas
     queryParameters['with_watch_providers'] = _selectedProviders.join('|'); // '|' funciona como un "OR" en TMDB
     
@@ -152,7 +157,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
     // Si es peli
     if (endpoint=='movie') {
 
-      queryParameters['with_genres'] = _selectedFilmGenres.join(','); //género
+      queryParameters['with_genres'] = _selectedFilmGenres.join('|'); //género
 
       //Duración (es solo en pelis)
       queryParameters['with_runtime.gte'] = _durationRange.start.round().toString();
@@ -165,7 +170,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
 
     } else{ //Si es serie
 
-      queryParameters['with_genres'] = _selectedSerieGenres.join(',');
+      queryParameters['with_genres'] = _selectedSerieGenres.join('|');
 
       // Año de estreno (tv : first_air_date)
       queryParameters['first_air_date.gte'] = yearStart;
@@ -178,8 +183,8 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
     queryParameters['vote_average.lte'] = _scoreRange.end.toStringAsFixed(1);
 
     //Tipo de pago
-    queryParameters['with_watch_monetization_types'] = 
-          _selectedWatchTypes.map((type) => type.name).join('|');
+    // queryParameters['with_watch_monetization_types'] = 
+    //       _selectedWatchTypes.map((type) => type.name).join('|');
 
 
     final queryString = Uri(queryParameters: queryParameters).query;
@@ -522,37 +527,37 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                       ),
 
                       // TIPO DE PAGO
-                      _buildFilterContainer(
-                        title: context.lang.tipo_pago,
-                        child: Wrap(
-                          spacing: 8.0, // Espacio horizontal entre óvalos
-                          runSpacing: 4.0, // Espacio vertical entre filas
-                          children: TMDBWatchType.values.map((type) {
-                            final isSelected = _selectedWatchTypes.contains(type);
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: FilterChip(
-                                label: Text(type.getLabel(context)),
-                                selected: isSelected,
-                                selectedColor: Theme.of(context).colorScheme.primary, 
-                                backgroundColor: Colors.grey.shade200,
-                                labelStyle: TextStyle(color: isSelected ? Colors.white : const Color.fromARGB(255, 88, 88, 88) ),
-                                shape: const StadiumBorder(),
-                                showCheckmark: false,
-                                onSelected: (bool selected) {
-                                  setState(() {
-                                    if (selected) {
-                                      _selectedWatchTypes.add(type);
-                                    } else {
-                                      _selectedWatchTypes.remove(type);
-                                    }
-                                  });
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                      // _buildFilterContainer(
+                      //   title: context.lang.tipo_pago,
+                      //   child: Wrap(
+                      //     spacing: 8.0, // Espacio horizontal entre óvalos
+                      //     runSpacing: 4.0, // Espacio vertical entre filas
+                      //     children: TMDBWatchType.values.map((type) {
+                      //       final isSelected = _selectedWatchTypes.contains(type);
+                      //       return Padding(
+                      //         padding: const EdgeInsets.only(right: 8.0),
+                      //         child: FilterChip(
+                      //           label: Text(type.getLabel(context)),
+                      //           selected: isSelected,
+                      //           selectedColor: Theme.of(context).colorScheme.primary, 
+                      //           backgroundColor: Colors.grey.shade200,
+                      //           labelStyle: TextStyle(color: isSelected ? Colors.white : const Color.fromARGB(255, 88, 88, 88) ),
+                      //           shape: const StadiumBorder(),
+                      //           showCheckmark: false,
+                      //           onSelected: (bool selected) {
+                      //             setState(() {
+                      //               if (selected) {
+                      //                 _selectedWatchTypes.add(type);
+                      //               } else {
+                      //                 _selectedWatchTypes.remove(type);
+                      //               }
+                      //             });
+                      //           },
+                      //         ),
+                      //       );
+                      //     }).toList(),
+                      //   ),
+                      // ),
 
                     // ORDENAR POR (Desplegable)
                     Row(
@@ -692,7 +697,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                       try {
                                         
                                         //Comprueba que haya al menos una opción seleccionada de cada categoría
-                                        if(_selectedType.isEmpty || _selectedProviders.isEmpty || _selectedWatchTypes.isEmpty || (_selectedType==film && _selectedFilmGenres.isEmpty) || (_selectedType==serie && _selectedSerieGenres.isEmpty)){
+                                        if(_selectedType.isEmpty || _selectedProviders.isEmpty || (_selectedType==film && _selectedFilmGenres.isEmpty) || (_selectedType==serie && _selectedSerieGenres.isEmpty)){
                                            ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
                                               content: Text(context.lang.error_opciones_decision_watch),
