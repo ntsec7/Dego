@@ -44,4 +44,12 @@ class WatchDecisionService {
     }
   }
 
+  Stream<WatchDecision> getWatchDecisionById(String id) {
+    return supabase
+        .from('watch_decision')
+        .stream(primaryKey: ['id'])
+        .eq('id', id)
+        .map((data) => WatchDecision.fromMap(data.first));
+  }
+
 }

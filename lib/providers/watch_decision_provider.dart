@@ -30,3 +30,9 @@ final voteWatchDecisionsProvider = Provider<AsyncValue<List<WatchDecision>>>((re
     decisionsList.where((d) => d.finish == false).toList()
   );
 });
+
+final watchDecisionByIdProvider = StreamProvider.family<WatchDecision, String>((ref, id) {
+  final service = ref.watch(watchDecisionServiceProvider);
+
+  return service.getWatchDecisionById(id);
+});
