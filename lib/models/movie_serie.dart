@@ -45,7 +45,7 @@ class MovieSerie {
           : (json['first_air_date'] ?? ''),
       voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0.0,
       genreIds: List<int>.from(json['genre_ids'] ?? []),
-      voteCount: json['voteCount'] ?? '',
+      voteCount: json['voteCount'] ?? 0,
     );
   }
 }
