@@ -53,7 +53,7 @@ class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionSta
    Future<void> _init() async {
 
     final decision = await service.getWatchDecision(decisionId);
-    final position = await service.getWatchPosition(decisionId);
+    final position = await service.getWatchPosition(decisionId, userId);
 
     final savedPage = position.page;
     final lastId= position.last_id;

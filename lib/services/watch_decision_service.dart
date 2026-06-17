@@ -33,14 +33,19 @@ class WatchDecisionService {
     }
   }
 
-  Future<WatchPosition> getWatchPosition(String decision_id) async{
+  Future<WatchPosition> getWatchPosition(String decision_id, String user_id) async{
     try{
-      final res= await supabase.from('watch_decision_position').select().eq('id_decision', decision_id).single();
+      final res= await supabase.from('watch_decision_position').select().eq('id_decision', decision_id).eq('id_user', user_id).single();
 
       return WatchPosition.fromMap(res);
     }
     catch(e){
-      rethrow;
+      return WatchPosition(
+        id_decision: decision_id,
+        id_user: user_id,
+        last_id: 0, 
+        page: 1,   
+      );
     }
   }
 
@@ -59,9 +64,13 @@ class WatchDecisionService {
     required int page,
   }) async {
     try{
-      await supabase.from('watch_decision_position')
-      .update({'last_id': lastId, 'page': page})
-      .eq('id_decision', decisionId).eq('id_user', userId);
+      await supabase.from('watch_decision_position').upsert({ //hace un insert, pero si ya existe hace un update
+        'id_decision': decisionId,
+        'id_user': userId,
+        'last_id': lastId,
+        'page': page,
+        'finish': false, // Añadimos el valor por defecto por consistencia
+      });
     }catch(e){
       rethrow;
     }

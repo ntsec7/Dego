@@ -1,3 +1,4 @@
+import 'package:dego/models/watch_decision.dart';
 import 'package:dego/providers/create_provider.dart';
 import 'package:dego/providers/decision_provider.dart';
 import 'package:dego/providers/watch_decision_provider.dart';
@@ -44,6 +45,61 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                   onPressed: () async {
                     try {
                       await ref.read(createProvider.notifier).deleteDecision(decisionId: dec.id);
+
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(context.lang.exito_eliminar_decision),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(translateSupabaseError(context, e))),
+                        );
+                      }
+                    }
+                  },
+                  child: Text(context.lang.aceptar),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _deleteWatchDecision(BuildContext context, WatchDecision dec) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              title: Text(context.lang.eliminar_decision),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    context.lang.eliminar_decision_txt(dec.title),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(context.lang.cancelar),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await ref.read(createProvider.notifier).deleteWatchDecision(decisionId: dec.id);
 
                       if (context.mounted) {
                         Navigator.pop(context);
@@ -256,7 +312,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                                         ),
                                       if (watchDec.id_creator == currentUserId || currentUserType == 'admin') ...[
                                         IconButton(
-                                          icon: const Icon(Icons.hourglass_empty_rounded),
+                                          icon: const Icon(Icons.edit),
                                           color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
                                           onPressed: () => null,  //TODO _finishWatchDecision(context,watchDec.id)
                                         ),
@@ -264,7 +320,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                                           icon: const Icon(Icons.delete),
                                           color: Colors.redAccent,
                                           onPressed: () {
-                                            // _deleteWatchDecision(context, watchDec); //TODO DELETE DECISION
+                                             _deleteWatchDecision(context, watchDec); 
                                           },
                                         ),
                                       ],

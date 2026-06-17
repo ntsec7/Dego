@@ -1,3 +1,4 @@
+import 'package:dego/models/watch_decision.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:typed_data';
 import 'package:dego/models/decision.dart';
@@ -465,6 +466,26 @@ class CreateService {
     }
   }
 
+  Future<void> editWatchDecision({
+    required WatchDecision decision
+  }) async {
+    try{
+       await supabase.from('watch_decision').update(decision.toMap()).eq('id', decision.id);
+    } catch(e){
+      rethrow;
+    }
+  }
+
+  Future<void> deleteWatchDecision({
+   required String decisionId,
+  }) async{
+    try{
+      await supabase.from('watch_decision').delete().eq('id',decisionId);
+    } 
+    catch(e){
+      rethrow;
+    }
+  }
 
 }
 

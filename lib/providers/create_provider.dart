@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:typed_data';
 import 'package:dego/models/option.dart';
+import 'package:dego/models/watch_decision.dart';
 
 final createServiceProvider = Provider<CreateService>((ref){
   return CreateService();
@@ -258,5 +259,28 @@ class CreateNotifier extends StateNotifier<User?> {
       rethrow;
     }
   }
+
+  //EDITAR WATCH DECISION
+  Future<void> editWatchDecision({
+    required WatchDecision decision
+  }) async {
+    try{
+       await createService.editWatchDecision(decision: decision);
+    } catch(e){
+      rethrow;
+    }
+  }
+
+  Future<void> deleteWatchDecision({
+   required String decisionId,
+  }) async{
+    try{
+      await createService.deleteWatchDecision(decisionId: decisionId);
+    } 
+    catch(e){
+      rethrow;
+    }
+  }
+
 
 }
