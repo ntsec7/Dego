@@ -605,10 +605,13 @@ class _EditDecision extends ConsumerState<EditDecision> {
                         ),
                       ),
 
+
+                    if(decision.state==DecisionState.options)...[  
+
                     SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.02),
 
                     // BOTÓN EMPEZAR VOTACIÓN
-                    if(decision.state==DecisionState.options)
+                    
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -654,6 +657,44 @@ class _EditDecision extends ConsumerState<EditDecision> {
                     ),
 
                     SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
+                    ],
+
+                  ],
+
+
+                  if(decision.state==DecisionState.vote && decision.type!=DecisionType.roulette) ...[
+                  SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.02),
+
+                    // BOTÓN TERMINAR VOTACIÓN
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                        foregroundColor: Theme.of(context).colorScheme.primary, 
+                        side: BorderSide( //Borde
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                      onPressed: () async{
+
+                        decision.state = DecisionState.finish;
+
+                        //Actualizar la decisión
+                        await ref.read(createProvider.notifier).editDecision(decision: decision);
+
+                        if(!context.mounted) return;
+
+                        Navigator.pop(context);
+
+                      },
+                      child: Text(context.lang.terminar_votacion,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
+                            ),),
+                    ),
+
+                  SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
 
                   ],
 

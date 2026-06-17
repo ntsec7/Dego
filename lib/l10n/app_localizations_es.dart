@@ -580,4 +580,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ver_mas => 'Ver más';
+
+  @override
+  String get terminar_votacion => 'Terminar votación';
 }

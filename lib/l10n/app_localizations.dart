@@ -1167,6 +1167,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Ver más'**
   String get ver_mas;
+
+  /// No description provided for @terminar_votacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Terminar votación'**
+  String get terminar_votacion;
 }
 
 class _AppLocalizationsDelegate

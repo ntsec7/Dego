@@ -243,5 +243,6 @@
     "generos" : "Géneros",
     "fecha_estreno" : "Fecha de estreno",
     "sinopsis" : "Sinopsis",
-    "ver_mas" : "Ver más" 
+    "ver_mas" : "Ver más",
+    "terminar_votacion" : "Terminar votación" 
 }

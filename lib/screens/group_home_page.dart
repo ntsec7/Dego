@@ -314,7 +314,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                                         IconButton(
                                           icon: const Icon(Icons.edit),
                                           color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
-                                          onPressed: () => null,  //TODO _finishWatchDecision(context,watchDec.id)
+                                          onPressed: () => Navigator.pushNamed(context, 'editDecisionWatch', arguments: watchDec.id),
                                         ),
                                         IconButton(
                                           icon: const Icon(Icons.delete),
