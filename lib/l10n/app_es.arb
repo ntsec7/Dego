@@ -239,5 +239,6 @@
     "mejor_valoradas" : "Mejor valoradas",
     "mas_vistas" : "Más vistas",
     "error_opciones_decision_watch" : "Error: Debes seleccionar al menos un apartado de cada categoría",
-    "error_titulo" : "Error: Debes introducir un título"
+    "error_titulo" : "Error: Debes introducir un título",
+    "generos" : "Géneros"
 }

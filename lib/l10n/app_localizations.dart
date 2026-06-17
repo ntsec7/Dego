@@ -1143,6 +1143,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error: Debes introducir un título'**
   String get error_titulo;
+
+  /// No description provided for @generos.
+  ///
+  /// In es, this message translates to:
+  /// **'Géneros'**
+  String get generos;
 }
 
 class _AppLocalizationsDelegate

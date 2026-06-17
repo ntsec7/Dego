@@ -568,4 +568,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get error_titulo => 'Error: Debes introducir un título';
+
+  @override
+  String get generos => 'Géneros';
 }

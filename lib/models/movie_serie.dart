@@ -8,6 +8,7 @@ class MovieSerie {
   final double voteAverage;
   final List<int> genreIds; 
   final int voteCount; 
+  final bool isMovie;
 
   MovieSerie({
     required this.id,
@@ -19,6 +20,7 @@ class MovieSerie {
     required this.voteAverage,
     required this.genreIds,
     required this.voteCount,
+    required this.isMovie,
   });
 
   // Getter para la URL de la imagen
@@ -45,7 +47,8 @@ class MovieSerie {
           : (json['first_air_date'] ?? ''),
       voteAverage: (json['vote_average'] as num?)?.toDouble() ?? 0.0,
       genreIds: List<int>.from(json['genre_ids'] ?? []),
-      voteCount: json['voteCount'] ?? 0,
+      voteCount: json['vote_count'] ?? 0,
+      isMovie: isMovie,
     );
   }
 }
