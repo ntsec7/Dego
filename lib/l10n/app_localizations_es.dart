@@ -571,4 +571,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generos => 'Géneros';
+
+  @override
+  String get fecha_estreno => 'Fecha de estreno';
+
+  @override
+  String get sinopsis => 'Sinopsis';
+
+  @override
+  String get ver_mas => 'Ver más';
 }

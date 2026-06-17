@@ -1,118 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:dego/providers/watch_decision_session_provider.dart';
-// import 'package:dego/providers/watch_decision_provider.dart';
-// import 'package:flutter/cupertino.dart';
-// class WatchVote extends ConsumerWidget {
-//   final String id;
-
-//   const WatchVote({
-//     super.key,
-//     required this.id,
-//   });
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-
-//     final screenWidth = MediaQuery.of(context).size.width;
-//     final screenHeight = MediaQuery.of(context).size.height;
-
-//     bool web = screenWidth > 600 ? true : false;
-
-//     final decisionAsync = ref.watch(watchDecisionByIdProvider(id));
-//     final state = ref.watch(watchDecisionSessionProvider(id));
-
-//     final double ladoIzquierdo = web ? screenWidth * 0.15 : screenWidth * 0.05;
-//     final double ladoDerecho = web ? screenWidth * 0.15 : screenWidth * 0.05;
-
-//     if (decisionAsync.isLoading ) {
-//       return const Scaffold(
-//         body: Center(child: CupertinoActivityIndicator(radius: 15)),
-//       );
-//     }
-
-//     final decision = decisionAsync.requireValue;
-
-//     // Si la lista esta vacia
-//     if (state.queue.isEmpty) {
-//       return const Scaffold(
-//         body: Center(child: CircularProgressIndicator()),
-//       );
-//     }
-
-//     final movie = state.currentMovie;
-
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Padding(
-//           padding: EdgeInsets.only(left: ladoIzquierdo, right: ladoDerecho, bottom: 20),
-//           child: Column(
-//             children: [
-
-//               // TÍTULO DE LA DECISIÓN
-//               Padding(
-//                 padding: EdgeInsets.symmetric(
-//                   vertical: web ? screenHeight * 0.02 : screenHeight * 0.015,
-//                   horizontal: web ? screenWidth * 0.05 : screenWidth * 0.01,
-//                 ),
-//               child: Row(
-//                 children: [
-//                   IconButton(
-//                     icon: const Icon(Icons.arrow_back_ios),
-//                     onPressed: () => Navigator.pop(context),
-//                   ),
-//                   SizedBox(width: screenWidth * 0.01),
-//                   Expanded(
-//                     child: Text(
-//                       decision.title,
-//                       style: TextStyle(
-//                         fontSize: web ? (screenHeight + screenWidth) * 0.014 : (screenHeight + screenWidth) * 0.02,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                       // overflow: TextOverflow.ellipsis,
-//                       // maxLines: 3,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               ),
-
-//           // 🎬 TÍTULO
-//           Text(
-//             movie.title,
-//             textAlign: TextAlign.center,
-//             style: const TextStyle(
-//               fontSize: 22,
-//               fontWeight: FontWeight.bold,
-//             ),
-//           ),
-
-//           const SizedBox(height: 30),
-
-//           // ▶ BOTÓN SIGUIENTE
-//           ElevatedButton(
-//             onPressed: () {
-//               ref
-//                   .read(watchDecisionSessionProvider(id).notifier)
-//                   .next();
-//             },
-//             child: const Text("Siguiente"),
-//           ),
-//         ],
-//       ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
-//https://image.tmdb.org/t/p/w500/i89vUDwNhAEWUZSFYITSiv1RIbK.jpg.
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/providers/watch_decision_session_provider.dart';
@@ -183,6 +68,7 @@ class WatchVote extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
+              //TITULO DECISION Y BOTÓN DE ATRÁS
               Padding(
                 padding: EdgeInsets.symmetric(
                   vertical: web ? screenHeight * 0.02 : screenHeight * 0.015,
@@ -223,7 +109,7 @@ class WatchVote extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
 
-              // 3. Fila: Imagen del póster (Centrada y con bordes redondeados)
+              // POSTER
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
@@ -273,11 +159,11 @@ class WatchVote extends ConsumerWidget {
               ),
               ),
 
-              // 5. Fila: Fecha de estreno
+              // FECHA DE ESTRENO
               Row(
                 children: [
-                  const Text(
-                    "Fecha de estreno: ",
+                  Text(
+                    "${context.lang.fecha_estreno}: ",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   Text(
@@ -288,11 +174,11 @@ class WatchVote extends ConsumerWidget {
               ),
               const SizedBox(height: 10),
 
-              // 6. Fila: Puntuación (votos)
+              // PUNTUACIÓN
               Row(
                 children: [
-                  const Text(
-                    "Puntuación: ",
+                  Text(
+                    "${context.lang.puntuacion}: ",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   const Icon(Icons.star, color: Colors.amber, size: 18),
@@ -305,9 +191,9 @@ class WatchVote extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
 
-              // 7. Fila: Sinopsis
-              const Text(
-                "Sinopsis",
+              // SINOPSIS
+              Text(
+                "${context.lang.sinopsis}:",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(height: 6),
@@ -321,14 +207,14 @@ class WatchVote extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
 
-              // 8. Fila: Enlace "Ver más +" centrado
+              // VER MÁS +
               Center(
                 child: TextButton(
                   onPressed: () {
                     // Acción para expandir o ir a detalles externos de TMDB
                   },
                   child: Text(
-                    "ver más +",
+                    "${context.lang.ver_mas} +",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -340,24 +226,30 @@ class WatchVote extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
 
-              // 9. Fila inferior: Botones de acción redondos (X y Corazón)
+              // BOTONES
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Botón rechazar (X)
                   _buildCircleButton(
                     icon: Icons.close,
-                    iconColor: Colors.red,
-                    onPressed: () {
+                    color: const Color(0xFFCC2525),
+                    onPressed: () {                      
+                      //Pasar a la siguiente
                       ref.read(watchDecisionSessionProvider(id).notifier).next();
                     },
                   ),
-                  const SizedBox(width: 40), // Separación entre círculos
-                  // Botón guardar/favorito (Corazón)
+                  SizedBox(width: web ? screenWidth  * 0.3 : screenWidth * 0.15), // Separación entre círculos
+
+                  // Botón aceptar (Corazón)
                   _buildCircleButton(
                     icon: Icons.favorite,
-                    iconColor: Colors.green,
-                    onPressed: () {
+                    color: const Color(0xFF098238),
+                    onPressed: () async{
+
+                      //Votar
+                      await ref.read(watchDecisionSessionProvider(id).notifier).watchVote();
+
+                      //Pasar a la siguiente
                       ref.read(watchDecisionSessionProvider(id).notifier).next();
                     },
                   ),
@@ -410,11 +302,11 @@ class WatchVote extends ConsumerWidget {
   }
 
   // Helper widget para generar los botones inferiores en un círculo pulcro
-  Widget _buildCircleButton({required IconData icon, required Color iconColor, required VoidCallback? onPressed}) {
+  Widget _buildCircleButton({required IconData icon, required Color color, required VoidCallback? onPressed}) {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.white,
+        color: color,
         boxShadow: [
           BoxShadow(
             color: Colors.black,
@@ -426,7 +318,7 @@ class WatchVote extends ConsumerWidget {
       child: IconButton(
         iconSize: 32,
         padding: const EdgeInsets.all(16),
-        icon: Icon(icon, color: iconColor),
+        icon: Icon(icon, color: Colors.white),
         onPressed: onPressed,
       ),
     );

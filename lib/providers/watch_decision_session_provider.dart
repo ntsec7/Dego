@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/models/watch_decision_session.dart';
 import 'package:dego/services/tmdb_service.dart';
 import 'package:dego/services/watch_decision_service.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
 final tmdbServiceProvider = Provider<TmdbService>((ref) {
   return TmdbService();
@@ -17,8 +18,11 @@ final watchDecisionSessionProvider = StateNotifierProvider.family<WatchDecisionS
   final tmdbService = ref.read(tmdbServiceProvider);
   final service = ref.read(watchDecisionServiceProvider);
 
+  final currentUserId = ref.read(usuarioProvider).value?.id ?? '';
+
   return WatchDecisionSessionNotifier(
     decisionId: decisionId,
+    userId: currentUserId,
     tmdbService: tmdbService,
     service: service,
   );
@@ -28,10 +32,11 @@ final watchDecisionSessionProvider = StateNotifierProvider.family<WatchDecisionS
 class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionState> {
   
   final String decisionId;
+  final String userId;
   final TmdbService _tmdbService;
   final WatchDecisionService service;
   
-  WatchDecisionSessionNotifier({required this.decisionId, required TmdbService tmdbService, required this.service,
+  WatchDecisionSessionNotifier({required this.decisionId, required this.userId, required TmdbService tmdbService, required this.service,
   }) : _tmdbService = tmdbService,
       super(
           WatchDecisionSessionState(
@@ -92,10 +97,28 @@ class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionSta
     }
   }
 
-  void next() {
+  void next() async{
     if (!state.hasNext) return;
 
     final newIndex = state.currentIndex + 1;
+
+    //Actualizar ultima peli y página en Supabase
+    final nextMovie = state.queue[newIndex];
+    final nextMovieId = nextMovie.id;
+  
+    //calculamos la pagina
+    final moviePage = (newIndex ~/ 20) + 1; 
+
+    try {
+      await service.updateWatchDecisionPosition(
+        decisionId: decisionId,
+        userId: userId,
+        lastId: nextMovieId,
+        page: moviePage,
+      );
+    } catch (e) {
+      rethrow;
+    }
 
     state = state.copyWith(currentIndex: newIndex);
 
@@ -105,5 +128,18 @@ class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionSta
     }
   }
 
+  Future<void> watchVote() async{
+    try{
+
+      if (state.queue.isEmpty || state.currentIndex >= state.queue.length || userId.isEmpty) return;
+
+      final movieId= state.queue[state.currentIndex].id;
+
+      await service.watchVote(decisionId: decisionId, userId: userId, optionId: movieId);
+      
+    } catch (e){
+      rethrow;
+    }
+  }
 
 }

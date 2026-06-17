@@ -1149,6 +1149,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Géneros'**
   String get generos;
+
+  /// No description provided for @fecha_estreno.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de estreno'**
+  String get fecha_estreno;
+
+  /// No description provided for @sinopsis.
+  ///
+  /// In es, this message translates to:
+  /// **'Sinopsis'**
+  String get sinopsis;
+
+  /// No description provided for @ver_mas.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver más'**
+  String get ver_mas;
 }
 
 class _AppLocalizationsDelegate
