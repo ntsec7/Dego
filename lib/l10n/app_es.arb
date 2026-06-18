@@ -244,5 +244,7 @@
     "fecha_estreno" : "Fecha de estreno",
     "sinopsis" : "Sinopsis",
     "ver_mas" : "Ver más",
-    "terminar_votacion" : "Terminar votación" 
+    "terminar_votacion" : "Terminar votación",
+    "error_votacion_finalizada" : "Error: La votación ya ha finalizado",
+    "no_quedan_opciones" : "No quedan opciones" 
 }

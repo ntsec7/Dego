@@ -26,7 +26,9 @@ class WatchDecision{
       id_creator: map['id_creator'], 
       title: map['title'], 
       url: map['url'],
-      finish_hour: map['finish_hour'], 
+      finish_hour: map['finish_hour'] != null
+        ? DateTime.parse(map['finish_hour']).toLocal()
+        : null,
       finish: map['finish']
     );
   }

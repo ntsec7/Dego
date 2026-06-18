@@ -6,6 +6,7 @@ class WatchDecisionSessionState {
   final int currentPage;
   final bool isLoadingMore;
   final String path;
+  final bool isInitialLoaded;
 
   WatchDecisionSessionState({
     required this.queue,
@@ -13,6 +14,7 @@ class WatchDecisionSessionState {
     required this.currentPage,
     this.isLoadingMore = false,
     required this.path,
+    required this.isInitialLoaded,
   });
 
   MovieSerie get currentMovie => queue[currentIndex];
@@ -25,6 +27,7 @@ class WatchDecisionSessionState {
     int? currentPage,
     bool? isLoadingMore,
     String? path,
+    bool? isInitialLoaded,
   }) {
     return WatchDecisionSessionState(
       queue: queue ?? this.queue,
@@ -32,6 +35,7 @@ class WatchDecisionSessionState {
       currentPage: currentPage ?? this.currentPage,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       path: path ?? this.path,
+      isInitialLoaded: isInitialLoaded ?? this.isInitialLoaded,
     );
   }
 }

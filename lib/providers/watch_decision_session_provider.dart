@@ -44,6 +44,7 @@ class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionSta
             currentIndex: 0,
             currentPage: 1,
             path: "",
+            isInitialLoaded: false,
           ),
         ) {
     _init();
@@ -67,6 +68,8 @@ class WatchDecisionSessionNotifier extends StateNotifier<WatchDecisionSessionSta
     await _loadPage(savedPage);
 
     _restoreIndex(lastId);
+
+    state = state.copyWith(isInitialLoaded: true);
   }
 
   void _restoreIndex(int lastId) {

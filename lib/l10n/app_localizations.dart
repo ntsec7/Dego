@@ -1173,6 +1173,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Terminar votación'**
   String get terminar_votacion;
+
+  /// No description provided for @error_votacion_finalizada.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: La votación ya ha finalizado'**
+  String get error_votacion_finalizada;
+
+  /// No description provided for @no_quedan_opciones.
+  ///
+  /// In es, this message translates to:
+  /// **'No quedan opciones'**
+  String get no_quedan_opciones;
 }
 
 class _AppLocalizationsDelegate

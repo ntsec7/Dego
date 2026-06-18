@@ -53,9 +53,69 @@ class WatchVote extends ConsumerWidget {
 
     // Si la lista esta vacia
     if (state.queue.isEmpty) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+
+
+      if (!state.isInitialLoaded) {
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+      else{
+         return Scaffold(
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    //TITULO DECISION Y BOTÓN DE ATRÁS
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: web ? screenHeight * 0.02 : screenHeight * 0.015,
+                        horizontal: web ? screenWidth * 0.05 : screenWidth * 0.01,
+                      ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        SizedBox(width: screenWidth * 0.01),
+                        Expanded(
+                          child: Text(
+                            decision.title,
+                            style: TextStyle(
+                              // fontSize: web ? (screenHeight + screenWidth) * 0.014 : (screenHeight + screenWidth) * 0.02,
+                              fontSize: 20,
+                              // fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
+                              color: isDarkMode ? const Color.fromARGB(255, 167, 167, 167) : const Color.fromARGB(255, 74, 74, 74), 
+                            ),
+                            // overflow: TextOverflow.ellipsis,
+                            // maxLines: 3,
+                          ),
+                        ),
+                      ],
+                    ),
+                    ),
+
+                    // TITULO
+                    Text(
+                      context.lang.no_quedan_opciones,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ),
+          );
+      }
+    
     }
 
     final movie = state.currentMovie;
@@ -233,7 +293,18 @@ class WatchVote extends ConsumerWidget {
                   _buildCircleButton(
                     icon: Icons.close,
                     color: const Color(0xFFCC2525),
-                    onPressed: () {                      
+                    onPressed: () {         
+
+                      //SI YA HA ACABADO LO ECHA
+                      if(decision.finish){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(context.lang.error_votacion_finalizada),
+                            ),
+                          );
+                          Navigator.pop(context);
+                      }
+
                       //Pasar a la siguiente
                       ref.read(watchDecisionSessionProvider(id).notifier).next();
                     },
@@ -245,6 +316,17 @@ class WatchVote extends ConsumerWidget {
                     icon: Icons.favorite,
                     color: const Color(0xFF098238),
                     onPressed: () async{
+
+                      //SI YA HA ACABADO LO ECHA
+                      if(decision.finish){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(context.lang.error_votacion_finalizada),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+
 
                       //Votar
                       await ref.read(watchDecisionSessionProvider(id).notifier).watchVote();

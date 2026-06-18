@@ -583,4 +583,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get terminar_votacion => 'Terminar votación';
+
+  @override
+  String get error_votacion_finalizada => 'Error: La votación ya ha finalizado';
+
+  @override
+  String get no_quedan_opciones => 'No quedan opciones';
 }
