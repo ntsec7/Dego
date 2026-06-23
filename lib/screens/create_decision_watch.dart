@@ -9,6 +9,7 @@ import 'package:dego/providers/decision_draft_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/providers/create_provider.dart';
 import 'package:dego/models/tmdb_info.dart';
+import 'package:flutter/services.dart';
 
 class CreateDecisionWatch extends ConsumerStatefulWidget {
   const CreateDecisionWatch({super.key});
@@ -36,6 +37,9 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
   late RangeValues _yearRange = RangeValues(1950, _currentYear.toDouble());
   // final List<TMDBWatchType> _selectedWatchTypes = [];
   TMDBOrder _selectedOrder = TMDBOrder.voteAverageDesc;
+
+  bool _hasLimit = false; 
+  int _maxToShow = 50;
 
   @override
   void dispose() {
@@ -626,6 +630,103 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                       ],
                     ),
 
+
+                    SizedBox(height: web ? screenHeight * 0.03 : screenHeight * 0.03),
+
+                    //MAXIMO A MOSTRAR
+                    
+                    //SWITCH
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: web ? screenWidth * 0.02 : 0,
+                            right: 12.0,
+                          ),
+                          child: Text(
+                            context.lang.maximo_resultados,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: web
+                                  ? (screenHeight + screenWidth) * 0.012
+                                  : (screenHeight + screenWidth) * 0.014,
+                            ),
+                          ),
+                        ),
+                        // const Spacer(), 
+                        Switch.adaptive(
+                          value: _hasLimit,
+                          activeTrackColor: Theme.of(context).colorScheme.primary,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _hasLimit = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+
+                    //LÍMITE
+                    if( _hasLimit) ...[
+                    SizedBox(height: web ? screenHeight * 0.03 : screenHeight * 0.03),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: web ? screenWidth * 0.02 : 0, 
+                            right: 12.0, 
+                          ),
+                          child: Text(
+                            "${context.lang.maximo}: ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: web
+                                  ? (screenHeight + screenWidth) * 0.012
+                                  : (screenHeight + screenWidth) * 0.014,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: screenWidth * 0.03),
+                        Expanded(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly], // Evita que el usuario escriba letras, puntos o comas
+                              initialValue: _maxToShow.toString(),
+                              onChanged: (String value) {
+                                setState(() {
+                                  _maxToShow = int.tryParse(value) ?? 50;
+                                });
+                              },
+                              cursorColor: Colors.grey,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal,
+                                fontFamily: 'Arial',
+                                fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.0125,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: context.lang.titulo,
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
+                                ),
+                                errorStyle: TextStyle(
+                                  fontSize: web ? (screenHeight + screenWidth) * 0.007 : (screenHeight + screenWidth) * 0.012,
+                                ),
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+                                filled: true,
+                                fillColor: Colors.white,
+                                isDense: true,
+                                contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                              ),
+                            ),
+                          ),
+                    ],),
+                    ],
+
                     SizedBox(height: web ? screenHeight * 0.03 : screenHeight * 0.03),
 
                       // =======================================
@@ -715,7 +816,13 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                         final DateTime? parsedDate = DateTime.tryParse(_dateControllerVote.text);
                                         final DateTime? finishDateTime = parsedDate?.toLocal();
 
-                                        await ref.read(createProvider.notifier).createWatchDecision(id_creator: currentUserId!, id_group: currentGroupId, title: _title.text, finish_hour: finishDateTime, url: url);
+                                        //Coge máximo de resultados
+                                        int? limit;
+                                        if(_hasLimit){
+                                          limit = _maxToShow;
+                                        }
+
+                                        await ref.read(createProvider.notifier).createWatchDecision(id_creator: currentUserId!, id_group: currentGroupId, title: _title.text, finish_hour: finishDateTime, url: url, limit: limit);
 
                                         if (!context.mounted) return;
 

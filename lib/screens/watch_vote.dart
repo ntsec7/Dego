@@ -100,15 +100,20 @@ class WatchVote extends ConsumerWidget {
                     ),
                     ),
 
-                    // TITULO
-                    Text(
+                    // ERROR
+                    SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Center(
+                    child: Text(
                       context.lang.no_quedan_opciones,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                   ),
+                    ),
                   ],
                 ),
               ),

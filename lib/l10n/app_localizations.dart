@@ -1183,8 +1183,20 @@ abstract class AppLocalizations {
   /// No description provided for @no_quedan_opciones.
   ///
   /// In es, this message translates to:
-  /// **'No quedan opciones'**
+  /// **'No quedan opciones por votar'**
   String get no_quedan_opciones;
+
+  /// No description provided for @maximo_resultados.
+  ///
+  /// In es, this message translates to:
+  /// **'Máximo de resultados'**
+  String get maximo_resultados;
+
+  /// No description provided for @maximo.
+  ///
+  /// In es, this message translates to:
+  /// **'Máximo'**
+  String get maximo;
 }
 
 class _AppLocalizationsDelegate

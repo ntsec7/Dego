@@ -447,6 +447,7 @@ class CreateService {
     required String title,
     DateTime? finish_hour,
     required String url,
+    int? limit,
 
   }) async{
     try{
@@ -459,6 +460,7 @@ class CreateService {
         'finish_hour' : finish_hour,
         'url' : url,
         'finish' : false,
+        'res_limit' : limit,
       });
 
     } catch(e){

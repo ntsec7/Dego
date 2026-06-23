@@ -44,7 +44,8 @@ class WatchDecisionService {
         id_decision: decision_id,
         id_user: user_id,
         last_id: 0, 
-        page: 1,   
+        page: 1, 
+        finish: false,  
       );
     }
   }
@@ -58,18 +59,15 @@ class WatchDecisionService {
   }
 
   Future<void> updateWatchDecisionPosition({
-    required String decisionId,
-    required String userId,
-    required int lastId,
-    required int page,
+    required WatchPosition position,
   }) async {
     try{
       await supabase.from('watch_decision_position').upsert({ //hace un insert, pero si ya existe hace un update
-        'id_decision': decisionId,
-        'id_user': userId,
-        'last_id': lastId,
-        'page': page,
-        'finish': false, // Añadimos el valor por defecto por consistencia
+        'id_decision': position.id_decision,
+        'id_user': position.id_user,
+        'last_id': position.last_id,
+        'page': position.page,
+        'finish': position.finish, // Añadimos el valor por defecto por consistencia
       });
     }catch(e){
       rethrow;

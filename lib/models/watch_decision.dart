@@ -6,6 +6,7 @@ class WatchDecision{
   String url;
   DateTime? finish_hour;
   bool finish;
+  int? res_limit;
 
 
   WatchDecision({
@@ -16,6 +17,7 @@ class WatchDecision{
     required this.url,
     this.finish_hour,
     required this.finish,
+    this.res_limit,
   });
 
   //Desde Supabase
@@ -29,7 +31,8 @@ class WatchDecision{
       finish_hour: map['finish_hour'] != null
         ? DateTime.parse(map['finish_hour']).toLocal()
         : null,
-      finish: map['finish']
+      finish: map['finish'],
+      res_limit : map['res_limit'],
     );
   }
 
@@ -43,6 +46,7 @@ class WatchDecision{
       'url' : url,
       'finish_hour' : finish_hour?.toUtc().toIso8601String(),
       'finish' : finish,
+      'res_limit' : res_limit,
     };
   }
 

@@ -588,5 +588,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get error_votacion_finalizada => 'Error: La votación ya ha finalizado';
 
   @override
-  String get no_quedan_opciones => 'No quedan opciones';
+  String get no_quedan_opciones => 'No quedan opciones por votar';
+
+  @override
+  String get maximo_resultados => 'Máximo de resultados';
+
+  @override
+  String get maximo => 'Máximo';
 }

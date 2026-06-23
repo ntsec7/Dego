@@ -249,11 +249,12 @@ class CreateNotifier extends StateNotifier<User?> {
     required String title,
     DateTime? finish_hour,
     required String url,
+    int? limit,
 
   }) async{
     try{
       
-      await createService.createWatchDecision(id_creator: id_creator, id_group: id_group, title: title, finish_hour: finish_hour, url: url);
+      await createService.createWatchDecision(id_creator: id_creator, id_group: id_group, title: title, finish_hour: finish_hour, url: url, limit: limit);
 
     } catch(e){
       rethrow;
