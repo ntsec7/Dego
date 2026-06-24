@@ -595,4 +595,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get maximo => 'Máximo';
+
+  @override
+  String get decision_estandar => 'Decisión estándar';
+
+  @override
+  String get sugerir_peliculas => 'Sugerir películas';
 }

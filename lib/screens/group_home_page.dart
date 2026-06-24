@@ -450,28 +450,28 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                 children: [
 
                   // NUEVA DECISIÓN DE CINE/SERIES
-                  Container(
-                    width: web ? screenWidth * 0.04 : screenWidth * 0.15,
-                    height: web ? screenWidth * 0.04 : screenWidth * 0.15,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: GestureDetector(
-                      onTap: () async {
-                        Navigator.pushNamed(context, 'createDecisionWatch');
-                      },
-                      child: FractionallySizedBox(
-                        widthFactor: 0.95,
-                        child: Image.asset(
-                          'assets/images/popcorn_icon.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   width: web ? screenWidth * 0.04 : screenWidth * 0.15,
+                  //   height: web ? screenWidth * 0.04 : screenWidth * 0.15,
+                  //   decoration: BoxDecoration(
+                  //     color: Theme.of(context).colorScheme.primary,
+                  //     shape: BoxShape.circle,
+                  //   ),
+                  //   child: GestureDetector(
+                  //     onTap: () async {
+                  //       Navigator.pushNamed(context, 'createDecisionWatch');
+                  //     },
+                  //     child: FractionallySizedBox(
+                  //       widthFactor: 0.95,
+                  //       child: Image.asset(
+                  //         'assets/images/popcorn_icon.png',
+                  //         fit: BoxFit.contain,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
-                  SizedBox(width: web ? screenWidth * 0.06 : screenWidth * 0.07),
+                  // SizedBox(width: web ? screenWidth * 0.06 : screenWidth * 0.07),
 
                   // NUEVA DECISIÓN GENERAL
                   IconButton(
@@ -482,7 +482,8 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                     color: const Color(0xFF098238),
                     iconSize: web ? screenWidth * 0.03 : screenWidth * 0.15,
                     onPressed: () async {
-                      Navigator.pushNamed(context, 'createDecision');
+                      // Navigator.pushNamed(context, 'createDecision');
+                      Navigator.pushNamed(context, 'navigateToCreateDecision');
                     },
                   ),
                 ],

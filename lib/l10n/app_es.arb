@@ -248,5 +248,7 @@
     "error_votacion_finalizada" : "Error: La votación ya ha finalizado",
     "no_quedan_opciones" : "No quedan opciones por votar",
     "maximo_resultados": "Máximo de resultados",
-    "maximo" : "Máximo"
+    "maximo" : "Máximo",
+    "decision_estandar": "Decisión estándar",
+    "sugerir_peliculas" : "Sugerir películas"
 }

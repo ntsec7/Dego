@@ -6,6 +6,7 @@ import 'package:dego/screens/edit_option.dart';
 import 'package:dego/screens/group_history.dart';
 import 'package:dego/screens/group_home_page.dart';
 import 'package:dego/screens/group_members.dart';
+import 'package:dego/screens/navigate_to_create_decision.dart';
 import 'package:dego/screens/reset_password.dart';
 import 'package:dego/screens/simple_vote.dart';
 import 'package:flutter/material.dart';
@@ -174,6 +175,7 @@ class _MyAppState extends State<MyApp> {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return EditDecisionWatch(id:id);
         },
+        'navigateToCreateDecision' : (context) => NavigateToCreateDecision(),
       },
     );
   }

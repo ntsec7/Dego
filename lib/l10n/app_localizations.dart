@@ -1197,6 +1197,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Máximo'**
   String get maximo;
+
+  /// No description provided for @decision_estandar.
+  ///
+  /// In es, this message translates to:
+  /// **'Decisión estándar'**
+  String get decision_estandar;
+
+  /// No description provided for @sugerir_peliculas.
+  ///
+  /// In es, this message translates to:
+  /// **'Sugerir películas'**
+  String get sugerir_peliculas;
 }
 
 class _AppLocalizationsDelegate
