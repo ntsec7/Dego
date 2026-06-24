@@ -610,11 +610,17 @@ abstract class AppLocalizations {
   /// **'Título'**
   String get titulo;
 
-  /// No description provided for @votacion.
+  /// No description provided for @votacion_unica.
   ///
   /// In es, this message translates to:
-  /// **'Votación'**
-  String get votacion;
+  /// **'Votación Única'**
+  String get votacion_unica;
+
+  /// No description provided for @votacion_multiple.
+  ///
+  /// In es, this message translates to:
+  /// **'Votación Múltiple'**
+  String get votacion_multiple;
 
   /// No description provided for @ruleta.
   ///
@@ -831,6 +837,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error: Selecciona una opción para votar'**
   String get error_votar_simple_no_ops;
+
+  /// No description provided for @error_votar_multiple_no_ops.
+  ///
+  /// In es, this message translates to:
+  /// **'Error: Selecciona al menos una opción para votar'**
+  String get error_votar_multiple_no_ops;
 
   /// No description provided for @girar.
   ///

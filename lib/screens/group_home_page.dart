@@ -217,6 +217,9 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                                     case DecisionType.roulette:
                                       Navigator.pushNamed(context, 'rouletteVote', arguments: votDec.id);
                                       break;
+                                    case DecisionType.multiple:
+                                      Navigator.pushNamed(context, 'multipleVote', arguments: votDec.id);
+                                      break;
                                   }
                                 },
                                 child: Container(
@@ -308,7 +311,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
                                         IconButton(
                                           icon: const Icon(Icons.visibility),
                                           color: isDarkMode ? const Color.fromARGB(255, 145, 162, 169) : const Color.fromARGB(255, 95, 104, 108),
-                                          onPressed: () => null,  //TODO VER PELIS VOTADAS
+                                          onPressed: () => "",  //TODO VER PELIS VOTADAS
                                         ),
                                       if (watchDec.id_creator == currentUserId || currentUserType == 'admin') ...[
                                         IconButton(

@@ -6,9 +6,11 @@ import 'package:dego/screens/edit_option.dart';
 import 'package:dego/screens/group_history.dart';
 import 'package:dego/screens/group_home_page.dart';
 import 'package:dego/screens/group_members.dart';
+import 'package:dego/screens/multiple_vote.dart';
 import 'package:dego/screens/navigate_to_create_decision.dart';
 import 'package:dego/screens/reset_password.dart';
 import 'package:dego/screens/simple_vote.dart';
+import 'package:dego/screens/watch_vote_details.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';  //activa riverpod en toda la app
@@ -158,6 +160,10 @@ class _MyAppState extends State<MyApp> {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return SimpleVote(id:id);
         },
+        'multipleVote' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return MultipleVote(id:id);
+        },
         'rankingVote' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return RankingVote(id:id);
@@ -170,6 +176,10 @@ class _MyAppState extends State<MyApp> {
         'watchVote' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return WatchVote(id:id);
+        },
+        'watchVoteDetails' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return WatchVoteDetails(id:id);
         },
         'editDecisionWatch' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;

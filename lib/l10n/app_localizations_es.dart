@@ -288,7 +288,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get titulo => 'Título';
 
   @override
-  String get votacion => 'Votación';
+  String get votacion_unica => 'Votación Única';
+
+  @override
+  String get votacion_multiple => 'Votación Múltiple';
 
   @override
   String get ruleta => 'Ruleta';
@@ -410,6 +413,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get error_votar_simple_no_ops =>
       'Error: Selecciona una opción para votar';
+
+  @override
+  String get error_votar_multiple_no_ops =>
+      'Error: Selecciona al menos una opción para votar';
 
   @override
   String get girar => 'Girar';

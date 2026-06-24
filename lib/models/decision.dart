@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:dego/utilities/lang.dart';
 
 // enum DecisionType{roulette, simple, scientific, ranking}
-enum DecisionType{roulette, simple, ranking}
+enum DecisionType{roulette, simple, ranking, multiple}
 
 extension DecisionTypeExtension on DecisionType {
   String title(BuildContext context) {
     switch (this) {
-      case DecisionType.simple: return context.lang.votacion;
+      case DecisionType.simple: return context.lang.votacion_unica;
       case DecisionType.roulette: return context.lang.ruleta;
       case DecisionType.ranking: return context.lang.ranking;
+      case DecisionType.multiple: return context.lang.votacion_multiple;
       // case DecisionType.scientific: return context.lang.cientifico;
     }
   }

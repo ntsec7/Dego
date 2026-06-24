@@ -538,6 +538,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                         );
 
                         Navigator.pop(context);
+                        Navigator.pop(context);
 
                       },
                       child: Text(context.lang.abrir_opciones,
@@ -601,6 +602,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                             onPressed: () {
                               ref.read(decisionDraftProvider.notifier).reset();
                               Navigator.pop(context);
+                              Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFCC2525),
@@ -656,6 +658,7 @@ class _CreateDecision extends ConsumerState<CreateDecision> {
                                           SnackBar(content: Text(context.lang.exito_crear_decision)),
                                         );
 
+                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                         
 

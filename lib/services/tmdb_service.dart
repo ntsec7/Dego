@@ -1,3 +1,4 @@
+import 'package:dego/models/movie_serie_detail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:dego/models/movie_serie.dart';
 
@@ -22,4 +23,32 @@ class TmdbService {
 
     return data.map((json) => MovieSerie.fromJson(json)).toList();
   }
+
+  Future<MovieSerieDetail> getDetail({
+    required int id, 
+    required bool isMovie
+  }) async {
+    try {
+      // Invocamos la Edge Function
+      final response = await supabase.functions.invoke(
+        'get-movie-serie-detail',
+        body: {
+          'id': id,
+          'isMovie': isMovie,
+        },
+      );
+
+      if (response.status != 200) {
+        throw Exception('Error al obtener detalles de TMDB');
+      }
+
+      final Map<String, dynamic> data = response.data;
+      return MovieSerieDetail.fromJson(data);
+
+    } catch (e) {
+      throw Exception('Error en la petición: $e');
+    }
+  }
+
+
 }
