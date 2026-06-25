@@ -38,7 +38,7 @@ serve(async (req) => {
     const mediaType = isMovie ? "movie" : "tv";
 
     // 4. Construir la URL 
-    const url = `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${apiKey}&language=es-ES&append_to_response=credits,videos,watch/providers,recommendations`;
+    const url = `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${apiKey}&language=es-ES&append_to_response=credits,videos,watch/providers,recommendations&include_video_language=es,en,null`;
 
     // 5. Llamada a TMDB
     const response = await fetch(url);

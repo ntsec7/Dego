@@ -773,6 +773,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                             onPressed: () {
                               ref.read(decisionDraftProvider.notifier).reset();
                               Navigator.pop(context);
+                              Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFCC2525),
@@ -830,6 +831,7 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
                                           SnackBar(content: Text(context.lang.exito_crear_decision)),
                                         );
 
+                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                       } catch (e) {
                                         ScaffoldMessenger.of(context).showSnackBar(

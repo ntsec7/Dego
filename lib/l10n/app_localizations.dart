@@ -1219,8 +1219,134 @@ abstract class AppLocalizations {
   /// No description provided for @sugerir_peliculas.
   ///
   /// In es, this message translates to:
-  /// **'Sugerir películas'**
+  /// **'Sugerir películas o series'**
   String get sugerir_peliculas;
+
+  /// No description provided for @disponible.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible en'**
+  String get disponible;
+
+  /// No description provided for @duracion.
+  ///
+  /// In es, this message translates to:
+  /// **'Duración'**
+  String get duracion;
+
+  /// No description provided for @temporadas.
+  ///
+  /// In es, this message translates to:
+  /// **'Temporadas'**
+  String get temporadas;
+
+  /// No description provided for @capitulos_totales.
+  ///
+  /// In es, this message translates to:
+  /// **'Capítulos totales'**
+  String get capitulos_totales;
+
+  /// No description provided for @duracion_cap.
+  ///
+  /// In es, this message translates to:
+  /// **'Duración media por capítulo'**
+  String get duracion_cap;
+
+  /// No description provided for @estado_emision.
+  ///
+  /// In es, this message translates to:
+  /// **'Estado de emisión'**
+  String get estado_emision;
+
+  /// No description provided for @fecha_final.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha de finalización'**
+  String get fecha_final;
+
+  /// No description provided for @reparto.
+  ///
+  /// In es, this message translates to:
+  /// **'Reparto principal'**
+  String get reparto;
+
+  /// No description provided for @equipo_tecnico.
+  ///
+  /// In es, this message translates to:
+  /// **'Equipo técnico'**
+  String get equipo_tecnico;
+
+  /// No description provided for @direccion.
+  ///
+  /// In es, this message translates to:
+  /// **'Dirección'**
+  String get direccion;
+
+  /// No description provided for @guion.
+  ///
+  /// In es, this message translates to:
+  /// **'Guion'**
+  String get guion;
+
+  /// No description provided for @companias_productoras.
+  ///
+  /// In es, this message translates to:
+  /// **'Compañias productoras'**
+  String get companias_productoras;
+
+  /// No description provided for @finanzas.
+  ///
+  /// In es, this message translates to:
+  /// **'Finanzas'**
+  String get finanzas;
+
+  /// No description provided for @presupuesto.
+  ///
+  /// In es, this message translates to:
+  /// **'Presupuesto'**
+  String get presupuesto;
+
+  /// No description provided for @recaudacion.
+  ///
+  /// In es, this message translates to:
+  /// **'Recaudación mundial'**
+  String get recaudacion;
+
+  /// No description provided for @trailer.
+  ///
+  /// In es, this message translates to:
+  /// **'Tráiler'**
+  String get trailer;
+
+  /// No description provided for @titulos_similares.
+  ///
+  /// In es, this message translates to:
+  /// **'Título similares'**
+  String get titulos_similares;
+
+  /// No description provided for @emision.
+  ///
+  /// In es, this message translates to:
+  /// **'En emisión'**
+  String get emision;
+
+  /// No description provided for @finalizada.
+  ///
+  /// In es, this message translates to:
+  /// **'Finalizada'**
+  String get finalizada;
+
+  /// No description provided for @cancelada.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelada'**
+  String get cancelada;
+
+  /// No description provided for @piloto.
+  ///
+  /// In es, this message translates to:
+  /// **'Piloto'**
+  String get piloto;
 }
 
 class _AppLocalizationsDelegate

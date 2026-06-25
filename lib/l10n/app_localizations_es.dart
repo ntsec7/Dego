@@ -607,5 +607,68 @@ class AppLocalizationsEs extends AppLocalizations {
   String get decision_estandar => 'Decisión estándar';
 
   @override
-  String get sugerir_peliculas => 'Sugerir películas';
+  String get sugerir_peliculas => 'Sugerir películas o series';
+
+  @override
+  String get disponible => 'Disponible en';
+
+  @override
+  String get duracion => 'Duración';
+
+  @override
+  String get temporadas => 'Temporadas';
+
+  @override
+  String get capitulos_totales => 'Capítulos totales';
+
+  @override
+  String get duracion_cap => 'Duración media por capítulo';
+
+  @override
+  String get estado_emision => 'Estado de emisión';
+
+  @override
+  String get fecha_final => 'Fecha de finalización';
+
+  @override
+  String get reparto => 'Reparto principal';
+
+  @override
+  String get equipo_tecnico => 'Equipo técnico';
+
+  @override
+  String get direccion => 'Dirección';
+
+  @override
+  String get guion => 'Guion';
+
+  @override
+  String get companias_productoras => 'Compañias productoras';
+
+  @override
+  String get finanzas => 'Finanzas';
+
+  @override
+  String get presupuesto => 'Presupuesto';
+
+  @override
+  String get recaudacion => 'Recaudación mundial';
+
+  @override
+  String get trailer => 'Tráiler';
+
+  @override
+  String get titulos_similares => 'Título similares';
+
+  @override
+  String get emision => 'En emisión';
+
+  @override
+  String get finalizada => 'Finalizada';
+
+  @override
+  String get cancelada => 'Cancelada';
+
+  @override
+  String get piloto => 'Piloto';
 }

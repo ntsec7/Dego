@@ -178,8 +178,14 @@ class _MyAppState extends State<MyApp> {
           return WatchVote(id:id);
         },
         'watchVoteDetails' : (context) {
-          final String id = ModalRoute.of(context)?.settings.arguments as String;
-          return WatchVoteDetails(id:id);
+          
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+          
+          final String id = args['id'] ?? '';
+          final int mediaId = args['mediaId'] ?? 0;
+          final bool isMovie = args['isMovie'] ?? true;
+          
+          return WatchVoteDetails(id:id, mediaId: mediaId, isMovie: isMovie);
         },
         'editDecisionWatch' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;

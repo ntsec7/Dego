@@ -207,7 +207,7 @@ class WatchVote extends ConsumerWidget {
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary, // Formato "Selected" de tu diseño
+                        color: Theme.of(context).colorScheme.primary, 
                         borderRadius: BorderRadius.circular(20), // Aspecto Stadium/Óvalo
                       ),
                       child: Text(
@@ -276,7 +276,11 @@ class WatchVote extends ConsumerWidget {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'watchVoteDetails', arguments: movie.id);
+                    Navigator.pushNamed(context, 'watchVoteDetails', arguments: {
+                      'id': decision.id,
+                      'mediaId': movie.id,
+                      'isMovie': movie.isMovie,
+                  });
                   },
                   child: Text(
                     "${context.lang.ver_mas} +",
