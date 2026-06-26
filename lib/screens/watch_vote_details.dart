@@ -5,6 +5,7 @@ import 'package:dego/providers/watch_decision_provider.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/providers/watch_decision_detail_provider.dart';
 import 'package:intl/intl.dart';  //para el formato del dinero
+import 'package:dego/widgets/youtube_player.dart';
 
 class WatchVoteDetails extends ConsumerWidget {
   final String id; 
@@ -270,37 +271,13 @@ class WatchVoteDetails extends ConsumerWidget {
                   ),
                 ),
 
-              // TRÁILER (Widget interactivo o placeholder visual)
+              // TRÁILER
               if (detail.trailer != null)
-                _buildFilterContainer(
-                  context: context,
-                  title: context.lang.trailer,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.network(
-                          "https://img.youtube.com/vi/${detail.trailer}/hqdefault.jpg",
-                          width: double.infinity,
-                          height: 180,
-                          fit: BoxFit.cover,
-                        ),
-                        Container(
-                          color: Colors.black,
-                          width: double.infinity,
-                          height: 180,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.play_circle_fill, size: 60, color: Colors.white),
-                          onPressed: () {
-                            // Aquí lanzas url_launcher o abres tu reproductor con detail.trailer
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              _buildFilterContainer(
+                context: context,
+                title: context.lang.trailer,
+                child: YoutubeTrailerPlayer(videoKey: detail.trailer!),
+              ),
 
               // CONTENIDO SIMILAR (Scroll Horizontal usando tu clase MovieSerie)
               if (detail.similars.isNotEmpty) ...[
