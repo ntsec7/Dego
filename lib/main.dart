@@ -4,6 +4,7 @@ import 'package:dego/screens/edit_decision.dart';
 import 'package:dego/screens/edit_group.dart';
 import 'package:dego/screens/edit_option.dart';
 import 'package:dego/screens/group_history.dart';
+import 'package:dego/screens/group_history_decision.dart';
 import 'package:dego/screens/group_home_page.dart';
 import 'package:dego/screens/group_members.dart';
 import 'package:dego/screens/multiple_vote.dart';
@@ -196,6 +197,10 @@ class _MyAppState extends State<MyApp> {
         'seeWatchVotes' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return SeeWatchVotes(id:id);
+        },
+        'groupHistoryDecision' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return GroupHistoryDecision(id:id);
         },
       },
     );

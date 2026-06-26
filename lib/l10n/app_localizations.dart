@@ -1347,6 +1347,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Piloto'**
   String get piloto;
+
+  /// No description provided for @historial.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial'**
+  String get historial;
 }
 
 class _AppLocalizationsDelegate

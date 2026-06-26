@@ -32,6 +32,17 @@ final voteWatchDecisionsProvider = Provider<AsyncValue<List<WatchDecision>>>((re
   );
 });
 
+final finishWatchDecisionsProvider = Provider<AsyncValue<List<WatchDecision>>>((ref) {
+
+  // Escuchamos el proveedor principal en tiempo real
+  final allDecisionsAsync = ref.watch(watchDecisionProvider);
+
+  // Filtramos los datos localmente en memoria sin volver a consultar a Supabase
+  return allDecisionsAsync.whenData((decisionsList) => 
+    decisionsList.where((d) => d.finish == true).toList()
+  );
+});
+
 final watchDecisionByIdProvider = StreamProvider.family<WatchDecision, String>((ref, id) {
   final service = ref.watch(watchDecisionServiceProvider);
 

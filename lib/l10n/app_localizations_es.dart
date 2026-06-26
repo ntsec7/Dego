@@ -671,4 +671,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get piloto => 'Piloto';
+
+  @override
+  String get historial => 'Historial';
 }

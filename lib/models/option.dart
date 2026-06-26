@@ -6,6 +6,7 @@ class Option{
   String? description;
   int? percentage;
   String? image;
+  int? num_votes;
 
   Option({
     required this.id,
@@ -14,7 +15,8 @@ class Option{
     required this.title,
     this.description,
     this.percentage,
-    this.image
+    this.image,
+    this.num_votes,
   });
 
   //Desde Supabase 
@@ -27,6 +29,7 @@ class Option{
       description: map['description'],
       percentage: map['percentage'],
       image: map['image'],
+      num_votes: map['num_votes'],
     );
   }
 
