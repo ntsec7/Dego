@@ -20,6 +20,7 @@ final watchDecisionProvider = StreamProvider<List<WatchDecision>>((ref){
 
 });
 
+//Los que están en estado de votación
 final voteWatchDecisionsProvider = Provider<AsyncValue<List<WatchDecision>>>((ref) {
 
   // Escuchamos el proveedor principal en tiempo real
@@ -35,4 +36,11 @@ final watchDecisionByIdProvider = StreamProvider.family<WatchDecision, String>((
   final service = ref.watch(watchDecisionServiceProvider);
 
   return service.getWatchDecisionById(id);
+});
+
+final voteCountProvider =
+    StreamProvider.family<Map<int, int>, String>((ref, decisionId) {
+  final service = ref.watch(watchDecisionServiceProvider);
+
+  return service.getVoteCount(decisionId);
 });

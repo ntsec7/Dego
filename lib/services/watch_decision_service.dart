@@ -91,4 +91,25 @@ class WatchDecisionService {
     }
   }
 
+  Stream<Map<int, int>> getVoteCount(String decisionId) {
+    return supabase
+        .from('watch_vote')
+        .stream(primaryKey: ['id_decision', 'id_user', 'id_option'])
+        .eq('id_decision', decisionId)
+        .map((rows) {
+          final Map<int, int> counts = {};
+
+          for (final row in rows) {
+            final optionId = row['id_option'] as int;
+            counts.update(
+              optionId,
+              (value) => value + 1,
+              ifAbsent: () => 1,
+            );
+          }
+
+          return counts;
+        });
+  }
+
 }
