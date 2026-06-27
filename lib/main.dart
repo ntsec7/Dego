@@ -9,9 +9,12 @@ import 'package:dego/screens/group_home_page.dart';
 import 'package:dego/screens/group_members.dart';
 import 'package:dego/screens/multiple_vote.dart';
 import 'package:dego/screens/navigate_to_create_decision.dart';
+import 'package:dego/screens/navigate_to_tie.dart';
 import 'package:dego/screens/reset_password.dart';
 import 'package:dego/screens/see_watch_votes.dart';
 import 'package:dego/screens/simple_vote.dart';
+import 'package:dego/screens/tied_creator.dart';
+import 'package:dego/screens/tied_roulette.dart';
 import 'package:dego/screens/watch_vote_details.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -201,6 +204,18 @@ class _MyAppState extends State<MyApp> {
         'groupHistoryDecision' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return GroupHistoryDecision(id:id);
+        },
+        'navigateToTie' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return NavigateToTie(id:id);
+        },
+        'tiedCreator' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return TiedCreator(id:id);
+        },
+        'tiedRoulette' : (context) {
+          final String id = ModalRoute.of(context)?.settings.arguments as String;
+          return TiedRoulette(id:id);
         },
       },
     );

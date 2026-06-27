@@ -274,5 +274,7 @@
     "finalizada" : "Finalizada",
     "cancelada" : "Cancelada",
     "piloto" : "Piloto",
-    "historial" : "Historial"
+    "historial" : "Historial",
+    "desempatar" : "Desempatar",
+    "decide_creador" : "Decide el creador"
 }

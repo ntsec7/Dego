@@ -1353,6 +1353,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Historial'**
   String get historial;
+
+  /// No description provided for @desempatar.
+  ///
+  /// In es, this message translates to:
+  /// **'Desempatar'**
+  String get desempatar;
+
+  /// No description provided for @decide_creador.
+  ///
+  /// In es, this message translates to:
+  /// **'Decide el creador'**
+  String get decide_creador;
 }
 
 class _AppLocalizationsDelegate

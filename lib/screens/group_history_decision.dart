@@ -2,9 +2,9 @@ import 'package:dego/models/decision.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
-import 'package:dego/utilities/error.dart';
 import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
 class GroupHistoryDecision extends ConsumerStatefulWidget {
   final String id;
@@ -33,6 +33,8 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
 
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
+    final currentUserId = ref.watch(usuarioProvider).value?.id ?? '';
+
 
     if (decisionAsync.isLoading || optionsAsync.isLoading) {
       return const Scaffold(
@@ -42,6 +44,35 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
 
     final decision = decisionAsync.requireValue;
     final options = optionsAsync.requireValue;
+
+    final sortedOptions = List.from(options)..sort((a, b) {
+      final votesA = a.num_votes ?? 0;
+      final votesB = b.num_votes ?? 0;
+      if(decision.type==DecisionType.ranking){
+        return votesA.compareTo(votesB); // Ascendente
+      }
+      else{
+        return votesB.compareTo(votesA); // Descendente
+      }
+      
+    });
+
+    int? winnerValue;
+
+    if(sortedOptions.isNotEmpty){
+      winnerValue = sortedOptions.first.num_votes ?? 0;  //el primero tiene el valor ganador
+    } 
+
+    List<String> winnersIds= [];
+
+    if (winnerValue != null) {
+      for (var option in sortedOptions) {
+        final votes = option.num_votes ?? 0;
+        if (votes == winnerValue) {
+          winnersIds.add(option.id);
+        }
+      }
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -97,15 +128,15 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
 
               // BLOQUE DE OPCIONES (Se expande para ocupar el espacio restante)
               Expanded(
-                child: ListView.builder(
+                child: ListView(
                   padding: EdgeInsets.all(
                     web
                         ? (screenHeight + screenWidth) * 0.01
                         : (screenHeight + screenWidth) * 0.01,
                   ),
-                  itemCount: options.length,
-                  itemBuilder: (context, index) {
-                    final option = options[index];
+                  children: [
+                  ...List.generate(sortedOptions.length, (index) {
+                    final option = sortedOptions[index];
 
                     return GestureDetector(
                       onTap: () {
@@ -133,6 +164,22 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
                         ),
                         child: Row(
                           children: [
+
+                            //POSICIÓN(si es ranking)
+                            if(decision.type == DecisionType.ranking) ...[
+                            Text(
+                              "${index+1}º",
+                              style: TextStyle(
+                                fontSize: web
+                                    ? (screenHeight + screenWidth) * 0.007
+                                    : (screenHeight + screenWidth) * 0.013,
+                                fontWeight: FontWeight.bold,
+                                color:Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            ],
+
                             Expanded(
                               child: Text(
                                 option.title,
@@ -146,7 +193,8 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
                               ),
                             ),
                             
-                            // NÚMERO DE VOTOS
+                            // NÚMERO DE VOTOS (si es ruleta o ranking no se muestra)
+                            if(decision.type != DecisionType.roulette && decision.type != DecisionType.ranking)
                             Text(
                               '${option.num_votes ?? 0}',
                               style: TextStyle(
@@ -157,6 +205,25 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
                                 color: Colors.black87,
                               ),
                             ),
+
+                            const SizedBox(width: 5),
+
+                            //ICONO DE LOS GANADORES
+                            if(option.num_votes == winnerValue)
+                              winnersIds.length == 1
+                                ? const Icon( //Ganador
+                                    Icons.emoji_events, // trofeo
+                                    color: Color(0xFFFFD700), 
+                                  )
+                                : const Icon( //Empate
+                                    Icons.balance,
+                                    color: Color.fromARGB(255, 134, 134, 134), 
+                                  )
+                            else
+                              const Icon(
+                                Icons.emoji_events, 
+                                color: Colors.transparent, // Ocupa espacio pero no se ve
+                              ),
                             
                           ],
                         ),
@@ -164,10 +231,44 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
                     );
                   },
                 ),
+
+                const SizedBox(height: 10),
+
+              //BOTÓN DE DESEMPATE
+              if(winnersIds.length>1 && decision.id_creator==currentUserId)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // Centra el botón horizontalmente
+                  mainAxisSize: MainAxisSize.min, // Hace que la fila solo ocupe el espacio de sus hijos
+                  children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    // foregroundColor: Theme.of(context).colorScheme.primary, 
+                    side: BorderSide( //Borde
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 1.5,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'navigateToTie', arguments: decision.id);
+                  },
+                  child: Text(context.lang.desempatar,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.014,
+                        ),),
+                ),
+                  ],
+                ),
               ),
         
             ],
           ),
+        ),
+            ],
+      ),
         ),
       ),
     );

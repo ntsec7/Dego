@@ -373,12 +373,14 @@ class CreateService {
     required String id_option,
     required String id_decision,
     required String id_user,
+    bool tied=false,
   }) async{
     try{
       await supabase.from('simple_vote').insert({
         'id_option' : id_option,
         'id_decision' : id_decision,
         'id_user' : id_user,
+        'tied':tied,
       });
     } catch (e){
       rethrow;
@@ -428,6 +430,7 @@ class CreateService {
     required String id_decision,
     required String id_user,
     required int number,
+    bool tied = false,
   }) async{
     try{
       await supabase.from('ranking_vote').insert({
@@ -435,6 +438,7 @@ class CreateService {
         'id_decision' : id_decision,
         'id_user' : id_user,
         'number' : number,
+        'tied' : tied,
       });
     } catch (e){
       rethrow;

@@ -196,9 +196,10 @@ class CreateNotifier extends StateNotifier<User?> {
     required String id_option,
     required String id_decision,
     required String id_user,
+    bool tied=false,
   }) async{
     try{
-      await createService.createSimpleVote(id_option:id_option, id_decision: id_decision, id_user:id_user);
+      await createService.createSimpleVote(id_option:id_option, id_decision: id_decision, id_user:id_user, tied:tied);
     } catch (e){
       rethrow;
     }
@@ -234,9 +235,10 @@ class CreateNotifier extends StateNotifier<User?> {
     required String id_decision,
     required String id_user,
     required int number,
+    bool tied=false,
   }) async{
     try{
-      await createService.createRankingVote(id_option:id_option, id_decision: id_decision, id_user:id_user, number:number);
+      await createService.createRankingVote(id_option:id_option, id_decision: id_decision, id_user:id_user, number:number, tied:tied);
     } catch (e){
       rethrow;
     }

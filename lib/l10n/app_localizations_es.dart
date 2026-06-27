@@ -674,4 +674,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get historial => 'Historial';
+
+  @override
+  String get desempatar => 'Desempatar';
+
+  @override
+  String get decide_creador => 'Decide el creador';
 }
