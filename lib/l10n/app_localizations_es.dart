@@ -680,4 +680,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get decide_creador => 'Decide el creador';
+
+  @override
+  String get error_carga_votos => 'Error en la carga de votos';
+
+  @override
+  String get error_carga_decision => 'Error en la carga de la decisión';
+
+  @override
+  String get no_votos => 'No hay opciones votadas';
 }

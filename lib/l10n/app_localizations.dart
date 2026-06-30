@@ -1365,6 +1365,24 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Decide el creador'**
   String get decide_creador;
+
+  /// No description provided for @error_carga_votos.
+  ///
+  /// In es, this message translates to:
+  /// **'Error en la carga de votos'**
+  String get error_carga_votos;
+
+  /// No description provided for @error_carga_decision.
+  ///
+  /// In es, this message translates to:
+  /// **'Error en la carga de la decisión'**
+  String get error_carga_decision;
+
+  /// No description provided for @no_votos.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay opciones votadas'**
+  String get no_votos;
 }
 
 class _AppLocalizationsDelegate

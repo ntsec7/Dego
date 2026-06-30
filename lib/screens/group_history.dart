@@ -132,7 +132,7 @@ class _GroupHistory extends ConsumerState<GroupHistory> {
                               final watchDec = watchDecs[index];
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.pushNamed(context, 'watchVote', arguments: watchDec.id);
+                                  Navigator.pushNamed(context, 'groupHistoryWatchDecision', arguments: watchDec.id);
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(bottom: screenHeight * 0.015),

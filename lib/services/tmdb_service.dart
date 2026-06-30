@@ -50,5 +50,24 @@ class TmdbService {
     }
   }
 
+  Future<List<dynamic>> getMultipleMedia({
+    required List<int> ids, 
+    required bool isMovie
+  }) async {
+
+    final String tipo = isMovie ? 'movie' : 'tv';
+    
+    final response = await supabase.functions.invoke(
+      'get-multiple-media',
+      body: {
+        'ids': ids, 
+        'tipo': tipo
+      },
+    );
+
+    if (response.status != 200) throw Exception('Error al traer bloque de TMDB');
+    // return response.data as Map<String, dynamic>;
+    return response.data as List<dynamic>;
+  }
 
 }

@@ -11,7 +11,7 @@ import 'package:dego/screens/multiple_vote.dart';
 import 'package:dego/screens/navigate_to_create_decision.dart';
 import 'package:dego/screens/navigate_to_tie.dart';
 import 'package:dego/screens/reset_password.dart';
-import 'package:dego/screens/see_watch_votes.dart';
+import 'package:dego/screens/group_history_watch_decision.dart';
 import 'package:dego/screens/simple_vote.dart';
 import 'package:dego/screens/tied_creator.dart';
 import 'package:dego/screens/tied_roulette.dart';
@@ -197,9 +197,9 @@ class _MyAppState extends State<MyApp> {
           return EditDecisionWatch(id:id);
         },
         'navigateToCreateDecision' : (context) => NavigateToCreateDecision(),
-        'seeWatchVotes' : (context) {
+        'groupHistoryWatchDecision' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
-          return SeeWatchVotes(id:id);
+          return GroupHistoryWatchDecision(id:id);
         },
         'groupHistoryDecision' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;

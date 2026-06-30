@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/models/watch_decision.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/services/watch_decision_service.dart';
+import 'package:dego/models/watch_decision_history.dart';
+import 'package:dego/providers/watch_decision_list_provider.dart';
 
 final watchDecisionServiceProvider = Provider<WatchDecisionService>((ref) {
   return WatchDecisionService();
@@ -54,4 +56,37 @@ final voteCountProvider =
   final service = ref.watch(watchDecisionServiceProvider);
 
   return service.getVoteCount(decisionId);
+});
+
+final watchVoteListProvider = FutureProvider.family<List<MediaWithVotes>, HistoryArgs>((ref, args) async {
+  
+  // 1. Obtenemos el mapa de votos actual (Map<int, int>)
+  final votesAsync = ref.watch(voteCountProvider(args.decisionId));
+  
+  // Manejamos el estado del stream de votos de forma segura
+  final Map<int, int> votosMap = votesAsync.maybeWhen(
+    data: (data) => data,
+    orElse: () => {},
+  );
+
+  if (votosMap.isEmpty) return [];
+
+  // 2. Extraemos solo las llaves (los IDs de las pelis/series)
+  List<int> ids = votosMap.keys.toList();
+
+  // 3. Llamamos al provider pasándole estos IDs
+  // si los IDs no han cambiado, Riverpod NO llamará a la Edge Function, usará la caché
+  final filmList = await ref.read(watchDecisionListProvider(WatchDecisionListProvider(ids, args.isMovie)).future);
+
+  // 4. Cruzamos los datos: Unimos la película con sus votos correspondientes
+  final List<MediaWithVotes> resultado = filmList.map((peli) {
+    return MediaWithVotes(
+      media: peli,
+      votes: votosMap[peli.id] ?? 0,
+    );
+  }).toList();
+
+  resultado.sort((a, b) => b.votes.compareTo(a.votes));
+
+  return resultado;
 });
