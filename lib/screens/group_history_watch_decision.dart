@@ -40,9 +40,6 @@ class _GroupHistoryWatchDecision extends ConsumerState<GroupHistoryWatchDecision
               loading: () => const Center(child: CupertinoActivityIndicator(radius: 15)),
               error: (err, stack) => Center(child: Text(context.lang.error_carga_votos)),
               data: (options) {
-                if (options.isEmpty) {
-                  return Center(child: Text(context.lang.no_votos));
-                }
 
             return SingleChildScrollView( 
               child: Column(
@@ -79,7 +76,10 @@ class _GroupHistoryWatchDecision extends ConsumerState<GroupHistoryWatchDecision
                   for (var option in options) ...[
                     InkWell(
                     onTap: () {
-                      print('Clic en: ${option.media.title}');
+                      Navigator.pushNamed(context, 'groupHistoryWatchDecisionComplete', arguments: {
+                      'id': decision.id,
+                      'mediaId': option.media.id,
+                      });
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),

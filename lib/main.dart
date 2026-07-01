@@ -42,6 +42,7 @@ import 'package:dego/screens/roulette_vote.dart';
 import 'package:dego/screens/create_decision_watch.dart';
 import 'package:dego/screens/watch_vote.dart';
 import 'package:dego/screens/edit_decision_watch.dart';
+import 'package:dego/screens/group_history_watch_decision_complete.dart';
 
 void main() async{
 
@@ -216,6 +217,15 @@ class _MyAppState extends State<MyApp> {
         'tiedRoulette' : (context) {
           final String id = ModalRoute.of(context)?.settings.arguments as String;
           return TiedRoulette(id:id);
+        },
+        'groupHistoryWatchDecisionComplete' : (context) {
+          
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+          
+          final String id = args['id'] ?? '';
+          final int mediaId = args['mediaId'] ?? 0;
+
+          return GroupHistoryWatchDecisionComplete(id:id, mediaId:mediaId);
         },
       },
     );

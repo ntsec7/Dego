@@ -1378,11 +1378,11 @@ abstract class AppLocalizations {
   /// **'Error en la carga de la decisión'**
   String get error_carga_decision;
 
-  /// No description provided for @no_votos.
+  /// No description provided for @error_carga_datos.
   ///
   /// In es, this message translates to:
-  /// **'No hay opciones votadas'**
-  String get no_votos;
+  /// **'Error en la carga de datos'**
+  String get error_carga_datos;
 }
 
 class _AppLocalizationsDelegate

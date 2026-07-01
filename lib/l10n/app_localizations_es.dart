@@ -688,5 +688,5 @@ class AppLocalizationsEs extends AppLocalizations {
   String get error_carga_decision => 'Error en la carga de la decisión';
 
   @override
-  String get no_votos => 'No hay opciones votadas';
+  String get error_carga_datos => 'Error en la carga de datos';
 }
