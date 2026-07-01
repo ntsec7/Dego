@@ -60,14 +60,6 @@ final voteCountProvider =
 
 final watchVoteListProvider = FutureProvider.family<List<MediaWithVotes>, HistoryArgs>((ref, args) async {
   
-  // 1. Obtenemos el mapa de votos actual (Map<int, int>)
-  // final votesAsync = ref.watch(voteCountProvider(args.decisionId));
-  
-  // // Manejamos el estado del stream de votos de forma segura
-  // final Map<int, int> votosMap = votesAsync.maybeWhen(
-  //   data: (data) => data,
-  //   orElse: () => {},
-  // );
   final votosMap = await ref.watch(
     voteCountProvider(args.decisionId).future,
   );
