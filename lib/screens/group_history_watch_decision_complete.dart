@@ -222,6 +222,15 @@ class GroupHistoryWatchDecisionComplete extends ConsumerWidget {
               ),
               ),
 
+              Text(
+                        movie.genreIds.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                      ),
+
               // FECHA DE ESTRENO
               Row(
                 children: [
