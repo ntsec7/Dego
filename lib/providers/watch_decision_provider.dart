@@ -61,12 +61,15 @@ final voteCountProvider =
 final watchVoteListProvider = FutureProvider.family<List<MediaWithVotes>, HistoryArgs>((ref, args) async {
   
   // 1. Obtenemos el mapa de votos actual (Map<int, int>)
-  final votesAsync = ref.watch(voteCountProvider(args.decisionId));
+  // final votesAsync = ref.watch(voteCountProvider(args.decisionId));
   
-  // Manejamos el estado del stream de votos de forma segura
-  final Map<int, int> votosMap = votesAsync.maybeWhen(
-    data: (data) => data,
-    orElse: () => {},
+  // // Manejamos el estado del stream de votos de forma segura
+  // final Map<int, int> votosMap = votesAsync.maybeWhen(
+  //   data: (data) => data,
+  //   orElse: () => {},
+  // );
+  final votosMap = await ref.watch(
+    voteCountProvider(args.decisionId).future,
   );
 
   if (votosMap.isEmpty) return [];
@@ -89,4 +92,26 @@ final watchVoteListProvider = FutureProvider.family<List<MediaWithVotes>, Histor
   resultado.sort((a, b) => b.votes.compareTo(a.votes));
 
   return resultado;
+});
+
+final watchDecisionHistoryProvider =
+    FutureProvider.family<WatchDecisionHistory, String>((ref, id) async {
+
+  final decision = await ref.watch(
+    watchDecisionByIdProvider(id).future,
+  );
+
+  final options = await ref.watch(
+    watchVoteListProvider(
+      HistoryArgs(
+        decisionId: decision.id,
+        isMovie: decision.url.contains('movie'),
+      ),
+    ).future,
+  );
+
+  return WatchDecisionHistory(
+    decision: decision,
+    options: options,
+  );
 });
