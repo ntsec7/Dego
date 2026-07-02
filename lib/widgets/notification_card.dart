@@ -145,12 +145,21 @@ class NotificationCard extends ConsumerWidget {
           context.lang.noti_kick_group(notification.creatorUsername, notification.groupName),
           style: TextStyle(fontSize: fontSize, color: Colors.black),
         );
-      case NotificationType.create_group:
-        return const Text("¡Se ha creado un nuevo grupo!");
+      case NotificationType.create_vote:
+        return Text(
+          context.lang.noti_create_vote(notification.decisionTitle!, notification.groupName),
+          style: TextStyle(fontSize: fontSize, color: Colors.black),
+        );
       case NotificationType.end_vote:
-        return const Text("Una votación ha terminado.");
+        return Text(
+          context.lang.noti_end_vote(notification.decisionTitle!, notification.groupName),
+          style: TextStyle(fontSize: fontSize, color: Colors.black),
+        );
       case NotificationType.create_option:
-        return const Text("Se ha añadido una nueva opción.");
+        return Text(
+          context.lang.noti_create_option(notification.decisionTitle!, notification.groupName),
+          style: TextStyle(fontSize: fontSize, color: Colors.black),
+        );
     }
   }
 }

@@ -81,6 +81,42 @@
         }
     }
     },
+    "noti_create_vote" : "Iniciada votación {dec_name} en el grupo {group_name}",
+    "@noti_create_vote" : {
+        "description" : "Iniciada votación",
+        "placeholders": {
+            "dec_name":{
+                "type" : "String"
+            },
+            "group_name": {
+                "type" : "String"
+            }
+        }
+    },
+    "noti_create_option" : "Iniciada propuesta de opciones en {dec_name} en el grupo {group_name}",
+    "@noti_create_option" : {
+        "description" : "Iniciada propuesta de opciones",
+        "placeholders": {
+            "dec_name":{
+                "type" : "String"
+            },
+            "group_name": {
+                "type" : "String"
+            }
+        }
+    },
+    "noti_end_vote" : "Terminada votación {dec_name} en el grupo {group_name}",
+    "@noti_create_vote" : {
+        "description" : "Terminada votación",
+        "placeholders": {
+            "dec_name":{
+                "type" : "String"
+            },
+            "group_name": {
+                "type" : "String"
+            }
+        }
+    },
     "eliminar_miembro" : "Eliminar miembro",
     "eliminar_miembro_txt" : "¿Estás seguro que quieres eliminar a {user_name} del grupo?",
     "@eliminar_miembro_txt" : {

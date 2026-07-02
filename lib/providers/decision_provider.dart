@@ -69,3 +69,13 @@ final optionByIdProvider = StreamProvider.family<Option,String> ((ref, id) {
   final service = ref.watch(decisionServiceProvider);
   return service.getOptionById(id);
 });
+
+final decisionTitleProvider = Provider.family<AsyncValue<String>, String>((ref, id) {
+  
+  // Escuchamos la decisión por su ID en tiempo real
+  final decisionAsync = ref.watch(decisionByIdProvider(id));
+  
+  // Mapeamos el objeto Decision para extraer únicamente el título
+  return decisionAsync.whenData((decision) => decision.title); 
+
+});

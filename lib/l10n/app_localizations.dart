@@ -454,6 +454,24 @@ abstract class AppLocalizations {
   /// **'{user_name} te ha echado del grupo {group_name}'**
   String noti_kick_group(String user_name, String group_name);
 
+  /// Terminada votación
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciada votación {dec_name} en el grupo {group_name}'**
+  String noti_create_vote(String dec_name, String group_name);
+
+  /// Iniciada propuesta de opciones
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciada propuesta de opciones en {dec_name} en el grupo {group_name}'**
+  String noti_create_option(String dec_name, String group_name);
+
+  /// No description provided for @noti_end_vote.
+  ///
+  /// In es, this message translates to:
+  /// **'Terminada votación {dec_name} en el grupo {group_name}'**
+  String noti_end_vote(Object dec_name, Object group_name);
+
   /// No description provided for @eliminar_miembro.
   ///
   /// In es, this message translates to:

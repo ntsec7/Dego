@@ -1,10 +1,12 @@
-enum NotificationType {invite_group, kick_group, create_group, end_vote, create_option}
+enum NotificationType {invite_group, kick_group, create_vote, end_vote, create_option}
 class NotificationModel{
   
   String? id;
   String id_user;
   String? id_creator_user;
   String id_group;
+  String? id_decision;
+  bool? is_watch;
   NotificationType type;
 
   NotificationModel({
@@ -12,6 +14,8 @@ class NotificationModel{
     required this.id_user,
     this.id_creator_user,
     required this.id_group,
+    this.id_decision,
+    this.is_watch,
     required this.type,
   });
 
@@ -22,6 +26,8 @@ class NotificationModel{
       id_user: map['id_user'],
       id_creator_user: map['id_creator_user'],
       id_group: map['id_group'],
+      id_decision: map['id_decision'],
+      is_watch: map['is_watch'],
       type: NotificationType.values.firstWhere(
         (e) => e.name == map['type'],
         orElse: () => NotificationType.invite_group, 
@@ -36,6 +42,8 @@ class NotificationModel{
       'id_user':id_user,
       'id_creator_user':id_creator_user,
       'id_group':id_group,
+      'id_decision' : id_decision,
+      'is_watch' : is_watch,
       'type':type.name, //name convierte el enum a String
     };
   }
@@ -46,11 +54,13 @@ class NotificationDisplayModel{
   final NotificationModel baseNotification;
   final String creatorUsername;
   final String groupName;
+  final String? decisionTitle;
 
   NotificationDisplayModel({
     required this.baseNotification,
     required this.creatorUsername,
     required this.groupName,
+    this.decisionTitle,
   });
 
 }

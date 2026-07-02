@@ -204,6 +204,21 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String noti_create_vote(String dec_name, String group_name) {
+    return 'Iniciada votación $dec_name en el grupo $group_name';
+  }
+
+  @override
+  String noti_create_option(String dec_name, String group_name) {
+    return 'Iniciada propuesta de opciones en $dec_name en el grupo $group_name';
+  }
+
+  @override
+  String noti_end_vote(Object dec_name, Object group_name) {
+    return 'Terminada votación $dec_name en el grupo $group_name';
+  }
+
+  @override
   String get eliminar_miembro => 'Eliminar miembro';
 
   @override
