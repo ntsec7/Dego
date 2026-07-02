@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dego/providers/current_notifications_provider.dart'; 
 
-class NavigationBottom extends StatelessWidget {
+class NavigationBottom extends ConsumerWidget {
 
   final int currentIndex;
 
@@ -25,6 +27,7 @@ class NavigationBottom extends StatelessWidget {
     required int index,
     IconData? icon,
     String? imagePath,
+    int badgeCount = 0,
   }) {
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -34,34 +37,34 @@ class NavigationBottom extends StatelessWidget {
 
     final bool selected = currentIndex == index;
 
+    final Widget iconContent = imagePath != null
+        ? Image.asset(
+            imagePath,
+            width: web ? (screenHeight + screenWidth) * 0.03 : (screenHeight + screenWidth) * 0.05,
+            height: web ? (screenHeight + screenWidth) * 0.03 : (screenHeight + screenWidth) * 0.05,
+          )
+        : Icon(
+            icon,
+            color: Colors.black,
+            size: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.03,
+          );
+
     return Expanded(
       child: InkWell(
-
         onTap: () => _navigate(index),
-
         child: Container(
-
-          height: web? screenHeight * 0.17 : screenHeight * 0.08,
-
-          color: selected
-              ? Color(0xFFBEBEBE)
-              : Color(0xFFD9D9D9),
-
+          height: web ? screenHeight * 0.17 : screenHeight * 0.08,
+          color: selected ? const Color(0xFFBEBEBE) : const Color(0xFFD9D9D9),
           child: Center(
-
-            child: imagePath != null
-
-                ? Image.asset(
-                    imagePath,
-                    width: web ? (screenHeight + screenWidth) * 0.03 : (screenHeight + screenWidth) * 0.05,
-                    height: web ? (screenHeight + screenWidth) * 0.03 : (screenHeight + screenWidth) * 0.05,
+            // 3. Si tiene notificaciones, envolvemos el icono con Badge
+            child: badgeCount > 0
+                ? Badge(
+                    label: Text('$badgeCount'),
+                    backgroundColor: Theme.of(context).colorScheme.primary, // Color del circulito
+                    textColor: Colors.white,
+                    child: iconContent,
                   )
-
-                : Icon(
-                    icon,
-                    color: Colors.black,
-                    size: web ? (screenHeight + screenWidth) * 0.02 : (screenHeight + screenWidth) * 0.03,
-                  ),
+                : iconContent,
           ),
         ),
       ),
@@ -69,12 +72,16 @@ class NavigationBottom extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     bool web = screenWidth > 600;
+
+    final notificationsAsync = ref.watch(currentNotificationsProvider);
+    
+    final totalNotifications = notificationsAsync.value?.length ?? 0;
 
     return SizedBox(
 
@@ -109,6 +116,7 @@ class NavigationBottom extends StatelessWidget {
             context: context,
             index: 2,
             icon: Icons.notifications,
+            badgeCount: totalNotifications,
           ),
 
           Container(
