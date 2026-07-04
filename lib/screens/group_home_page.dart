@@ -349,7 +349,7 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
             ),
 
             Divider(
-              color: isDarkMode ? Colors.grey[700] : Colors.grey[300],
+              color: isDarkMode ? Colors.grey[700] : const Color.fromARGB(255, 191, 191, 191),
               thickness: 1,
             ),
 

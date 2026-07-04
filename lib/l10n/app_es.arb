@@ -202,18 +202,7 @@
     "votar" : "Votar",
     "error_ya_votado" : "Error: Ya has votado en esta decisión",
     "edit_decision_votos" : "Ya ha votos registrados, solo se puede modificar la fecha de finalización",
-    "votar_ranking" : "Ordena de {num1} a {num2} en orden de preferencia, siendo {num1} la más preferente",
-    "@votar_ranking" : {
-        "description" : "Votar ranking",
-        "placeholders" : {
-            "num1":{
-                "type":"int"
-            },
-            "num2":{
-                "type":"int"
-            }
-        }
-    },
+    "votar_ranking" : "Arrastra para ordenar, siendo 1 la más preferente",
     "error_votar_ranking_no_ops": "Error: Todas las opciones deben tener un número",
     "error_votar_ranking_repe" : "Error: Elige un número distinto para cada opción",
     "error_votar_simple_no_ops": "Error: Selecciona una opción para votar",

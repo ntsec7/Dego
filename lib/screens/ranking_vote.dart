@@ -23,29 +23,15 @@ class _RankingVote extends ConsumerState<RankingVote> {
   // Guardamos los votos de cada opción usando un Mapa: { optionId: numero }
   final Map<String, int?> _votos = {};
 
-  // MÉTODO DE VALIDACIÓN
-  // Comprueba que todas las opciones tengan un número, que estén en rango y que no se repitan.
-  String? _validarVotacion(int totalOptions) {
+  // Lista local para manejar el ordenamiento por arrastre
+  List<dynamic> _localOptions = []; 
+  bool _initialized = false;
 
-    // 1. Verificar que todas las opciones tengan un voto asignado
+  // MÉTODO DE VALIDACIÓN
+  String? _validarVotacion(int totalOptions) {
     if (_votos.length < totalOptions || _votos.values.any((v) => v == null)) {
       return context.lang.error_votar_ranking_no_ops;
     }
-
-    final valores = _votos.values.whereType<int>().toList();
-
-    // 2. Verificar que estén dentro del rango prefijado [1,totalOptions]
-    // for (var valor in valores) {
-    //   if (valor < 1 || valor > totalOptions) {
-    //     return 'Los números deben estar entre 1 y $totalOptions.';
-    //   }
-    // }
-
-    // 3. Verificar que no haya números repetidos
-    if (valores.toSet().length != valores.length) {
-      return context.lang.error_votar_ranking_repe;
-    }
-
     return null; // Todo correcto
   }
 
@@ -72,6 +58,15 @@ class _RankingVote extends ConsumerState<RankingVote> {
 
     final decision = decisionAsync.requireValue;
     final options = optionsAsync.requireValue;
+
+    // Inicializamos nuestra lista local una sola vez al cargar
+    if (!_initialized && options.isNotEmpty) {
+      _localOptions = List.from(options);
+      for (int i = 0; i < _localOptions.length; i++) {
+        _votos[_localOptions[i].id] = i + 1; 
+      }
+      _initialized = true;
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -107,7 +102,7 @@ class _RankingVote extends ConsumerState<RankingVote> {
 
               // EXPLICACIÓN SOBRE COMO VOTAR
               Text(
-                context.lang.votar_ranking(1, options.length),
+                context.lang.votar_ranking,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -118,99 +113,108 @@ class _RankingVote extends ConsumerState<RankingVote> {
 
               SizedBox(height: web ? screenHeight * 0.04 : screenHeight * 0.04),
 
-              // BLOQUE DE OPCIONES
+              // BLOQUE DE OPCIONES REORDENABLES
               Expanded(
-                child: ListView.builder(
+                child: ReorderableListView.builder(
+                  buildDefaultDragHandles: false, 
                   padding: EdgeInsets.all((screenHeight + screenWidth) * 0.01),
-                  itemCount: options.length,
+                  itemCount: _localOptions.length,
+                  
+                  // Con esto eliminamos el rectángulo extraño del fondo y las sombras por defecto
+                  //Crea una copia flotante que sigue al dedo
+                  proxyDecorator: (Widget child, int index, Animation<double> animation) {
+                    return Material(
+                      color: Colors.transparent, // Evita que se cree un fondo detrás de la tarjeta
+                      child: child,
+                    );
+                  },
+                  
+                  onReorder: (int oldIndex, int newIndex) {
+                    setState(() {
+                      if (newIndex > oldIndex) {
+                        newIndex -= 1;  //-1 porque flutter devuelve una posición por debajo de donde se suelta
+                      }
+
+                      //Mover el elemento en tu lista de datos
+                      final item = _localOptions.removeAt(oldIndex);
+                      _localOptions.insert(newIndex, item);
+
+                      // Sincronizamos las puntuaciones del mapa automáticamente
+                      for (int i = 0; i < _localOptions.length; i++) {
+                        _votos[_localOptions[i].id] = i + 1;
+                      }
+                    });
+                  },
                   itemBuilder: (context, index) {
-                    final option = options[index];
-                    
-                    // Inicializamos el mapa si la opción no existe aún en él
-                    if (!_votos.containsKey(option.id)) {
-                      _votos[option.id] = null;
-                    }
+                    final option = _localOptions[index];
+                    final currentPosition = _votos[option.id] ?? (index + 1);
 
-                    final currentVote = _votos[option.id];
-
-                    return GestureDetector(
-                      onTap: () {
-                        if(option.type==OptionType.standard){
-                          Navigator.pushNamed(context, 'seeOption', arguments: option.id);
-                        }else{
-                          Navigator.pushNamed(context, 'seeMediaOption', arguments: {
-                            'id': decision.id,
-                            'optionId': option.id,
-                          },);
-                        }
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: screenHeight * 0.015),
-                        padding: EdgeInsets.only(
-                          left: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
-                          right: 16.0, // Ajustamos el padding para el dropdown
-                        ),
-                        constraints: BoxConstraints(
-                          minHeight: web ? screenHeight * 0.05 : 50.0,
-                        ),
-                        decoration: BoxDecoration(
-                          // Cambiamos el color si el usuario ya le ha asignado una puntuación
-                          color: currentVote != null
-                              ? Theme.of(context).colorScheme.secondary
-                              : const Color.fromARGB(255, 224, 224, 224),
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            color: currentVote != null ? Theme.of(context).colorScheme.primary : Colors.transparent,
-                            width: 2,
+                    return ReorderableDragStartListener(  //para poder arrastrar elementos
+                      key: ValueKey(option.id),
+                      index: index,
+                      child: GestureDetector(
+                        onTap: () {
+                          if(option.type == OptionType.standard){
+                            Navigator.pushNamed(context, 'seeOption', arguments: option.id);
+                          } else {
+                            Navigator.pushNamed(context, 'seeMediaOption', arguments: {
+                              'id': decision.id,
+                              'optionId': option.id,
+                            });
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: screenHeight * 0.015),
+                          padding: EdgeInsets.only(
+                            left: web ? (screenHeight + screenWidth) * 0.01 : (screenHeight + screenWidth) * 0.015,
+                            right: 24.0,
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                option.title,
-                                style: TextStyle(
-                                  fontSize: web
-                                      ? (screenHeight + screenWidth) * 0.007
-                                      : (screenHeight + screenWidth) * 0.013,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
+                          constraints: BoxConstraints(
+                            minHeight: web ? screenHeight * 0.05 : 50.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 224, 224, 224),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  option.title,
+                                  style: TextStyle(
+                                    fontSize: web
+                                        ? (screenHeight + screenWidth) * 0.007
+                                        : (screenHeight + screenWidth) * 0.013,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primary,
+                                shape: BoxShape.circle,
+                              ),
+                              child:Text(
+                                '$currentPosition',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold, 
+                                  color: Colors.white,
+                                  fontSize: 16
                                 ),
                               ),
                             ),
-                            
-                            // DROPDOWN PARA SELECCIONAR EL NÚMERO DE RANKING
-                            DropdownButton<int>(
-                              dropdownColor: const Color.fromARGB(255, 224, 224, 224),
-                              value: currentVote,
-                              hint: const Text("-", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
-                              icon: const Icon(Icons.arrow_drop_down, color: Colors.black54),
-                              underline: const SizedBox(), // Quitamos la línea de abajo
-                              onChanged: (int? newValue) {
-                                setState(() {
-                                  _votos[option.id] = newValue;
-                                });
-                              },
-                              // Generamos la lista de números disponibles del 1 al total de opciones
-                              items: List.generate(options.length, (i) => i + 1)
-                                  .map<DropdownMenuItem<int>>((int value) {
-                                return DropdownMenuItem<int>(
-                                  value: value,
-                                  child: Text(
-                                    value.toString(),
-                                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
               ),
-
               SizedBox(height: screenHeight * 0.02),
 
               // BOTONES
@@ -243,9 +247,7 @@ class _RankingVote extends ConsumerState<RankingVote> {
                     onPressed: _loading
                         ? null
                         : () async {
-
-                            // Validar los votos
-                            final errorValidacion = _validarVotacion(options.length);
+                            final errorValidacion = _validarVotacion(_localOptions.length);
                             
                             if (errorValidacion != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -256,7 +258,6 @@ class _RankingVote extends ConsumerState<RankingVote> {
 
                             setState(() => _loading = true);
                             try {
-                              // Comprueba si ya ha votado en esta decision
                               final hasAlreadyVote = await ref.read(createProvider.notifier).hasAlreadyRankingVote(
                                 id_decision: decision.id, 
                                 id_user: currentUserId!
@@ -271,7 +272,6 @@ class _RankingVote extends ConsumerState<RankingVote> {
                                 return;
                               }
 
-                              // Vota: Bucle que envía las votaciones de todas las opciones
                               for (var entry in _votos.entries) {
                                 final optionId = entry.key;
                                 final points = entry.value!; 

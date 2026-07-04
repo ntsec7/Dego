@@ -832,11 +832,11 @@ abstract class AppLocalizations {
   /// **'Ya ha votos registrados, solo se puede modificar la fecha de finalización'**
   String get edit_decision_votos;
 
-  /// Votar ranking
+  /// No description provided for @votar_ranking.
   ///
   /// In es, this message translates to:
-  /// **'Ordena de {num1} a {num2} en orden de preferencia, siendo {num1} la más preferente'**
-  String votar_ranking(int num1, int num2);
+  /// **'Arrastra para ordenar, siendo 1 la más preferente'**
+  String get votar_ranking;
 
   /// No description provided for @error_votar_ranking_no_ops.
   ///

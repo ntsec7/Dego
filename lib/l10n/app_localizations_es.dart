@@ -413,9 +413,8 @@ class AppLocalizationsEs extends AppLocalizations {
       'Ya ha votos registrados, solo se puede modificar la fecha de finalización';
 
   @override
-  String votar_ranking(int num1, int num2) {
-    return 'Ordena de $num1 a $num2 en orden de preferencia, siendo $num1 la más preferente';
-  }
+  String get votar_ranking =>
+      'Arrastra para ordenar, siendo 1 la más preferente';
 
   @override
   String get error_votar_ranking_no_ops =>
