@@ -348,6 +348,11 @@ class _GroupHomePage extends ConsumerState<GroupHomePage> {
               ),
             ),
 
+            Divider(
+              color: isDarkMode ? Colors.grey[700] : Colors.grey[300],
+              thickness: 1,
+            ),
+
             SizedBox(height: web ? screenHeight * 0.02 : screenHeight * 0.015),
 
             // DAR OPCIONES 
