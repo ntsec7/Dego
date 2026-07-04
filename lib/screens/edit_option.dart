@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dego/providers/create_provider.dart';
+import 'package:dego/models/option.dart';
 
 class EditOption extends ConsumerStatefulWidget {
 
@@ -34,6 +35,8 @@ class _EditOption extends ConsumerState<EditOption> {
   bool _isInitialized=false;
   bool imageRemoved = false;
 
+  OptionType _selectedType = OptionType.standard;
+
   @override
   void dispose() {
     _title.dispose();
@@ -60,6 +63,7 @@ class _EditOption extends ConsumerState<EditOption> {
     if (!_isInitialized) {
       _title.text = option.title;
       _description.text = option.description ?? "";
+      _selectedType = option.type;
       _isInitialized = true; 
     }
 
@@ -179,6 +183,83 @@ class _EditOption extends ConsumerState<EditOption> {
                               ],
                             ),
 
+                             SizedBox(height: screenHeight * 0.02),
+
+                              //GENERAR DATOS (Desplegable)
+                              Row(
+                              crossAxisAlignment: CrossAxisAlignment.center, 
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: web ? screenWidth * 0.02 : 0, 
+                                    right: 12.0, 
+                                  ),
+                                  child: Text(
+                                    "${context.lang.generar_datos}: ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: web
+                                          ? (screenHeight + screenWidth) * 0.012
+                                          : (screenHeight + screenWidth) * 0.014,
+                                    ),
+                                  ),
+                                ),
+                                
+                                Expanded(
+                                  child: DropdownButtonFormField<OptionType>(
+                                    key: const Key('typeField'),
+                                    dropdownColor: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    initialValue: _selectedType, 
+                                    onChanged: (OptionType? newValue) {
+                                      if (newValue != null) {
+                                        setState(() {
+                                          _selectedType = newValue;
+                                        });
+                                      }
+                                    },
+                                    items: OptionType.values.map((OptionType type) {
+                                      return DropdownMenuItem<OptionType>(
+                                        value: type,
+                                        child: Text(type.getLabel(context)), 
+                                      );
+                                    }).toList(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: web 
+                                          ? (screenHeight + screenWidth) * 0.01 
+                                          : (screenHeight + screenWidth) * 0.0125,
+                                    ),
+                                    decoration: InputDecoration(
+                                      errorStyle: TextStyle(
+                                        fontSize: web 
+                                            ? (screenHeight + screenWidth) * 0.007 
+                                            : (screenHeight + screenWidth) * 0.012,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.grey.shade200, 
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                        borderSide: BorderSide.none, 
+                                      ),
+                                      isDense: true,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                  ),
+                                ),
+                              ],
+                            ),  
+
+                           Visibility(
+                          visible: _selectedType == OptionType.standard,
+                          maintainState: true,
+                          maintainAnimation: true,
+                          maintainSize: true,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
                             SizedBox(height: screenHeight * 0.04),
 
                             //DESCRIPCIÓN
@@ -353,6 +434,9 @@ class _EditOption extends ConsumerState<EditOption> {
                                 ),
                                   ],
                              ),
+                            ],
+                          ),
+                           ),
 
                                 SizedBox(height: screenHeight * 0.07),
 
@@ -384,7 +468,17 @@ class _EditOption extends ConsumerState<EditOption> {
                                     if (_formKey.currentState!.validate()) {
                                       setState(() => _loading = true);
                                       try {
-                                                                                
+                                        
+                                        //Ver si guardamos imagen y descripcion
+                                        if( _selectedType != OptionType.standard){
+                                           _description.clear();
+                                          imageBytes = null;
+
+                                          if (option.image != null && option.image!.isNotEmpty) {
+                                            imageRemoved = true;
+                                          }
+                                        }
+
                                         //Actualizar la opción
                                         Uint8List? sendImage;
                                         bool deletePhoto= false;

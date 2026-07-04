@@ -1,3 +1,28 @@
+import 'package:dego/utilities/lang.dart';
+import 'package:flutter/material.dart';
+
+enum OptionType {
+  standard('standard'),
+  film('film'),
+  serie('serie');
+
+  // El valor que se guardará/leerá en Supabase
+  final String databaseValue;
+  const OptionType(this.databaseValue);
+
+  // Tu método de traducción idéntico al de TMDBOrder
+  String getLabel(BuildContext context) {
+    switch (this) {
+      case OptionType.standard:
+        return context.lang.no; 
+      case OptionType.film:
+        return context.lang.peli;
+      case OptionType.serie:
+        return context.lang.serie;
+    }
+  }
+}
+
 class Option{
   String id;
   String id_decision;
@@ -7,6 +32,7 @@ class Option{
   int? percentage;
   String? image;
   int? num_votes;
+  OptionType type;
 
   Option({
     required this.id,
@@ -17,6 +43,7 @@ class Option{
     this.percentage,
     this.image,
     this.num_votes,
+    required this.type,
   });
 
   //Desde Supabase 
@@ -30,6 +57,10 @@ class Option{
       percentage: map['percentage'],
       image: map['image'],
       num_votes: map['num_votes'],
+      type: OptionType.values.firstWhere(
+        (e) => e.databaseValue == (map['type'] as String?),
+        orElse: () => OptionType.standard,
+      ),
     );
   }
 
@@ -43,6 +74,7 @@ class Option{
       'description' : description,
       "percentage" : percentage,
       "image": image,
+      "type" : type.databaseValue,
     };
   }
 

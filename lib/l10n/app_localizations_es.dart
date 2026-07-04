@@ -704,4 +704,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get error_carga_datos => 'Error en la carga de datos';
+
+  @override
+  String get generar_datos => 'Generar datos';
+
+  @override
+  String get no => 'No';
 }

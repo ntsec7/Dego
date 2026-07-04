@@ -7,6 +7,7 @@ import 'package:dego/utilities/error.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
 import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/models/option.dart';
 
 class CreateDraftOption extends ConsumerStatefulWidget {
 
@@ -31,6 +32,8 @@ class _CreateDraftOption extends ConsumerState<CreateDraftOption> {
 
   Uint8List? imageBytes;
 
+  OptionType _selectedType = OptionType.standard;
+
   @override
   void dispose() {
     _title.dispose();
@@ -48,6 +51,7 @@ class _CreateDraftOption extends ConsumerState<CreateDraftOption> {
       _title.text = option.title;
       _description.text = option.description ?? "";
       imageBytes = option.image;
+      _selectedType = option.type;
     }
   }
 
@@ -177,6 +181,84 @@ class _CreateDraftOption extends ConsumerState<CreateDraftOption> {
                                 ),
                               ],
                             ),
+
+                             SizedBox(height: screenHeight * 0.02),
+
+                              //GENERAR DATOS (Desplegable)
+                              Row(
+                              crossAxisAlignment: CrossAxisAlignment.center, 
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: web ? screenWidth * 0.02 : 0, 
+                                    right: 12.0, 
+                                  ),
+                                  child: Text(
+                                    "${context.lang.generar_datos}: ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: web
+                                          ? (screenHeight + screenWidth) * 0.012
+                                          : (screenHeight + screenWidth) * 0.014,
+                                    ),
+                                  ),
+                                ),
+                                
+                                Expanded(
+                                  child: DropdownButtonFormField<OptionType>(
+                                    key: const Key('typeField'),
+                                    dropdownColor: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    initialValue: _selectedType, 
+                                    onChanged: (OptionType? newValue) {
+                                      if (newValue != null) {
+                                        setState(() {
+                                          _selectedType = newValue;
+                                        });
+                                      }
+                                    },
+                                    items: OptionType.values.map((OptionType type) {
+                                      return DropdownMenuItem<OptionType>(
+                                        value: type,
+                                        child: Text(type.getLabel(context)), 
+                                      );
+                                    }).toList(),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: web 
+                                          ? (screenHeight + screenWidth) * 0.01 
+                                          : (screenHeight + screenWidth) * 0.0125,
+                                    ),
+                                    decoration: InputDecoration(
+                                      errorStyle: TextStyle(
+                                        fontSize: web 
+                                            ? (screenHeight + screenWidth) * 0.007 
+                                            : (screenHeight + screenWidth) * 0.012,
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.grey.shade200, 
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                        borderSide: BorderSide.none, 
+                                      ),
+                                      isDense: true,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                  ),
+                                ),
+                              ],
+                            ),  
+
+                          Visibility(
+                          visible: _selectedType == OptionType.standard,
+                          maintainState: true,
+                          maintainAnimation: true,
+                          maintainSize: true,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
 
                             SizedBox(height: screenHeight * 0.04),
 
@@ -338,6 +420,10 @@ class _CreateDraftOption extends ConsumerState<CreateDraftOption> {
                                   ],
                              ),
 
+                            ],
+                            ),
+                            ),
+
                                 SizedBox(height: screenHeight * 0.07),
 
                                 // BOTONES
@@ -374,8 +460,9 @@ class _CreateDraftOption extends ConsumerState<CreateDraftOption> {
                                         OptionDraft newOption = OptionDraft(
                                               id_creator: currentUserId, 
                                               title: _title.text,
-                                              description: _description.text,
-                                              image: imageBytes,
+                                              description: _selectedType == OptionType.standard ? _description.text : null,
+                                              image: _selectedType == OptionType.standard ? imageBytes : null,
+                                              type: _selectedType,
                                               );
                                         
                                         

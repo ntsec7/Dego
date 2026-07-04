@@ -304,6 +304,7 @@ class CreateService {
         'title' : option.title,
         'description': option.description,
         'percentage' : option.percentage,
+        'type' : option.type.databaseValue,
         'image' : url,
       });
 

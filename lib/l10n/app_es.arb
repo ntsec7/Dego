@@ -315,5 +315,7 @@
     "decide_creador" : "Decide el creador",
     "error_carga_votos" : "Error en la carga de votos",
     "error_carga_decision" : "Error en la carga de la decisión",
-    "error_carga_datos" : "Error en la carga de datos"
+    "error_carga_datos" : "Error en la carga de datos",
+    "generar_datos" : "Generar datos",
+    "no" : "No"
 }

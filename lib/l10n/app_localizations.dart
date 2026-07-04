@@ -1401,6 +1401,18 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Error en la carga de datos'**
   String get error_carga_datos;
+
+  /// No description provided for @generar_datos.
+  ///
+  /// In es, this message translates to:
+  /// **'Generar datos'**
+  String get generar_datos;
+
+  /// No description provided for @no.
+  ///
+  /// In es, this message translates to:
+  /// **'No'**
+  String get no;
 }
 
 class _AppLocalizationsDelegate
