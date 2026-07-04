@@ -19,7 +19,6 @@ class _GroupHistoryWatchDecision extends ConsumerState<GroupHistoryWatchDecision
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     bool web = screenWidth > 600 ? true : false;
-    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final historyAsync = ref.watch(watchDecisionHistoryProvider(widget.id));
 

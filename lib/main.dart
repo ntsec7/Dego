@@ -12,9 +12,11 @@ import 'package:dego/screens/navigate_to_create_decision.dart';
 import 'package:dego/screens/navigate_to_tie.dart';
 import 'package:dego/screens/reset_password.dart';
 import 'package:dego/screens/group_history_watch_decision.dart';
+import 'package:dego/screens/see_media_option.dart';
 import 'package:dego/screens/simple_vote.dart';
 import 'package:dego/screens/tied_creator.dart';
 import 'package:dego/screens/tied_roulette.dart';
+import 'package:dego/screens/vote_details.dart';
 import 'package:dego/screens/watch_vote_details.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -226,6 +228,24 @@ class _MyAppState extends State<MyApp> {
           final int mediaId = args['mediaId'] ?? 0;
 
           return GroupHistoryWatchDecisionComplete(id:id, mediaId:mediaId);
+        },
+        'seeMediaOption' : (context) {
+          
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+          
+          final String id = args['id'] ?? '';
+          final String optionId = args['optionId'] ?? '';
+          return SeeMediaOption(id:id, optionId:optionId);
+        },
+        'voteDetails' : (context) {
+          
+          final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+          
+          final String id = args['id'] ?? '';
+          final int mediaId = args['mediaId'] ?? 0;
+          final bool isMovie = args['isMovie'] ?? true;
+          
+          return VoteDetails(id:id, mediaId: mediaId, isMovie: isMovie);
         },
       },
     );

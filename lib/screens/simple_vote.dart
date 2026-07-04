@@ -1,3 +1,4 @@
+import 'package:dego/models/option.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/utilities/lang.dart';
@@ -91,7 +92,14 @@ class _SimpleVote extends ConsumerState<SimpleVote> {
                     return GestureDetector(
                       onTap: () {
                         // Al tocar la tarjeta, vamos a la información de la opción
-                        Navigator.pushNamed(context, 'seeOption', arguments: option.id);
+                        if(option.type==OptionType.standard){
+                          Navigator.pushNamed(context, 'seeOption', arguments: option.id);
+                        }else{
+                          Navigator.pushNamed(context, 'seeMediaOption', arguments: {
+                            'id': decision.id,
+                            'optionId': option.id,
+                          },);
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.only(bottom: screenHeight * 0.015),

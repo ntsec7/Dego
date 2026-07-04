@@ -1,9 +1,12 @@
+import 'package:dego/providers/watch_decision_session_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dego/models/watch_decision.dart';
 import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/services/watch_decision_service.dart';
 import 'package:dego/models/watch_decision_history.dart';
 import 'package:dego/providers/watch_decision_list_provider.dart';
+import 'package:dego/models/movie_serie.dart';
+import 'package:dego/models/option.dart';
 
 final watchDecisionServiceProvider = Provider<WatchDecisionService>((ref) {
   return WatchDecisionService();
@@ -106,4 +109,15 @@ final watchDecisionHistoryProvider =
     decision: decision,
     options: options,
   );
+});
+
+final movieSerieByTitleProvider = FutureProvider.family<MovieSerie?, Option>((ref, option) async {
+  
+  final service = ref.watch(tmdbServiceProvider);
+
+  return service.getMediaByTitle(
+    title: option.title,
+    type: option.type,
+  );
+  
 });

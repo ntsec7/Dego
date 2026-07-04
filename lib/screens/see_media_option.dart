@@ -4,18 +4,16 @@ import 'package:dego/providers/watch_decision_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dego/models/tmdb_info.dart';
 import 'package:dego/utilities/lang.dart';
-import 'package:dego/models/watch_decision_history.dart';
-// ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart';
+import 'package:dego/providers/decision_provider.dart';
 
-class GroupHistoryWatchDecisionComplete extends ConsumerWidget {
+class SeeMediaOption extends ConsumerWidget {
   final String id;
-  final int mediaId;
+  final String optionId;
 
-  const GroupHistoryWatchDecisionComplete({
+  const SeeMediaOption({
     super.key,
     required this.id,
-    required this.mediaId,
+    required this.optionId,
   });
 
   String FormatDate(String date){
@@ -42,25 +40,38 @@ class GroupHistoryWatchDecisionComplete extends ConsumerWidget {
 
     bool web = screenWidth > 600 ? true : false;
 
-    final decisionAsync = ref.watch(watchDecisionByIdProvider(id));
-
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    if (decisionAsync.isLoading ) {
-      return const Scaffold(
-        body: Center(child: CupertinoActivityIndicator(radius: 15)),
-      );
+    final decisionAsync = ref.watch(decisionByIdProvider(id));
+    final optionAsync = ref.watch(optionByIdProvider(optionId));
+
+
+    if (optionAsync.isLoading || decisionAsync.isLoading) {
+      return const Scaffold(body: Center(child: CupertinoActivityIndicator(radius: 15)));
     }
 
     final decision = decisionAsync.requireValue;
+    final option = optionAsync.requireValue;
 
-    final listOptions = ref.watch(watchVoteListProvider(HistoryArgs(decisionId: decision.id, isMovie: decision.url.contains('movie') ) ));
+    final movieAsync = ref.watch(movieSerieByTitleProvider(option));
 
-    final options = listOptions.value;
+    if (movieAsync.isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CupertinoActivityIndicator(radius: 15),
+        ),
+      );
+    }
 
-    final movie = options?.firstWhereOrNull(
-      (option) => option.media.id == mediaId,
-    )?.media;
+    if (movieAsync.hasError) {
+      return Scaffold(
+        body: Center(
+          child: Text(context.lang.error_carga_datos),
+        ),
+      );
+    }
+
+    final movie = movieAsync.requireValue;
 
     if(movie==null){
       return Scaffold(
@@ -279,11 +290,12 @@ class GroupHistoryWatchDecisionComplete extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
 
+
               // VER MÁS +
               Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, 'watchVoteDetails', arguments: {
+                    Navigator.pushNamed(context, 'voteDetails', arguments: {
                       'id': decision.id,
                       'mediaId': movie.id,
                       'isMovie': movie.isMovie,

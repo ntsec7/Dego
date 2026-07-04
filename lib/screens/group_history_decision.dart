@@ -5,6 +5,7 @@ import 'package:dego/utilities/lang.dart';
 import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/models/option.dart';
 
 class GroupHistoryDecision extends ConsumerStatefulWidget {
   final String id;
@@ -140,7 +141,14 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
 
                     return GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, 'seeOption', arguments: option.id);
+                        if(option.type==OptionType.standard){
+                          Navigator.pushNamed(context, 'seeOption', arguments: option.id);
+                        }else{
+                          Navigator.pushNamed(context, 'seeMediaOption', arguments: {
+                            'id': decision.id,
+                            'optionId': option.id,
+                          },);
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.only(bottom: screenHeight * 0.015),
