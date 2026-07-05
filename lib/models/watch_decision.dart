@@ -24,7 +24,7 @@ class WatchDecision{
   factory WatchDecision.fromMap(Map<String,dynamic> map){
     return WatchDecision(
       id: map['id'], 
-      id_group : map['id_group'] ?? "",
+      id_group : map['id_group'],
       id_creator: map['id_creator'], 
       title: map['title'], 
       url: map['url'],

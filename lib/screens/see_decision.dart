@@ -8,7 +8,6 @@ import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dego/models/option.dart';
 import 'package:dego/providers/usuario_provider.dart';
-import 'package:dego/models/option.dart';
 
 class SeeDecision extends ConsumerStatefulWidget {
   final String id;

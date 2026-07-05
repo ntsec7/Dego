@@ -17,10 +17,14 @@ class DecisionService {
   Stream<List<Decision>> getIndividualDecisions(){
 
     return supabase
-        .from('individual_decisions')
+        .from('decision')
         .stream(primaryKey: ['id'])
         .eq('id_creator', supabase.auth.currentUser?.id ?? '')
-        .order('vote_date', ascending: false).map((data) => data.map((json) => Decision.fromMap(json)).toList());
+        .order('vote_date', ascending: false)
+        .map((data) => data
+          .map((json) => Decision.fromMap(json))
+          .where((decision) => decision.id_group == null) 
+          .toList());
 
   }
 

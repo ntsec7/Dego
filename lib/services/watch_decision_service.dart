@@ -16,10 +16,13 @@ class WatchDecisionService {
 
   Stream<List<WatchDecision>> getIndividualWatchDecisions(){
     return supabase
-      .from('individual_watch_decision')
+      .from('watch_decision')
       .stream(primaryKey: ['id'])
-      .eq('id_gcreator', supabase.auth.currentUser?.id ?? '')
-      .map((data) => data.map((json) => WatchDecision.fromMap(json)).toList());
+      .eq('id_creator', supabase.auth.currentUser?.id ?? '')
+      .map((data) => data
+          .map((json) => WatchDecision.fromMap(json))
+          .where((decision) => decision.id_group == null) 
+          .toList());
   }
 
   Future<WatchDecision> getWatchDecision(String id) async{
