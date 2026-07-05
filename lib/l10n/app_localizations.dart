@@ -1413,6 +1413,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'No'**
   String get no;
+
+  /// No description provided for @individual.
+  ///
+  /// In es, this message translates to:
+  /// **'Individual'**
+  String get individual;
 }
 
 class _AppLocalizationsDelegate

@@ -1,5 +1,4 @@
 import 'package:dego/screens/group_tab_manager.dart';
-import 'package:dego/screens/individual_home_page.dart';
 import 'package:dego/screens/notifications.dart';
 import 'package:dego/screens/profile.dart';
 import 'package:dego/screens/users_list.dart';
@@ -10,6 +9,7 @@ import 'package:dego/widgets/navigation_bottom_admin.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/providers/usuario_provider.dart';
 import 'package:dego/providers/current_group_provider.dart';
+import 'package:dego/screens/individual_container.dart';
 
 
 
@@ -34,7 +34,7 @@ class _AppMainContainerState extends ConsumerState<AppMainContainer> {
 
   final List<Widget> _mainPagesClient = [
     const GroupTabManager(),
-    const Individualhomepage(),
+    const IndividualContainer(),
     const Notifications(),
     const Profile(),
   ];

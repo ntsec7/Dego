@@ -306,5 +306,6 @@
     "error_carga_decision" : "Error en la carga de la decisión",
     "error_carga_datos" : "Error en la carga de datos",
     "generar_datos" : "Generar datos",
-    "no" : "No"
+    "no" : "No",
+    "individual" : "Individual"
 }
