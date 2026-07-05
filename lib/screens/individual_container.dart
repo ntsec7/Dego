@@ -3,7 +3,6 @@ import 'package:dego/screens/individual_home_page.dart';
 import 'package:dego/widgets/individual_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; 
-import 'package:dego/screens/group_history.dart';
 import 'package:dego/utilities/lang.dart';
 
 

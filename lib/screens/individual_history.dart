@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dego/providers/current_group_provider.dart';
 import 'package:dego/utilities/lang.dart';
 import 'package:dego/providers/watch_decision_provider.dart';
 import 'package:dego/providers/decision_provider.dart';
