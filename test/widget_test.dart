@@ -1,30 +1,216 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:dego/main.dart';
+import 'package:dego/screens/login.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:dego/l10n/app_localizations.dart';
+import 'package:dego/screens/register.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  Widget createTestApp(Widget child) {
+    return ProviderScope(
+      child: MaterialApp(
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('es'),
+        ],
+        locale: const Locale('es'),
+        home: child,
+      ),
+    );
+  }
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  //LOGIN SCREEN
+  group('Login screen', () {
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    testWidgets( 'The screen has the main elements' ,(tester) async{
+      
+      await tester.pumpWidget(
+        createTestApp(const Login()),
+      );
+
+      expect(find.byKey(const Key('nameField')), findsOneWidget);
+
+      expect(find.byKey(const Key('passwordField')), findsOneWidget);
+
+      expect(find.text('DEGO'), findsOneWidget);
+    });
+
+    testWidgets( 'Empty form returns two errors' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Login()),
+      );
+      
+      await tester.tap(find.text('Iniciar sesión'));
+
+      await tester.pump();
+
+      expect(find.text('Campo obligatorio'), findsNWidgets(2));
+
+    });
+
+    testWidgets( 'You can write username and password' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Login()),
+      ); 
+
+      await tester.enterText(find.byKey(const Key('nameField')),'juan');    
+
+      expect(find.text('juan'), findsOneWidget); 
+
+    });
+
+    testWidgets( 'The eye icon changes the visibility of the password' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Login()),
+      );
+
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.visibility_off));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
+ 
+    });
+
+    testWidgets( ' "He olvidado mi contraseña" open the dialog, which has "Enviar" and "Cancelar" ' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Login()),
+      );
+
+      await tester.tap(find.text('He olvidado mi contraseña'));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AlertDialog), findsOneWidget);
+
+      expect(find.text('Enviar'), findsOneWidget);
+
+      expect(find.text('Cancelar'), findsOneWidget);
+
+    });
+
   });
+
+
+  //REGISTER
+  group('Register screen', (){
+
+    testWidgets( 'The screen has the main elements' ,(tester) async{
+      
+      await tester.pumpWidget(
+        createTestApp(const Register()),
+      );
+
+      expect(find.byKey(const Key('usernameField')), findsOneWidget);
+      expect(find.byKey(const Key('nameField')), findsOneWidget);
+      expect(find.byKey(const Key('emailField')), findsOneWidget);
+      expect(find.byKey(const Key('passwordField')), findsOneWidget);
+      expect(find.byKey(const Key('password2Field')), findsOneWidget);
+      expect(find.text('Registrarse'), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_back_ios_new), findsOneWidget);
+
+    });
+
+    testWidgets( 'Empty form returns five errors' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Register()),
+      );
+
+      await tester.ensureVisible(find.text('Registrarse'));
+      
+      await tester.tap(find.text('Registrarse'));
+      
+      await tester.pump();
+
+      expect(find.text('Campo obligatorio'), findsNWidgets(5));
+
+    });
+
+    testWidgets( 'You can write in all form fields' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Register()),
+      ); 
+
+      await tester.enterText(find.byKey(const Key('usernameField')),'juan_');
+      await tester.enterText( find.byKey(const Key('nameField')), 'juan');  
+      await tester.enterText(find.byKey(const Key('emailField')),'juan@gmail.com');  
+      await tester.enterText(find.byKey(const Key('passwordField')), 'password');
+      await tester.enterText(find.byKey(const Key('password2Field')), 'password2');
+
+      expect(find.text('juan_'), findsOneWidget);
+      expect(find.text('juan'), findsOneWidget);
+      expect(find.text('juan@gmail.com'), findsOneWidget);
+      expect(find.text('password'), findsOneWidget);
+      expect(find.text('password2'), findsOneWidget);
+
+    });
+
+    testWidgets( 'The first eye icon changes the visibility of the password' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Register()),
+      );
+
+      expect(find.byIcon(Icons.visibility_off), findsNWidgets(2));
+
+      await tester.tap(find.byIcon(Icons.visibility_off).first);
+      await tester.pump();
+
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+ 
+    });
+
+    testWidgets( 'The second eye icon changes the visibility of the password' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Register()),
+      );
+
+      expect(find.byIcon(Icons.visibility_off), findsNWidgets(2));
+
+      await tester.tap(find.byIcon(Icons.visibility_off).last);
+      await tester.pump();
+
+      expect(find.byIcon(Icons.visibility), findsOneWidget);
+      expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+ 
+    });
+
+    testWidgets( 'Different passwords return an error' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(const Register()),
+      );
+
+      await tester.enterText(find.byKey(const Key('passwordField')), 'Abcdef.9');
+
+      await tester.enterText(find.byKey(const Key('password2Field')),'Abcdef:9');
+
+      await tester.ensureVisible(find.text('Registrarse'));
+
+      await tester.tap(find.text('Registrarse'));
+
+      await tester.pump();
+
+      expect(find.text('Las contraseñas no coinciden'), findsOneWidget);
+
+    });
+
+  });
+
 }

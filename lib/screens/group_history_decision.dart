@@ -6,6 +6,7 @@ import 'package:dego/providers/decision_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:dego/providers/usuario_provider.dart';
 import 'package:dego/models/option.dart';
+import 'package:dego/funciones/functions.dart';
 
 class GroupHistoryDecision extends ConsumerStatefulWidget {
   final String id;
@@ -17,7 +18,6 @@ class GroupHistoryDecision extends ConsumerStatefulWidget {
 }
 
 class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,13 +66,17 @@ class _GroupHistoryDecision extends ConsumerState<GroupHistoryDecision> {
 
     List<String> winnersIds= [];
 
+    // if (winnerValue != null) {
+    //   for (var option in sortedOptions) {
+    //     final votes = option.num_votes ?? 0;
+    //     if (votes == winnerValue) {
+    //       winnersIds.add(option.id);
+    //     }
+    //   }
+    // }
+
     if (winnerValue != null) {
-      for (var option in sortedOptions) {
-        final votes = option.num_votes ?? 0;
-        if (votes == winnerValue) {
-          winnersIds.add(option.id);
-        }
-      }
+      winnersIds = getWinners(sortedOptions, winnerValue);
     }
 
     return Scaffold(
