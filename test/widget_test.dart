@@ -1,3 +1,5 @@
+import 'package:dego/providers/decision_provider.dart';
+import 'package:dego/screens/simple_vote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dego/screens/login.dart';
@@ -5,6 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:dego/l10n/app_localizations.dart';
 import 'package:dego/screens/register.dart';
+import 'package:dego/models/decision.dart';
+import 'package:dego/models/option.dart';
+import 'package:dego/models/usuario.dart';
+import 'package:dego/providers/usuario_provider.dart';
 
 void main() {
 
@@ -22,6 +28,31 @@ void main() {
         ],
         locale: const Locale('es'),
         home: child,
+      ),
+    );
+  }
+
+  Widget createSimpleVoteTestApp({
+    required Decision decision,
+    required List<Option> options,
+    required Usuario usuario,
+  }) {
+    return ProviderScope(
+      overrides: [
+        decisionByIdProvider.overrideWith(
+          (ref, id) => Stream.value(decision),
+        ),
+
+        optionsByDecisionProvider.overrideWith(
+          (ref, id) => Stream.value(options),
+        ),
+
+        usuarioProvider.overrideWith(
+          (ref) async => usuario,
+        ),
+      ],
+      child: createTestApp(
+        SimpleVote(id: decision.id),
       ),
     );
   }
@@ -209,6 +240,125 @@ void main() {
 
       expect(find.text('Las contraseñas no coinciden'), findsOneWidget);
 
+    });
+
+  });
+
+  group('Simple Vote', (){
+
+    final decision = Decision(
+      id: '1',
+      id_creator : '1',
+      title: 'Elegir restaurante',
+      state: DecisionState.vote,
+      type: DecisionType.simple,
+      votes: false,
+    );
+
+    final usuario = Usuario(
+      id: '1',
+      username: 'username',
+      name: 'name',
+      tipo: 'client',
+    );
+
+    final options = [
+      Option(
+        id: '1',
+        id_decision: '1',
+        id_creator: '1',
+        title: 'Dominos',
+        type: OptionType.standard
+      ),
+      Option(
+        id: '2',
+        id_decision: '1',
+        id_creator: '1',
+        title: 'Burger King',
+        type: OptionType.standard
+      ),
+    ];
+    
+    testWidgets('The main elements are shown', (tester) async{
+
+      await tester.pumpWidget(
+        createSimpleVoteTestApp(
+          decision: decision,
+          options: options,
+          usuario: usuario,
+        ),
+      );
+
+      await tester.pump();
+
+      expect(find.text('Elegir restaurante'), findsOneWidget);
+      expect(find.text('Dominos'), findsOneWidget);
+      expect(find.text('Burger King'), findsOneWidget);
+      expect(find.byIcon(Icons.radio_button_unchecked), findsNWidgets(2));
+      expect(find.text('Cancelar'), findsOneWidget);
+      expect(find.text('Votar'), findsOneWidget);
+      expect(find.byType(ElevatedButton), findsNWidgets(2));
+    });
+
+    testWidgets('An option is selected', (tester) async{
+
+      await tester.pumpWidget(
+        createSimpleVoteTestApp(
+          decision: decision,
+          options: options,
+          usuario: usuario,
+        ),
+      );
+
+      await tester.pump();
+
+      expect(find.byIcon(Icons.check_circle), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.radio_button_unchecked).first);
+      await tester.pump();
+
+      expect(find.byIcon(Icons.check_circle), findsOneWidget);
+    });
+
+    testWidgets('Only an option is selected', (tester) async{
+
+      await tester.pumpWidget(
+        createSimpleVoteTestApp(
+          decision: decision,
+          options: options,
+          usuario: usuario,
+        ),
+      );
+
+      await tester.pump();
+
+      expect(find.byIcon(Icons.check_circle), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.radio_button_unchecked).first);
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.radio_button_unchecked).last);
+      await tester.pump();
+
+      expect(find.byIcon(Icons.check_circle), findsOneWidget);
+    });
+
+    testWidgets('Vote without an option selected returns an error', (tester) async{
+
+      await tester.pumpWidget(
+        createSimpleVoteTestApp(
+          decision: decision,
+          options: options,
+          usuario: usuario,
+        ),
+      );
+
+      await tester.pump();
+
+      await tester.tap(find.text('Votar'));
+      await tester.pump();
+
+      expect(find.text('Error: Selecciona una opción para votar'), findsOneWidget);
     });
 
   });

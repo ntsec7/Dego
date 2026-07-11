@@ -107,7 +107,7 @@ void main(){
   // MODEL: DECISION
   group('Check Decision Model', (){
 
-    test('Decision.toMap creates correct object', () {
+    test('Decision.fromMap creates correct object', () {
 
       final map = {
         'id': '1',
