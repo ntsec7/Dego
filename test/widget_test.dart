@@ -1,4 +1,4 @@
-import 'package:dego/providers/decision_provider.dart';
+  import 'package:dego/providers/decision_provider.dart';
 import 'package:dego/screens/simple_vote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -133,7 +133,6 @@ void main() {
     });
 
   });
-
 
   //REGISTER
   group('Register screen', (){

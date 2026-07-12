@@ -6,7 +6,7 @@ import 'package:dego/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Login successfully', (tester) async {
+  testWidgets('User work stream', (tester) async {
     
     app.main();
     await tester.pumpAndSettle();
@@ -49,6 +49,16 @@ void main() {
 
     await tester.tap(find.text('Votacion'));
     await tester.pumpAndSettle();
+
+    for (int i = 0; i < 50; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+
+      if (find.text('Votar').evaluate().isNotEmpty) {
+        break;
+      }
+    }
+
+    expect(find.text('Votar'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.radio_button_unchecked).first);
     await tester.pumpAndSettle();
