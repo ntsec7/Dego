@@ -70,7 +70,7 @@ class _GroupMembers extends ConsumerState<GroupMembers> {
                   errorText: error,
                 ),
                 onChanged: (_) {
-                  // Si el usuario vuelve a escribir, limpiamos el erro
+                  // Si el usuario vuelve a escribir, limpiamos el error
                   if (error != null) {
                     setStateDialog(() => error = null);
                   }

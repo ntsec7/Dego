@@ -1,4 +1,5 @@
   import 'package:dego/providers/decision_provider.dart';
+import 'package:dego/screens/create_decision.dart';
 import 'package:dego/screens/simple_vote.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,11 +12,18 @@ import 'package:dego/models/decision.dart';
 import 'package:dego/models/option.dart';
 import 'package:dego/models/usuario.dart';
 import 'package:dego/providers/usuario_provider.dart';
+import 'package:dego/providers/decision_draft_provider.dart';
+import 'package:dego/models/option_draft.dart';
+import 'package:dego/providers/current_group_provider.dart';
 
 void main() {
 
-  Widget createTestApp(Widget child) {
+  Widget createTestApp(
+    Widget child, {
+      List<Override> overrides = const [],
+    }) {
     return ProviderScope(
+      overrides: overrides,
       child: MaterialApp(
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -243,6 +251,7 @@ void main() {
 
   });
 
+  //SIMPLE VOTE
   group('Simple Vote', (){
 
     final decision = Decision(
@@ -359,6 +368,242 @@ void main() {
 
       expect(find.text('Error: Selecciona una opción para votar'), findsOneWidget);
     });
+
+  });
+
+  //CREATE DECISION
+  group('Create decision', (){
+
+    testWidgets( 'The screen has the main elements' ,(tester) async{
+      
+      await tester.pumpWidget(
+        createTestApp(
+          const CreateDecision(),
+           overrides: [
+            idCurrentGroupProvider.overrideWith((ref) => '1'),
+          ],
+        ),
+      );
+
+      expect(find.text('Crear decisión'), findsOneWidget);
+      expect(find.byKey(const Key('nameField')), findsOneWidget);
+      expect(find.byKey(const Key('typeField')), findsOneWidget);
+      expect(find.byIcon(Icons.add), findsOneWidget);
+      expect(find.text('Abrir opciones'), findsOneWidget);
+      expect(find.text('Fecha de finalización de las opciones'), findsOneWidget);
+      expect(find.text('Fecha de finalización de la votación'), findsOneWidget);
+      expect(find.text('Cancelar'), findsOneWidget);
+      expect(find.text('Empezar'), findsOneWidget);
+
+    });
+
+    testWidgets( 'Title is mandatory' ,(tester) async{
+
+    await tester.pumpWidget(
+      createTestApp(
+        const CreateDecision(),
+        overrides: [
+          usuarioProvider.overrideWith((ref) async {
+            return Usuario(
+              id: '1',
+              username: 'user1',
+              name: 'user',
+              tipo: 'client'
+            );
+          }),
+        ],
+      ),
+    );
+
+      await tester.pumpAndSettle();
+      
+      await tester.ensureVisible(find.text('Empezar'));
+      await tester.tap(find.text('Empezar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Campo obligatorio'), findsOneWidget);     
+
+    });
+
+    testWidgets( 'You can write the title' ,(tester) async{
+
+    await tester.pumpWidget(
+      createTestApp(
+        const CreateDecision(),
+        overrides: [
+          usuarioProvider.overrideWith((ref) async {
+            return Usuario(
+              id: '1',
+              username: 'user1',
+              name: 'user',
+              tipo: 'client'
+            );
+          }),
+        ],
+      ),
+    ); 
+
+      await tester.enterText(find.byKey(const Key('nameField')),'¿Qué cenamos?');    
+
+      expect(find.text('¿Qué cenamos?'), findsOneWidget); 
+
+    });
+
+    testWidgets( 'You can change the type of decision' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(
+          const CreateDecision(),
+          overrides: [
+            usuarioProvider.overrideWith((ref) async {
+              return Usuario(
+                id: '1',
+                username: 'user1',
+                name: 'user',
+                tipo: 'client'
+              );
+            }),
+          ],
+        ),
+      );
+
+      await tester.tap(find.byKey(const Key('typeField')));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Ranking').last);
+      await tester.pumpAndSettle();
+ 
+    });
+
+    testWidgets( 'If they\'re no options it doesn\'t allow to start ' ,(tester) async{
+
+      await tester.pumpWidget(
+        createTestApp(
+          const CreateDecision(),
+          overrides: [
+            usuarioProvider.overrideWith((ref) async {
+              return Usuario(
+                id: '1',
+                username: 'user1',
+                name: 'user',
+                tipo: 'client'
+              );
+            }),
+          ],
+        ),
+      );
+
+      await tester.enterText(find.byKey(const Key('nameField')),'Mi decisión');
+
+      await tester.ensureVisible(find.text('Empezar'));
+      await tester.tap(find.text('Empezar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Error: Hace falta al menos 2 opciones para poder empezar'),findsOneWidget);
+
+    });
+
+  testWidgets( 'Options are shown' ,(tester) async{
+      
+    await tester.pumpWidget(
+      createTestApp(
+        const CreateDecision(),
+        overrides: [
+          decisionDraftProvider.overrideWith((ref) {
+            final notifier = DecisionDraftNotifier();
+
+            notifier.addOption(
+              OptionDraft(title: 'Pizza', id_creator:'1', type:OptionType.standard),
+            );
+
+            notifier.addOption(
+              OptionDraft(title: 'Hamburguesa', id_creator:'1', type:OptionType.standard),
+            );
+
+            return notifier;
+          }),
+        ],
+      ),
+    );
+
+    expect(find.text('Pizza'), findsOneWidget);
+    expect(find.text('Hamburguesa'), findsOneWidget);
+    expect(find.byIcon(Icons.delete), findsNWidgets(2));
+
+  });
+
+  testWidgets( 'Delete an option updates the options shown' ,(tester) async{
+      
+    await tester.pumpWidget(
+      createTestApp(
+        const CreateDecision(),
+        overrides: [
+          usuarioProvider.overrideWith((ref) async {
+            return Usuario(
+              id: '1',
+              username: 'user1',
+              name: 'user',
+              tipo: 'client'
+            );
+          }),
+          decisionDraftProvider.overrideWith((ref) {
+            final notifier = DecisionDraftNotifier();
+
+            notifier.addOption(
+              OptionDraft(title: 'Pizza', id_creator:'1', type:OptionType.standard),
+            );
+
+            notifier.addOption(
+              OptionDraft(title: 'Hamburguesa', id_creator:'1', type:OptionType.standard),
+            );
+
+            return notifier;
+          }),
+        ],
+      ),
+    );
+
+    expect(find.text('Pizza'), findsOneWidget);
+    expect(find.text('Hamburguesa'), findsOneWidget);
+    
+    // Borra la primera
+    await tester.tap(find.byIcon(Icons.delete).first);
+    await tester.pump();
+
+    // Ahora solo queda una
+    expect(find.text('Pizza'), findsNothing);
+    expect(find.text('Hamburguesa'), findsOneWidget);
+
+  });
+
+
+  testWidgets( 'There\'s no vote date in roulette decisions' ,(tester) async{
+      
+    await tester.pumpWidget(
+      createTestApp(
+        const CreateDecision(),
+        overrides: [
+          usuarioProvider.overrideWith((ref) async {
+            return Usuario(
+              id: '1',
+              username: 'user1',
+              name: 'user',
+              tipo: 'client'
+            );
+          }),
+        ],
+      ),
+    );
+
+      await tester.tap(find.byKey(const Key('typeField')));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Ruleta').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Fecha final votación'), findsNothing);
+
+  });
 
   });
 
