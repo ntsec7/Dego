@@ -825,6 +825,9 @@ class _CreateDecisionWatch extends ConsumerState<CreateDecisionWatch> {
 
                                         await ref.read(createProvider.notifier).createWatchDecision(id_creator: currentUserId!, id_group: currentGroupId, title: _title.text, finish_hour: finishDateTime, url: url, limit: limit);
 
+                                        //Borra decisionDraft
+                                        ref.read(decisionDraftProvider.notifier).reset();
+
                                         if (!context.mounted) return;
 
                                         ScaffoldMessenger.of(context).showSnackBar(
