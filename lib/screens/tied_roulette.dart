@@ -108,7 +108,7 @@ class _TiedRoulette extends ConsumerState<TiedRoulette> with SingleTickerProvide
   }
 
 //Girar la ruleta
-  void _spinRoulette(List<dynamic> options, String decisionId, String currentUserId) async {
+  void _spinRoulette(List<dynamic> options, String decisionId, String currentUserId, DecisionType decisionType) async {
     if (_animationController.isAnimating ) return;
 
     setState(() {
@@ -153,7 +153,13 @@ class _TiedRoulette extends ConsumerState<TiedRoulette> with SingleTickerProvide
       _confettiController.play();
 
       //Guardamos el voto en la bd
-      await ref.read(createProvider.notifier).createSimpleVote(id_option: _selectedOptionId!, id_decision: decisionId, id_user: currentUserId, tied:true);
+      if(decisionType==DecisionType.ranking){
+        await ref.read(createProvider.notifier).createRankingVote(id_option: _selectedOptionId!, id_decision: decisionId, id_user: currentUserId, number: -1, tied:true); // Ascendente
+      }
+      else{
+        await ref.read(createProvider.notifier).createSimpleVote(id_option: _selectedOptionId!, id_decision: decisionId, id_user: currentUserId, tied:true);
+      }
+      // await ref.read(createProvider.notifier).createSimpleVote(id_option: _selectedOptionId!, id_decision: decisionId, id_user: currentUserId, tied:true);
 
       //guardamos que ya ha votado
       hasAlreadyVote = true;
@@ -374,7 +380,7 @@ class _TiedRoulette extends ConsumerState<TiedRoulette> with SingleTickerProvide
                     }
 
                     // Gira la ruleta
-                    _spinRoulette(tiedOptions, decision.id, currentUserId!);
+                    _spinRoulette(tiedOptions, decision.id, currentUserId!, decision.type);
 
                   } catch (e) {
                     if (!context.mounted) return;
