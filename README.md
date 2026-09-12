@@ -64,6 +64,12 @@ La aplicación requiere configurar:
 - Clave pública (Anon Key) de Supabase.
 - Clave de la API de TMDB (utilizada por las Edge Functions).
 
+## Descarga de la aplicación
+
+Si solo deseas probar la aplicación, puedes descargar el APK desde la sección [Releases](../../releases/latest).
+
+Una vez descargado el archivo APK, puedes instalarlo directamente en un dispositivo Android.
+
 ## Autor
 Natalia Serrano Cerceda
 
