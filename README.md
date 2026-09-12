@@ -6,6 +6,14 @@ La aplicación permite crear grupos, gestionar decisiones, proponer opciones y v
 
 Este proyecto ha sido desarrollado como Trabajo Fin de Grado del Grado en Ingeniería Informática.
 
+## Imágenes de la aplicación
+
+<p align="center">
+  <img src="screenshots/GroupHomePage.png" width="200" hspace="10">
+  <img src="screenshots/Roulette.png" width="200" hspace="10">
+  <img src="screenshots/SerieSuggestion.png" width="200" hspace="10">
+</p>
+
 ## Tecnologías utilizadas
 
 - Flutter
